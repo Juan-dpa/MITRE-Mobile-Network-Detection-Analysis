@@ -1,0 +1,10 @@
+21:50:13 [FTP] FTP target listening on 127.0.0.1:2121; shell will appear on 6200 after trigger
+21:50:13 [FTP] Only the harmless command 'id' is implemented (Ctrl+C to stop)
+21:50:15 [FTP] FTP connection from 127.0.0.1:61366
+21:50:15 [FTP] FTP received bytearray(b'USER lab:)') [55 53 45 52 20 6c 61 62 3a 29]
+21:50:15 [FTP] FTP received bytearray(b'PASS lab') [50 41 53 53 20 6c 61 62]
+21:50:15 [FTP] CVE-2011-2523 lab trigger activated: simulated shell on 127.0.0.1:6200
+21:50:15 [FTP] Simulated bind shell connection from 127.0.0.1:61367
+21:50:15 [FTP] Shell received bytearray(b'id')
+21:50:15 [FTP] Simulated bind shell disconnected: 127.0.0.1:61367
+21:50:15 [FTP] FTP disconnected: 127.0.0.1:61366

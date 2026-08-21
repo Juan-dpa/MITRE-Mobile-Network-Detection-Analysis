@@ -1,0 +1,17 @@
+21:50:14 [GW] Listening on 127.0.0.1:18443 (Ctrl+C to stop)
+21:50:14 [GW] Advertising Operational C2 127.0.0.1:19443
+21:50:14 [GW] 127.0.0.1:61361 connected
+21:50:14 [GW] 127.0.0.1:61361 RSA/RC4 handshake complete
+21:50:14 [GW] 127.0.0.1:61361 -> HELO
+  HELO
+    VER: 02 00 00 00
+    UUID: cf 4e 87 11 ae 74 e3 26 64 86 be c4 0a 58 13 80
+    PORT: 75 30 ('u0')
+    GROUP: 00 00
+    LDGROUP: e8 03
+    LID: 01 00 00 00 00 00 00 00
+    CT: 01 00 00 00
+    FB: 
+21:50:14 [GW] GW -> 127.0.0.1:61361 SET signed with laboratory RSAGlobal
+21:50:14 [GW] GW -> 127.0.0.1:61361 SETGROUP=1; victim should persist and reconnect
+21:50:14 [GW] 127.0.0.1:61361 closed the gateway session as expected

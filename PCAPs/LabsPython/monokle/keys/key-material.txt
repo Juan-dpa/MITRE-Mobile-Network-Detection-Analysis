@@ -1,0 +1,6 @@
+Laboratorio: monokle
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/monokle/keys
+Material:
+  - monokle-transport-aes-gcm.hex: Clave AES-256-GCM del protocolo C2 interno
+  - monokle-sslkeys.log: Secretos TLS en formato NSS para las tres sesiones TLS
+Nota: El key log abre las capas TLS; la clave AES-GCM permite interpretar ServerCommand y AgentResponse. AgentRegistration no lleva la envoltura AES propia.

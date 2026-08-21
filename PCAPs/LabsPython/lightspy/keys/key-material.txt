@@ -1,0 +1,5 @@
+Laboratorio: lightspy
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/lightspy/keys
+Material:
+  - lightspy-sslkeys.log: Secretos TLS en formato NSS para HTTPS y WSS del C2
+Nota: El staging inicial usa HTTP en claro. El key log descifra tanto las solicitudes HTTPS como el WebSocket seguro del puerto 50000.

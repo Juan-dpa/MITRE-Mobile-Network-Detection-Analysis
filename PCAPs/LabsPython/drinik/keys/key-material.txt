@@ -1,0 +1,5 @@
+Laboratorio: drinik
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/drinik/keys
+Material:
+  - drinik-sslkeys.log: Secretos TLS en formato NSS para Firebase y el canal FCM
+Nota: Las consultas DNS, el C2 HTTP y la descarga viajan en claro; el mensaje aes() del registro reproduce una llamada de la muestra, no una capa criptográfica adicional en este flujo.

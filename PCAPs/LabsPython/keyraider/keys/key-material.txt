@@ -1,0 +1,5 @@
+Laboratorio: keyraider
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/keyraider/keys
+Material:
+  - keyraider-sslkeys.log: Secretos TLS en formato NSS para descifrar la conexión con el servicio Apple
+Nota: El canal C2 HTTP y las consultas DNS viajan en claro; la clave privada del certificado no sustituye al key log porque TLS negocia ECDHE.

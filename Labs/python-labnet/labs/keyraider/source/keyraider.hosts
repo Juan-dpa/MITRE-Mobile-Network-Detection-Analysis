@@ -1,0 +1,4 @@
+# Edita la IP si el servidor Python no corre en la misma máquina que el cliente.
+# Para una captura local en loopback, 127.0.0.1 es suficiente.
+127.0.0.1 p12-buy.itunes.apple.com
+127.0.0.1 www.wushidou.cn

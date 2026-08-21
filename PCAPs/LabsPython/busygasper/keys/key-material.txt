@@ -1,0 +1,4 @@
+Laboratorio: busygasper
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/busygasper/keys
+Material: ninguno
+Nota: DNS, IRC y FTP viajan en claro; no falta ningún fichero de claves para analizar la captura.

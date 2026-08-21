@@ -1,0 +1,5 @@
+Laboratorio: flubot
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/flubot/keys
+Material:
+  - flubot-rsa-private.pem: Clave RSA privada del laboratorio para recuperar la clave XOR efímera de cada petición
+Nota: Cada cuerpo HTTP contiene la identidad y la clave de sesión cifradas con RSA; tras recuperarla, esa clave permite revertir la transformación XOR de solicitud y respuesta.

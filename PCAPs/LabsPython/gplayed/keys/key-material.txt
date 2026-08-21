@@ -1,0 +1,4 @@
+Laboratorio: gplayed
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/gplayed/keys
+Material: ninguno
+Nota: El laboratorio usa HTTP sin TLS; sus transformaciones de aplicación son reversibles y no requieren material criptográfico externo.

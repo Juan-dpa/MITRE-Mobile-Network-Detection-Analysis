@@ -1,0 +1,17 @@
+# CoreDNS config for the FluBot SOCKS lab.
+# Run from the workspace with:
+#   coredns -conf outputs\Corefile
+#
+# This binds DNS to loopback on the standard DNS port. If port 53 is occupied
+# or requires elevated privileges, change ".:53" to ".:1053" and run the bot
+# with "--dns-server 127.0.0.1:1053".
+
+.:53 {
+    bind 127.0.0.1
+    errors
+    log
+    hosts {
+        127.0.0.1 gurbngbcxheshsj.ru
+        ttl 30
+    }
+}

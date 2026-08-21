@@ -1,0 +1,1 @@
+"""NotCompatible victim/proxy emulator."""

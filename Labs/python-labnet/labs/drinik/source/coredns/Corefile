@@ -1,0 +1,15 @@
+.:53 {
+    bind 127.0.0.53
+    errors
+    log
+    hosts {
+        127.0.0.10 gia.3utilities.com
+        127.0.0.20 firebaseinstallations.googleapis.com
+        127.0.0.20 android.apis.google.com
+        127.0.0.20 fcm.googleapis.com
+        127.0.0.21 mtalk.google.com
+        127.0.0.21 mtalk4.google.com
+        127.0.0.21 alt1-mtalk.google.com
+        ttl 30
+    }
+}

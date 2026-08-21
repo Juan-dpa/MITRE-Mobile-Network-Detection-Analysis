@@ -1,0 +1,5 @@
+Laboratorio: exodus
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/exodus/keys
+Material:
+  - exodus-sslkeys.log: Secretos TLS en formato NSS para descifrar la sesión HTTPS
+Nota: El key log descifra TLS. Los cuerpos de 256 bytes conservan el cifrado RSA/PKCS#1 v1.5 de staging y no existe una clave privada original en este laboratorio.

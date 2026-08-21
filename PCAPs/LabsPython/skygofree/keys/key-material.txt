@@ -1,0 +1,5 @@
+Laboratorio: skygofree
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/skygofree/keys
+Material:
+  - skygofree-sslkeys.log: Secretos TLS de InstanceID, la API GCM y el canal mtalk
+Nota: El panel HTTP, DHCP y el acceso bancario sintético viajan en claro. El key log permite recuperar las dos órdenes transportadas por los canales TLS emulados de Google.

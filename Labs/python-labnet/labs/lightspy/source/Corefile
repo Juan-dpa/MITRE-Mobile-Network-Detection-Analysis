@@ -1,0 +1,9 @@
+.:53 {
+    bind 127.0.0.153
+    template IN A {
+        match ^www[.]baidu[.]com[.]$
+        answer "{{ .Name }} 60 IN A 180.101.50.188"
+    }
+    log
+    errors
+}

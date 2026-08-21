@@ -1,0 +1,6 @@
+Laboratorio: notcompatible
+Directorio: /home/juadelavi/python-labnet/smoke/20260821-113219/notcompatible/keys
+Material:
+  - notcompatible-rsaglobal-public.pem: Clave pública RSAGlobal para verificar las configuraciones SET firmadas
+  - notcompatible-rsalocal-private.pem: Clave privada RSALocal efímera para recuperar las claves RC4 de ambas sesiones
+Nota: La RSALocal se genera una vez por ejecución y sirve para los enlaces con la pasarela y el C2; la RSAGlobal solo verifica firmas y no descifra esas sesiones.
