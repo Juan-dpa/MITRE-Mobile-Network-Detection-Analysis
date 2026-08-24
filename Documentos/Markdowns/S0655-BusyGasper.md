@@ -552,7 +552,7 @@ El laboratorio emula mediante Python la ruta positiva reconstruida. No ejecuta l
 | Operador emulado | `10.65.5.20` | Dirección privada asignada al segundo participante del canal IRC. |
 | Resolutor DNS | `8.8.8.8:53` | Dirección publicada para Google Public DNS; el servicio se emula dentro del *namespace* aislado. |
 | Servicio IRC | `149.28.246.185:6667` | Respuesta A de `irc.freenode.net` obtenida el 20 de agosto de 2026. Representa el servicio legítimo abusado y no infraestructura propia de BusyGasper. |
-| Servidor de actualización | `213.174.157.151:21` y `213.174.157.151:20200` | IP literal configurada por defecto en la muestra para FTP; TCP/20200 es el puerto pasivo fijado por el laboratorio. |
+| Servidor de actualización | `213.174.157.151:21` y `213.174.157.151:20200` | IP literal configurada por defecto en la muestra y publicada por [Kaspersky](https://securelist.com/busygasper-the-unfriendly-spy/87627/) como C2 FTP de BusyGasper. TCP/20200 es el puerto pasivo fijado por el laboratorio. |
 
 | Componente | Función |
 |---|---|

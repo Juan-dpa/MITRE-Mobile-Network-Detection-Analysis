@@ -565,8 +565,8 @@ El laboratorio reproduce el flujo mediante un cliente y varios servicios Python 
 | Víctima emulada | `10.105.4.10` | Dirección privada asignada al cliente dentro de la topología aislada. |
 | Resolutor DNS | `8.8.8.8:53` | Dirección publicada para Google Public DNS; el servicio se emula dentro del *namespace* y no se contacta con Google. |
 | Firebase | `172.217.114.4:443` y `108.177.15.188:5228` | Respuestas A obtenidas el 20 de agosto de 2026 para `firebaseinstallations.googleapis.com` y `mtalk.google.com`. Son infraestructura legítima de Google y no IOC de Drinik. |
-| Panel de Drinik | `198.12.107.13:80` | IOC asociado con `gia.3utilities.com` y publicado por Cyble en la referencia empleada para el análisis. |
-| Servidor de descarga | `192.3.124.14:80` | IOC publicado por Cyble para una campaña de Drinik que descargaba `Child.apk`; el laboratorio lo combina de forma explícita con la ruta `/AApk.apk` requerida por este escenario. |
+| Panel de Drinik | `198.12.107.13:80` | IOC asociado con `gia.3utilities.com` y publicado por Cyble en el [análisis de la variante estudiada](https://web.archive.org/web/20221114031945/https%3A//blog.cyble.com/2022/10/27/drinik-malware-returns-with-advanced-capabilities-targeting-indian-taxpayers/). |
+| Servidor de descarga | `192.3.124.14:80` | IOC publicado por Cyble en una [campaña posterior de Drinik](https://cyble.com/blog/indian-taxpayers-face-a-multifaceted-threat-with-drinik-malwares-return/) que descargaba `Child.apk`; el laboratorio lo combina de forma explícita con la ruta `/AApk.apk` requerida por este escenario. |
 
 La API FCM del laboratorio funciona sobre HTTP/1.1 protegido mediante TLS y el canal de entrega usa un protocolo de líneas sintético. Ambos conservan la causalidad y el contenido lógico necesarios para el análisis, pero no reproducen el protocolo interno completo de Google Play Services. El registro `drinik-sslkeys.log`, almacenado junto al PCAP, permite descifrar las conexiones TLS de esta ejecución en Wireshark.
 

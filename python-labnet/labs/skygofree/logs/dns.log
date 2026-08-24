@@ -1,0 +1,5 @@
+[DNS] 8.8.8.8:53 UDP/TCP; 4 registros
+[DNS] A android.googleapis.com -> 172.217.115.4
+[DNS] A iid.googleapis.com -> 172.217.117.4
+[DNS] A mtalk.google.com -> 172.253.157.188
+[DNS] A www.bancosantander.es -> 18.154.48.19

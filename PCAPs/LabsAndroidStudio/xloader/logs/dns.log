@@ -1,0 +1,10 @@
+[DNS] 10.230.31.53:53 UDP/TCP; 3 registros
+[DNS] A twitter.com -> 10.230.31.11
+[DNS] A vuln.lab -> 10.230.31.30
+[DNS] A webview.lab -> 10.230.31.20
+[DNS] UDP 172.22.0.1:59708 AAAA twitter.com -> NXDOMAIN
+[DNS] UDP 172.22.0.1:59709 A twitter.com -> 10.230.31.11
+[DNS] UDP 172.22.0.1:59710 AAAA webview.lab -> NXDOMAIN
+[DNS] UDP 172.22.0.1:59711 A webview.lab -> 10.230.31.20
+[DNS] UDP 172.22.0.1:59712 AAAA vuln.lab -> NXDOMAIN
+[DNS] UDP 172.22.0.1:59713 A vuln.lab -> 10.230.31.30

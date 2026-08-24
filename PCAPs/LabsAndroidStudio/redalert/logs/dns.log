@@ -1,0 +1,7 @@
+[DNS] 10.230.39.53:53 UDP/TCP; 2 registros
+[DNS] A twitter.com -> 10.230.39.11
+[DNS] A www.timeapi.org -> 10.230.39.10
+[DNS] UDP 172.22.0.1:54018 AAAA www.timeapi.org -> NXDOMAIN
+[DNS] UDP 172.22.0.1:54019 A www.timeapi.org -> 10.230.39.10
+[DNS] UDP 172.22.0.1:54020 AAAA twitter.com -> NXDOMAIN
+[DNS] UDP 172.22.0.1:54021 A twitter.com -> 10.230.39.11

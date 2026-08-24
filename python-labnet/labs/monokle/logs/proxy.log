@@ -1,0 +1,4 @@
+[proxy] listening on 185.117.89.238:443 TLSv1.2 for www.oracle.com
+[proxy] accepted 10.40.7.10:37912
+[proxy] victim request GET /identity/v1/session HTTP/1.1
+[proxy] relayed 192 bytes from origin

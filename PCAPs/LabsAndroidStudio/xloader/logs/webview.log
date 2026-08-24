@@ -1,0 +1,3 @@
+[webview] listening: {"host": "10.230.31.20", "port": 80, "virtual_hosts": ["webview.lab"], "command_execution": false}
+[webview] webview_request: {"client": ["172.22.0.1", 58994], "method": "GET", "path": "/", "headers": {"Host": "webview.lab", "Connection": "keep-alive", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "User-Agent": "Mozilla/5.0 (Linux; Android 5.1.1; Android SDK built for x86 Build/LMY48X) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/39.0.0.0 Mobile Safari/537.36", "Accept-Encoding": "gzip, deflate", "Accept-Language": "ko-KR,en-US;q=0.8", "X-Requested-With": "ufD.wykyx.vlhvh"}}
+[webview] webview_favicon: {"client": ["172.22.0.1", 58995]}

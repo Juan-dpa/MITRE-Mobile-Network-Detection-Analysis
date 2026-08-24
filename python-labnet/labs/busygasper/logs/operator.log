@@ -1,0 +1,8 @@
+[O -> IRC-S] NICK IRCBoss
+[O -> IRC-S] USER IRCBoss 8 * : IRC Client
+[IRC-S -> O] :irc.freenode.net 001 IRCBoss :Welcome
+[IRC-S -> O] :irc.freenode.net 002 IRCBoss :Your host is irc.freenode.net
+[IRC-S -> O] :irc.freenode.net 003 IRCBoss :This server was created for lab
+[IRC-S -> O] :irc.freenode.net 004 IRCBoss irc.freenode.net busy-1 o o
+[O -> IRC-S] PRIVMSG Suny-12345 :#Uupdate.apk
+[IRC-S -> O] :Suny-12345!usuario@origen PRIVMSG IRCBoss :com.android.system.bdata updated

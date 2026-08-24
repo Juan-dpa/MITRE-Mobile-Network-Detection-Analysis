@@ -409,7 +409,7 @@ El servidor escucha en el puerto 5416 y responde primero con `Ok` al registro. D
 | Entidad | Dirección y servicio | Procedencia |
 |---|---|---|
 | Víctima emulada | `10.53.6.10` | Dirección privada asignada al cliente dentro de la topología aislada. |
-| C2 de GPlayed | `5.9.33.226:5416` | URL HTTP fijada en la propiedad `Server` de la muestra analizada. |
+| C2 de GPlayed | `5.9.33.226:5416` | URL HTTP fijada en la propiedad `Server` de la muestra analizada y publicada por [Cisco Talos](https://blog.talosintelligence.com/gplayedtrojan/) como IOC de GPlayed. |
 
 No se necesita una autoridad de certificación porque el canal seleccionado usa HTTP sin TLS. El cliente conecta directamente con `5.9.33.226:5416` y conserva ese mismo extremo en la cabecera `Host`.
 

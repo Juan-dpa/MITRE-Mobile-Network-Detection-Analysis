@@ -202,7 +202,7 @@ El laboratorio emula en Python tanto el cliente como el servidor. No ejecuta la 
 | Entidad | Dirección y servicio | Procedencia |
 |---|---|---|
 | Víctima emulada | `10.40.5.10` | Dirección privada asignada exclusivamente al cliente dentro de la topología aislada. |
-| C2 de Exodus | `54.71.249.137:443` | Extremo recuperado de la configuración de Exodus One y corroborado por la captura publicada por Security Without Borders. |
+| C2 de Exodus | `54.71.249.137:443` | Extremo recuperado de la configuración de Exodus One y corroborado por la captura publicada por [Security Without Borders](https://web.archive.org/web/20200314194610/https://securitywithoutborders.org/blog/2019/03/29/exodus.html). |
 
 El cliente abre TLS 1.2 directamente contra `54.71.249.137:443`, conserva la misma dirección en la cabecera `Host` y envía dos peticiones sobre una sola sesión. La primera reproduce el registro y recibe el identificador documentado por la referencia. La segunda solicita el primer paquete de Exodus Two y recibe un ZIP inocuo que conserva los nombres y las fechas de los componentes publicados, pero sustituye su contenido ejecutable por datos controlados.
 

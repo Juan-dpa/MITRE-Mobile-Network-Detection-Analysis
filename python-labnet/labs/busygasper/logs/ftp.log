@@ -1,0 +1,19 @@
+[FTP-S] listening on 213.174.157.151:21
+[FTP-S] control accepted from 10.65.5.10:39614
+[FTP-S -> V] 220 BusyGasper lab FTP ready
+[V -> FTP-S] user ealexzna
+[FTP-S -> V] 331 Password required
+[V -> FTP-S] pass kl725x2408
+[FTP-S -> V] 230 Login successful
+[V -> FTP-S] pasv
+[FTP-D] passive data socket on 213.174.157.151:20200
+[FTP-S -> V] 227 Entering Passive Mode (213,174,157,151,78,232)
+[V -> FTP-S] type i
+[FTP-S -> V] 200 Type set to I
+[V -> FTP-S] retr update.apk
+[FTP-S -> V] 150 Opening BINARY mode data connection for update.apk
+[FTP-D -> V] accepted data socket from 10.65.5.10:56832
+[FTP-D -> V] 320 bytes of update.apk
+[FTP-S -> V] 226 Transfer complete
+[V -> FTP-S] quit
+[FTP-S -> V] 221 Goodbye

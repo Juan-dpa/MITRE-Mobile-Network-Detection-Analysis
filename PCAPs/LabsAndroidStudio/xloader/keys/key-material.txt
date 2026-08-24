@@ -1,0 +1,7 @@
+Laboratorio: xloader
+Directorio: /home/juadelavi/python-labnet/android-smoke/20260824-122605/xloader/keys
+Material:
+  - xloader-twitter.crt: Certificado presentado por el Twitter controlado
+  - xloader-twitter.key: Clave privada del certificado de Twitter
+  - xloader-sslkeys.log: Secretos TLS de las consultas HTTPS a twitter.com
+Nota: Twitter utiliza TLS 1.2 y genera un fichero SSLKEYLOGFILE. El C2 seleccionado usa tramas RFC 6455 directamente sobre TCP; WebView y el CGI usan HTTP claro.

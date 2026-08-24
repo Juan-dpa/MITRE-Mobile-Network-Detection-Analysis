@@ -1,0 +1,5 @@
+[c2] listening on 185.117.89.238:17185 TLSv1.2
+[c2] accepted 10.40.7.10:47604
+[c2] AgentRegistration deviceId='android-351756051523999' agentId=10 isWifi=True
+[c2] sent InstallCertificate taskId=7001 thrift=847 encrypted=883
+[c2] AgentResponse taskId=7001 errorCode=None errorMessage=None

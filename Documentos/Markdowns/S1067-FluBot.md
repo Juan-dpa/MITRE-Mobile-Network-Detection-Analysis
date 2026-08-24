@@ -294,7 +294,7 @@ Por tanto, una respuesta válida tiene esta representación lógica antes de apl
 
 La clave cambia en cada petición. Sin la clave privada del panel original no es posible recuperar desde el primer campo la clave efímera que permitiría generar respuestas válidas para la muestra. El laboratorio conserva el protocolo, pero utiliza un par RSA controlado y un cliente Python emulado. El siguiente esquema original resume esa separación entre RSA y XOR:
 
-![[Pasted image 20260620192438.png]]
+![Captura del análisis de FluBot](<images/Pasted image 20260620192438.png>)
 
 Una vez que el DGA ha seleccionado un panel válido, el hilo de inyecciones enumera los paquetes instalados y envía el mensaje `GET_INJECTS_LIST,` seguido de la lista separada por comas:
 
@@ -479,7 +479,7 @@ Finalmente, dos hilos copian bloques de hasta 512 bytes en ambos sentidos entre 
 
 El siguiente esquema conserva la representación original de los tres flujos TCP implicados:
 
-![[Pasted image 20260620180901.png]]
+![Captura del análisis de FluBot](<images/Pasted image 20260620180901.png>)
 
 Para el laboratorio se utiliza como ejemplo un servicio que reproduce de forma inocua el comportamiento asociado con [CVE-2015-3306](https://nvd.nist.gov/vuln/detail/CVE-2015-3306). La vulnerabilidad afecta al módulo `mod_copy` de ProFTPD 1.3.5 y permite operar sobre rutas arbitrarias mediante `SITE CPFR` y `SITE CPTO`. La primera orden selecciona el origen y la segunda solicita su copia a otro destino. El escenario usa `/etc/passwd` como ruta de origen y una ruta bajo `/var/www/html/` como destino, pero el servidor Python no accede al sistema de archivos ni ejecuta la explotación: solo devuelve respuestas FTP plausibles. La [RFC 959](https://www.rfc-editor.org/rfc/rfc959) define `SITE` como el mecanismo para servicios específicos del sistema; `CPFR` y `CPTO` son extensiones de ProFTPD.
 

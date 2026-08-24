@@ -1,0 +1,10 @@
+AVD: TFG_TeleRAT_API19
+DNS del laboratorio: 10.230.39.53
+Comando de PowerShell para el arranque manual:
+& "C:\Users\jdelp\AppData\Local\Android\Sdk\emulator\emulator.exe" "@TFG_TeleRAT_API19" -port 5554 -dns-server 10.230.39.53 -no-snapshot-load
+Rutas de Windows hacia Kali WSL:
+  10.230.39.53/32
+  10.230.39.10/32
+  10.230.39.11/32
+  146.0.72.85/32
+  192.168.56.20/32

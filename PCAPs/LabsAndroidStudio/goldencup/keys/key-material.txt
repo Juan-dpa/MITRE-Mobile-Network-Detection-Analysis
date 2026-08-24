@@ -1,0 +1,4 @@
+Laboratorio: goldencup
+Directorio: /home/juadelavi/python-labnet/android-smoke/20260822-165029/goldencup/keys
+Material: ninguno
+Nota: DNS, MQTT y HTTP viajan en claro; Golden Cup no necesita material criptográfico adicional. La clave AES del contenedor se transporta dentro del propio fichero .data.

@@ -656,7 +656,7 @@ Servicio HTTPS destino
 | Entidad | Dirección y servicio | Procedencia |
 |---|---|---|
 | Víctima emulada | `10.40.7.10` | Dirección privada asignada al cliente dentro de la topología aislada. |
-| Infraestructura Monokle | `185.117.89.238:17185` y `185.117.89.238:443` | TCP/17185 es el extremo almacenado en `socketAddr` dentro de `config2.acf`. El laboratorio reutiliza esa misma entidad maliciosa para el proxy TCP/443; esta segunda función no se presenta como un servicio observado históricamente en la dirección. |
+| Infraestructura Monokle | `185.117.89.238:17185` y `185.117.89.238:443` | TCP/17185 es el extremo almacenado en `socketAddr` dentro de `config2.acf`; la IP también figura entre la infraestructura publicada por [Lookout](https://www.lookout.com/documents/threat-reports/lookout-discovers-monokle-threat-report.pdf). El laboratorio reutiliza esa entidad para el proxy TCP/443, pero no presenta esta segunda función como un servicio observado históricamente en la dirección. |
 | Servicio HTTPS de origen | `23.208.220.69:443` | Respuesta A de `www.oracle.com` obtenida el 20 de agosto de 2026 a través de su distribución legítima. No es un IOC de Monokle. |
 
 El canal C&C respeta el puerto de la muestra:

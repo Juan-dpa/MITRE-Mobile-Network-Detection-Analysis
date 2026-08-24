@@ -1,0 +1,2 @@
+[bank] escucha en 18.154.48.19:80
+[bank] POST /particulares/acceso-clientes/ host=www.bancosantander.es body=b'tipoDocumento=NIF&documento=00000000T&clave=SantanderLab2026%21&recordar=false&canal=web&entorno=laboratorio'

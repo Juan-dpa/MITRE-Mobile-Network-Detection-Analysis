@@ -1,0 +1,6 @@
+[operador] Escuchando en http://10.230.70.20:9000 (orden automática: True, texto: 'دریافت وضعیت')
+[operador] Evento recibido: install_report
+[operador] Evento recibido: keyboard
+[operador] Orden añadida: 'دریافت وضعیت' (update_id=800000001, chat_id=471078355)
+[operador] Evento recibido: result
+[operador] Evento recibido: result

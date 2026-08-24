@@ -498,16 +498,16 @@ El laboratorio no ejecuta la APK ni crea una interfaz 802.11. Emula mediante pro
 
 La topología distribuye los roles y sus direcciones efectivas de la forma siguiente:
 
-| Entidad                    | Dirección y servicio   | Procedencia                                                                                                                                            |
-| -------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Víctima emulada            | `10.32.7.10` y UDP/68  | Dirección privada asignada al cliente dentro del laboratorio.                                                                                          |
-| Resolutor controlado       | `8.8.8.8:53`           | Dirección publicada por [Google Public DNS](https://developers.google.com/speed/public-dns/docs/using); el servicio se emula dentro de la red aislada. |
-| Panel de Skygofree         | `217.194.13.133:80`    | Dirección y puerto HTTP integrados en la muestra para `register.php`, `ser.php` y `control.php`.                                                       |
-| InstanceID                 | `172.217.117.4:443`    | Respuesta A de `iid.googleapis.com` obtenida el 21 de agosto de 2026.                                                                                  |
-| API GCM                    | `172.217.115.4:443`    | Respuesta A de `android.googleapis.com` obtenida el 21 de agosto de 2026.                                                                              |
-| Canal `mtalk`              | `172.253.157.188:5228` | Respuesta A de `mtalk.google.com` obtenida el 21 de agosto de 2026.                                                                                    |
-| Punto de acceso controlado | `10.32.7.1:67`         | Dirección privada elegida para representar el servidor DHCP del escenario posterior.                                                                   |
-| Sitio legítimo simulado    | `18.154.48.19:80`      | Respuesta A distribuida para `www.bancosantander.es` obtenida el 21 de agosto de 2026.                                                                 |
+| Entidad | Dirección y servicio | Procedencia |
+|---|---|---|
+| Víctima emulada | `10.32.7.10` y UDP/68 | Dirección privada asignada al cliente dentro del laboratorio. |
+| Resolutor controlado | `8.8.8.8:53` | Dirección publicada por [Google Public DNS](https://developers.google.com/speed/public-dns/docs/using); el servicio se emula dentro de la red aislada. |
+| Panel de Skygofree | `217.194.13.133:80` | Dirección y puerto HTTP integrados en la muestra para `register.php`, `ser.php` y `control.php`; [Kaspersky](https://securelist.com/skygofree-following-in-the-footsteps-of-hackingteam/83603/) también documentó esta IP dentro de la infraestructura de Skygofree. |
+| InstanceID | `172.217.117.4:443` | Respuesta A de `iid.googleapis.com` obtenida el 21 de agosto de 2026. |
+| API GCM | `172.217.115.4:443` | Respuesta A de `android.googleapis.com` obtenida el 21 de agosto de 2026. |
+| Canal `mtalk` | `172.253.157.188:5228` | Respuesta A de `mtalk.google.com` obtenida el 21 de agosto de 2026. |
+| Punto de acceso controlado | `10.32.7.1:67` | Dirección privada elegida para representar el servidor DHCP del escenario posterior. |
+| Sitio legítimo simulado | `18.154.48.19:80` | Respuesta A distribuida para `www.bancosantander.es` obtenida el 21 de agosto de 2026. |
 
 Las direcciones públicas anteriores se asignan exclusivamente dentro de los espacios de nombres y no se encaminan hacia Internet. Las tres direcciones de Google y la del sitio legítimo solo identifican los servicios emulados en esta captura; no se consideran indicadores de compromiso. El punto de acceso y la víctima utilizan direcciones privadas porque son elementos controlados sin una IP histórica atribuible.
 

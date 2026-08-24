@@ -1,0 +1,7 @@
+/home/juadelavi/python-labnet/android-labs/telerat/source/bot_api_server.py:257: DeprecationWarning: ssl.TLSVersion.TLSv1 is deprecated
+  context.minimum_version = ssl.TLSVersion.TLSv1
+/home/juadelavi/python-labnet/android-labs/telerat/source/bot_api_server.py:258: DeprecationWarning: ssl.TLSVersion.TLSv1 is deprecated
+  context.maximum_version = ssl.TLSVersion.TLSv1
+[api] HTTP en 149.154.167.220:80; HTTPS/TLS 1.0 en 149.154.167.220:443
+[api] Operador: http://10.230.70.20:9000
+[api] Registro: /home/juadelavi/python-labnet/android-smoke/20260824-132816/telerat/logs/bot-api.jsonl

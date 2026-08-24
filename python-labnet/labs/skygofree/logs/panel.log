@@ -1,0 +1,6 @@
+[panel] escucha en 217.194.13.133:80
+[panel] POST /app/pro/register.php body={"serialnumber":"LAB-SKYGOFREE-0001","regId":"APA91bH-LAB-Skygofree-RegId-3G9bP7mKp2u6uZq8cQ","modello":"Android SDK built for x86"}
+[panel] POST /app/pro/ser.php body={"serialnumber":"LAB-SKYGOFREE-0001"}
+[panel] POST /app/pro/control.php body={"serialnumber":"LAB-SKYGOFREE-0001","comando":"attivataYES"}
+[panel] POST /app/pro/ser.php body={"serialnumber":"LAB-SKYGOFREE-0001"}
+[panel] POST /app/pro/control.php body={"serialnumber":"LAB-SKYGOFREE-0001","comando":"wifiYES"}

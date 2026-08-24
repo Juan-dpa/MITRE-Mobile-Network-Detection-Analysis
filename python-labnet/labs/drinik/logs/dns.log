@@ -1,0 +1,6 @@
+[DNS] 8.8.8.8:53 UDP/TCP; 5 registros
+[DNS] A android.apis.google.com -> 172.217.114.4
+[DNS] A fcm.googleapis.com -> 172.217.114.4
+[DNS] A firebaseinstallations.googleapis.com -> 172.217.114.4
+[DNS] A gia.3utilities.com -> 198.12.107.13
+[DNS] A mtalk.google.com -> 108.177.15.188

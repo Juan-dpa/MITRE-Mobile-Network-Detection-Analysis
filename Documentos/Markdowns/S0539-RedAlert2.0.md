@@ -32,7 +32,7 @@ Los participantes necesarios son los siguientes:
 | Dirección primaria no implementada | `146.0.72.85:7878` | Valor inicial incrustado en `strings.xml`. En el flujo seleccionado no existe un servidor que responda al intento de conexión. |
 | TimeAPI | `www.timeapi.org:80` | Devuelve un cuerpo HTML cuyo texto se usa para calcular el identificador de Twitter. |
 | Twitter | `twitter.com:443` | Sirve por HTTPS una página con un primer elemento de clase `tweet-text`. |
-| C2 alternativo | `192.168.56.20:8060` | Dirección de laboratorio reconstruida desde el texto `192.168 56.20`; recibe la validación, el registro y las solicitudes de plantillas. |
+| C2 alternativo | `192.168.56.20:8060` | Extremo privado controlado reconstruido desde el texto `192.168 56.20` entregado por Twitter. Recibe la validación, el registro y las solicitudes de plantillas, pero no se presenta como IOC histórico. |
 
 La dirección `146.0.72.85` está escrita literalmente en la APK, por lo que el primer intento no requiere resolución DNS. No se desplegará ningún C2 primario ni ningún componente que responda en el puerto 7878. El intento de conexión permanecerá sin respuesta hasta que la pila TCP de Android lo dé por fallido. En una captura realizada junto al dispositivo se observarán el primer segmento `SYN` y las retransmisiones que efectúe la plataforma, pero no `POST /stbi`, porque el saludo TCP no llega a completarse. Los nombres `www.timeapi.org` y `twitter.com` sí requieren resolución DNS. El C2 alternativo no la requiere, ya que la aplicación lo reconstruye como una dirección IPv4 literal.
 
@@ -424,7 +424,7 @@ Por tanto, después de procesar la respuesta de TimeAPI, la APK solicitará exac
 https://twitter.com/86d08d31c9d4733
 ```
 
-La respuesta HTTP 200 asociada a esa ruta contendrá este documento UTF-8 de 65 bytes:
+La respuesta HTTP 200 asociada a esa ruta contendrá este documento UTF-8 de 63 bytes:
 
 ```html
 <html><body><p class="tweet-text">192.168 56.20</p></body></html>
@@ -438,7 +438,7 @@ http://192.168.56.20
 http://192.168.56.20:8060
 ```
 
-La dirección `192.168.56.20` queda así seleccionada como dirección controlada del C2 alternativo. El futuro laboratorio deberá asignarla a la interfaz o dirección virtual correspondiente y permitir que el dispositivo la alcance. Si la topología final obliga a emplear otra IPv4, bastará con cambiar el texto `tweet-text` y las referencias posteriores al C2; el cuerpo de TimeAPI y el identificador `86d08d31c9d4733` pueden mantenerse porque su cálculo no depende de la IPv4 publicada por Twitter.
+El laboratorio devuelve `192.168.56.20`, la dirección privada seleccionada en el escenario original, y añade el puerto 8060 previsto por el código. Este valor obliga a recorrer el mecanismo de respaldo sin atribuir a la campaña una segunda dirección pública no respaldada. El cuerpo de TimeAPI y el identificador `86d08d31c9d4733` se mantienen porque su cálculo no depende de la IPv4 publicada por Twitter.
 
 ### Consulta a Twitter
 
@@ -1316,7 +1316,7 @@ sequenceDiagram
     X-->>A: HTTP 200<br/>primer tweet-text = 192.168 56.20
     Note over A: El texto recibido produce http://192.168.56.20:8060
 
-    Note over A,C: 192.168.56.20 es una IPv4 controlada y alcanzable,<br/>no se realiza DNS para este destino
+    Note over A,C: 192.168.56.20 es una IPv4 privada y controlada;<br/>no se realiza DNS para este destino
     A->>C: Establecer TCP con 192.168.56.20:8060
     A->>C: POST /ping :8060<br/>cuerpo=cGluZw== + LF, Content-Length=9
     C-->>A: HTTP 200<br/>cuerpo leído pero ignorado
@@ -1361,18 +1361,20 @@ El parche duplica ambos recursos en las rutas esperadas por la clase. No modific
 Muestra\Parche\RedAlert2.0-patched-entities.apk
 ```
 
-El laboratorio ejecuta la APK parcheada en el emulador API 19. CoreDNS y `run_lab.py` reproducen en loopback TimeAPI, Twitter mediante TLS y el C2 alternativo. El C2 primario no se implementa, por lo que su fallo activa el resolver de respaldo. No es necesario instalar una autoridad de certificación porque la muestra utiliza un `X509TrustManager` y un `HostnameVerifier` permisivos.
+El laboratorio ejecuta la APK parcheada en el AVD `TFG_TeleRAT_API19`. Android Emulator permanece en Windows y Kali WSL aloja las entidades controladas.
 
-CoreDNS se inicia en una terminal:
+| Entidad | Dirección y servicio | Procedencia |
+|---|---|---|
+| DNS controlado | `10.230.39.53:53` | Dirección privada asignada al resolutor del laboratorio. |
+| TimeAPI emulada | `10.230.39.10:80` | Dirección privada elegida para reproducir `www.timeapi.org`. Representa un servicio legítimo y no es un IOC. |
+| Twitter emulado | `10.230.39.11:443` | Dirección privada elegida para entregar el texto del C2 alternativo. Representa un servicio legítimo abusado y no es un IOC. |
+| Dirección primaria | `146.0.72.85:7878` | IP y puerto incrustados en el recurso `domain` de la APK analizada. Es el único indicador público de infraestructura utilizado por este escenario. El *namespace* descarta silenciosamente el tráfico para provocar la ruta de respaldo sin emitir un RST. |
+| C2 alternativo | `192.168.56.20:8060` | Dirección privada del escenario original, suministrada por Twitter como `192.168 56.20` y completada por la muestra con TCP/8060. Es una decisión controlada del laboratorio y no un IOC atribuido a RedAlert 2.0. |
 
-```powershell
-PS: coredns.exe -conf .\Corefile
-```
+`redalert_server.py` conserva los valores del servidor original: TimeAPI responde con `2024-01-02T03:04:05+00:00`, Twitter publica el identificador `86d08d31c9d4733` y el C2 implementa `/ping`, `/stbi`, `/sban`, `/gt`, `/sy`, `/ssl` y `/ucs`. Las dos respuestas de `/gt` son documentos HTML inocuos y autocontenidos. Twitter utiliza el certificado del laboratorio original; la muestra acepta su cadena y su nombre mediante sus validadores permisivos. El pipeline guarda el certificado, su clave privada y `redalert-sslkeys.log` junto al PCAP.
 
-Los tres servidores se inician en otra terminal:
+Antes de repetir el escenario deben borrarse los datos de `com.kmc.prod` o reinstalarse la aplicación: la base SQLite conserva el C2 alternativo y el estado de registro, de modo que una ejecución sin limpiar omitiría el resolver.
 
-```powershell
-PS: python .\run_lab.py
-```
+Este escenario está incorporado en `python-labnet` con el identificador `redalert`. La preparación de la topología, el arranque manual del AVD, la captura interactiva y la retirada del entorno se describen en la [guía central de laboratorios Android](Laboratorios%20Android.md).
 
-Los comandos se ejecutan desde la carpeta `Lab`, cada uno en una terminal. Después se instala la APK parcheada arrastrándola al emulador, se inicia la captura sobre loopback y se abre la aplicación. El tráfico resultante contiene el resolver, el registro, la descarga de las dos plantillas y las comunicaciones posteriores `/sy`, `/ssl` y `/ucs`.
+La evidencia esperada comprende los `SYN` sin respuesta hacia `146.0.72.85:7878`, las consultas y respuestas DNS, la petición HTTP a TimeAPI, la consulta HTTPS a Twitter, la validación `/ping`, el registro `/stbi`, el catálogo `/sban`, dos descargas `/gt` y las comunicaciones posteriores `/sy`, `/ssl` y `/ucs`. Los resultados se almacenan en `android-smoke/<fecha-hora>/redalert/`.

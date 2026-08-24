@@ -1,0 +1,11 @@
+[google] iid escucha en 172.217.117.4:443
+[google] gcm escucha en 172.217.115.4:443
+[google] mtalk escucha en 172.253.157.188:5228
+[google] 10.32.7.10 POST /iid/getToken HTTP/1.1
+[google] mtalk 10.32.7.10 b'MCS_LOGIN regId=APA91bH-LAB-Skygofree-RegId-3G9bP7mKp2u6uZq8cQ sender=662966484664' b'GTALK_HEARTBEAT MCS_HEARTBEAT'
+[google] orden aceptada por GCM: attiva
+[google] push 'attiva'; respuesta b'ACK comando=attiva'
+[google] 217.194.13.133 POST /gcm/send HTTP/1.1
+[google] orden aceptada por GCM: wifi_enable_SantanderFreeWiFi_RogueLab2026!_WPA2_AES
+[google] push 'wifi_enable_SantanderFreeWiFi_RogueLab2026!_WPA2_AES'; respuesta b'ACK comando=wifi_enable_SantanderFreeWiFi_RogueLab2026!_WPA2_AES'
+[google] 217.194.13.133 POST /gcm/send HTTP/1.1

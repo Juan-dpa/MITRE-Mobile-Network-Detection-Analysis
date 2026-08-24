@@ -1,0 +1,10 @@
+AVD: GPlayed_API22_AOSP
+DNS del laboratorio: 10.230.31.53
+Comando de PowerShell para el arranque manual:
+& "C:\Users\jdelp\AppData\Local\Android\Sdk\emulator\emulator.exe" "@GPlayed_API22_AOSP" -port 5554 -dns-server 10.230.31.53 -no-snapshot-load
+Rutas de Windows hacia Kali WSL:
+  10.230.31.53/32
+  10.230.31.11/32
+  1.162.98.240/32
+  10.230.31.20/32
+  10.230.31.30/32

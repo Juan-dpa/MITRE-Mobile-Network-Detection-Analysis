@@ -1,0 +1,5 @@
+/home/juadelavi/python-labnet/android-labs/redalert/source/redalert_server.py:166: DeprecationWarning: ssl.TLSVersion.TLSv1 is deprecated
+  context.minimum_version = ssl.TLSVersion.TLSv1
+[twitter] escucha en 10.230.39.11:443; twitter-id=86d08d31c9d4733; c2=http://192.168.56.20:8060
+[twitter] GET /86d08d31c9d4733 Host=twitter.com
+[twitter] 172.22.0.1 "GET /86d08d31c9d4733 HTTP/1.1" 200 -

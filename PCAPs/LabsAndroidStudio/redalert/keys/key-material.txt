@@ -1,0 +1,7 @@
+Laboratorio: redalert
+Directorio: /home/juadelavi/python-labnet/android-smoke/20260823-220930/redalert/keys
+Material:
+  - redalert-twitter.crt: Certificado presentado por el servicio Twitter controlado
+  - redalert-twitter.key: Clave privada del certificado Twitter controlado
+  - redalert-sslkeys.log: Secretos TLS de la sesión HTTPS con twitter.com
+Nota: Twitter utiliza TLS; el fichero SSLKEYLOGFILE permite descifrar esa sesión. TimeAPI y los dos C2 no usan TLS.

@@ -1,0 +1,4 @@
+Laboratorio: dresscode
+Directorio: /home/juadelavi/python-labnet/android-smoke/20260822-134341/dresscode/keys
+Material: ninguno
+Nota: DNS, C2, SOCKS4 y SMTP viajan en claro; DressCode no necesita material criptográfico adicional.

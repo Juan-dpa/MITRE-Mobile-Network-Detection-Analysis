@@ -420,7 +420,7 @@ El laboratorio emula en Python el gateway, el C2 operacional, la víctima y el s
 | Entidad | Dirección y servicio | Procedencia |
 |---|---|---|
 | Víctima emulada | `10.29.9.10` | Dirección privada asignada a la víctima dentro de la topología aislada. |
-| Gateway inicial | `173.242.124.163:443` | Extremo integrado en la configuración de la muestra analizada. |
+| Gateway inicial | `173.242.124.163:443` | Extremo integrado en la configuración de la muestra y confirmado por el [informe de CERT Orange Polska de 2014](https://cert.orange.pl/wp-content/uploads/2023/05/Raport_CERT_OPL_2014.pdf), que lo identifica como el primer C2. |
 | C2 operacional | `5.45.65.100:80` | Uno de los C2 alternativos mostrados en la figura 48 del [informe de CERT Orange Polska de 2014](https://cert.orange.pl/wp-content/uploads/2023/05/Raport_CERT_OPL_2014.pdf). |
 | Objetivo FTP | `10.29.9.20:21` y `10.29.9.20:6200` | Host privado controlado dentro de la red de la víctima. Lo elige el escenario para materializar el uso del proxy y no se presenta como infraestructura de NotCompatible. |
 
@@ -490,4 +490,4 @@ sequenceDiagram
 
 Este escenario está automatizado en `python-labnet` con el identificador `notcompatible`. La ejecución, la captura y la recopilación del material RSA se describen en la [guía central de laboratorios Python](Laboratorios%20Python.md).
 
-El C2 muestra `LAB FLOW COMPLETED SUCCESSFULLY` cuando ha recibido la prueba inocua, ha cerrado los dos canales y ha completado el flujo. Este mensaje pertenece al registro local del laboratorio y no se transmite dentro de la captura.
+El C2 muestra `LAB FLOW COMPLETED SUCCESSFULLY` cuando ha recibido la prueba inocua, ha cerrado los dos canales y ha completado el flujo. 

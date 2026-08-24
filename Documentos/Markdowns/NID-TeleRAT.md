@@ -8,7 +8,7 @@ En Telegram, un bot es una cuenta automatizada que se controla mediante peticion
 
 La muestra tampoco realiza un registro de víctima convencional. No negocia un identificador propio con un panel ni recibe una configuración nueva. La asociación con el C2 consiste en utilizar esos valores ya incorporados a la aplicación. El modelo del dispositivo y `android_id` se añaden posteriormente al texto de algunas respuestas para que el operador pueda distinguir terminales.
 
-El análisis se apoya en la siguiente APK :
+El análisis se apoya en la APK abierta en JADX:
 
 | Artefacto estudiado | Identidad | SHA-256 |
 |---|---|---|
@@ -531,63 +531,16 @@ sequenceDiagram
 
 ### Laboratorio de generación del PCAP
 
-El laboratorio ejecuta la muestra real de TeleRAT en una máquina virtual AOSP con Android 5.0.2, correspondiente a la API 21 y sin los servicios de Google. El entorno reproduce localmente los servicios con los que se comunica la muestra:
+El laboratorio ejecuta la muestra original de TeleRAT en el AVD AOSP `golden_api21_aosp`, basado en Android 5.0/API 21. Esta versión es necesaria porque la APK distribuye código entre `classes.dex` y `classes2.dex`; Android 4.4/API 19 intenta inicializar `com.applisto.appcloner.classes.DefaultProvider` antes de cargar el segundo DEX y la aplicación termina durante el arranque. Android Emulator permanece en Windows y Kali WSL aloja las entidades controladas.
 
-- CoreDNS resuelve `api.telegram.org` hacia `10.0.2.2`, dirección utilizada por el emulador para acceder al sistema anfitrión.
-- El servidor de la API de Telegram emulada atiende mediante HTTP en el puerto 80 y HTTPS en el puerto 443.
-- El servidor del operador proporciona la orden que recibirá la muestra.
-- Wireshark captura el tráfico sobre la interfaz de bucle invertido de Windows.
+| Entidad | Dirección y servicio | Procedencia |
+|---|---|---|
+| DNS controlado | `10.230.70.53:53` | Dirección privada asignada al resolutor del laboratorio. |
+| API de Telegram emulada | `149.154.167.220:80` y `149.154.167.220:443` | Dirección incluida en el prefijo `149.154.160.0/20` publicado por [Telegram](https://core.telegram.org/resources/cidr.txt). Representa el servicio legítimo abusado por TeleRAT, no infraestructura dedicada a la familia. |
+| Operador | `10.230.70.20:9000` | Dirección privada desde la que se proporciona a la API emulada la orden destinada a la muestra. No es un IOC ni se anuncia al dispositivo. |
 
-#### Instalación del certificado
+El AVD confía previamente en la autoridad `TeleRAT Lab CA`. El certificado presentado para `api.telegram.org` contiene ese nombre en su SAN y está firmado por dicha autoridad. El servidor conserva TLS 1.0 y `TLS_RSA_WITH_AES_128_CBC_SHA`, de acuerdo con la ejecución observada; la clave privada RSA y los certificados quedan inventariados junto al PCAP para permitir el descifrado. Esta preparación pertenece al estado previo de la máquina virtual y no se repite durante la captura.
 
-Con la máquina virtual encendida, el certificado de la autoridad de certificación del laboratorio se copia a un directorio interno accesible y se abre mediante el instalador de certificados de Android:
+TeleRAT deshabilita su componente lanzador después de ocultar la actividad, por lo que una repetición debe restaurar `b4a.examplf/.main` antes de abrir la aplicación. El operador emulado introduce `دریافت وضعیت` después de recibir el mensaje que contiene el teclado de órdenes; la muestra obtiene la orden mediante `getUpdates` y devuelve el resultado mediante el mismo servicio.
 
-```powershell
-PS: $Certificado = '.\certs\telerat-lab-ca.cer'
-PS: adb push $Certificado /data/local/tmp/telerat-lab-ca.cer
-PS: adb shell chmod 644 /data/local/tmp/telerat-lab-ca.cer
-PS: adb shell am start `
->>     -a android.intent.action.VIEW `
->>     -d file:///data/local/tmp/telerat-lab-ca.cer `
->>     -t application/x-x509-ca-cert
-```
-
-Android solicita asignar un nombre al certificado. En este laboratorio se utiliza `TeleRAT Lab CA`. Esta operación solo es necesaria durante la preparación inicial de la máquina virtual.
-
-El certificado presentado por el servidor HTTPS es válido para `api.telegram.org` y está firmado por esta autoridad. El servidor limita la negociación a TLS 1.0 con el conjunto criptográfico `TLS_RSA_WITH_AES_128_CBC_SHA`, de acuerdo con la comunicación observada durante la ejecución de la muestra.
-
-#### Ejecución del laboratorio
-
-CoreDNS se inicia con la configuración incluida en el laboratorio:
-
-```powershell
-PS: coredns -conf .\coredns\Corefile
-```
-
-El servidor del operador se inicia en otra terminal:
-
-```powershell
-PS: python .\operator\operator_server.py
-```
-
-El servidor que emula la API de Telegram se inicia en una tercera terminal:
-
-```powershell
-PS: python .\server\bot_api_server.py
-```
-
-Antes de iniciar la muestra se comienza la captura en Wireshark sobre la interfaz de bucle invertido de Windows.
-
-La máquina virtual se inicia indicando que debe utilizar CoreDNS como servidor DNS:
-
-```powershell
-PS: emulator -avd <AVD_API21_AOSP> `
->>     -writable-system `
->>     -no-snapshot-load `
->>     -no-snapshot-save `
->>     -dns-server 127.0.0.1
-```
-
-Una vez iniciado Android, la muestra puede instalarse arrastrando la APK a la ventana del emulador.
-
-Finalmente, se pulsa el botón mostrado por la aplicación. TeleRAT oculta su actividad e inicia sus servicios. El servidor del operador introduce automáticamente la orden `دریافت وضعیت` después de recibir el mensaje que contiene el teclado de órdenes. A partir de ese momento se desarrolla la secuencia de comunicaciones descrita en el diagrama anterior.
+Este escenario está incorporado en `python-labnet` con el identificador `telerat`. La preparación de la topología, el arranque manual del AVD, la captura interactiva y la retirada del entorno se describen en la [guía central de laboratorios Android](Laboratorios%20Android.md).

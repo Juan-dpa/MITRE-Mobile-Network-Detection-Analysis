@@ -1,0 +1,17 @@
+11:32:34 [GW] Listening on 173.242.124.163:443 (Ctrl+C to stop)
+11:32:34 [GW] Advertising Operational C2 5.45.65.100:80
+11:32:35 [GW] 10.29.9.10:47978 connected
+11:32:35 [GW] 10.29.9.10:47978 RSA/RC4 handshake complete
+11:32:35 [GW] 10.29.9.10:47978 -> HELO
+  HELO
+    VER: 02 00 00 00
+    UUID: 11 bd 54 2d ee ba a9 cf 36 78 9c eb 9a e9 10 3f
+    PORT: 75 30 ('u0')
+    GROUP: 00 00
+    LDGROUP: e8 03
+    LID: 01 00 00 00 00 00 00 00
+    CT: 01 00 00 00
+    FB: 
+11:32:35 [GW] GW -> 10.29.9.10:47978 SET signed with laboratory RSAGlobal
+11:32:35 [GW] GW -> 10.29.9.10:47978 SETGROUP=1; victim should persist and reconnect
+11:32:35 [GW] 10.29.9.10:47978 closed the gateway session as expected

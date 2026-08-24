@@ -1,0 +1,9 @@
+AVD: DressCode_API22_AOSP
+DNS del laboratorio: 10.230.30.53
+Comando de PowerShell para el arranque manual:
+& "C:\Users\jdelp\AppData\Local\Android\Sdk\emulator\emulator.exe" "@DressCode_API22_AOSP" -port 5554 -dns-server 10.230.30.53 -no-snapshot-load
+Rutas de Windows hacia Kali WSL:
+  10.230.30.53/32
+  138.201.195.77/32
+  10.230.30.20/32
+  10.230.30.25/32

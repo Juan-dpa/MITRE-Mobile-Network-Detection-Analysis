@@ -36,9 +36,9 @@ La APK adicional viaja dentro del canal C2, no mediante una descarga HTTP indepe
 
 #### Dirección del C2 para la futura captura
 
-La dirección del C2 no tiene que conservar el valor observado en la campaña original. Para la futura captura, la respuesta controlada de Twitter codificará `10.0.2.2:<C2_PORT>`. En Android Emulator, `10.0.2.2` es la dirección especial que permite a una aplicación del dispositivo emulado alcanzar un servicio que escucha en `127.0.0.1` en el equipo anfitrión.
+La respuesta controlada de Twitter codifica `1.162.98.240:28833`. La dirección corresponde a un C2 de XLoader en TCP/28833 publicado por Trend Micro; el puerto y la procedencia se conservan en el inventario de la sesión. Windows enruta ese destino hacia la entidad C2 de Kali WSL sin modificar sus cabeceras IP.
 
-El contenido recuperado desde Twitter también puede expresar el C2 mediante un nombre de dominio, en cuyo caso aparecería una resolución DNS antes de la conexión. No obstante, esa alternativa añade una interacción que no resulta necesaria para el escenario propuesto; se utilizará `10.0.2.2` para mantener el flujo mínimo y reproducible.
+El contenido recuperado desde Twitter también puede expresar el C2 mediante un nombre de dominio, en cuyo caso aparecería una resolución DNS antes de la conexión. El laboratorio conserva la dirección publicada para reproducir el flujo mínimo documentado, por lo que no añade esa consulta intermedia.
 
 #### Dos usos independientes de TLS
 
@@ -105,7 +105,7 @@ Para concretar la futura captura sin falsificar datos históricos se fijan estos
 - Región del dispositivo: `ko_KR`.
 - Cuenta regional de C2: `sdfghuio342`.
 - Cuenta del `WebView`: `fdgoer343`.
-- Destino C2: `10.0.2.2:28833`, donde `10.0.2.2` permite alcanzar el servidor preparado en el equipo anfitrión y `28833` es una elección compatible con los indicadores publicados, no el valor recuperado históricamente de esa cuenta.
+- Destino C2: `1.162.98.240:28833`, indicador publicado por Trend Micro para XLoader.
 - URL controlada del `WebView`: `http://webview.lab/`, codificada en la respuesta emulada de `fdgoer343`.
 - Actualización controlada: el C2 anunciará `lab.xloader.secondary` como nombre de la APK adicional. El valor asociado será `*`, que indica que la instalación no sustituye a ninguna aplicación anterior y evita una desinstalación previa.
 - Servicio vulnerable emulado: `http://vuln.lab/cgi-bin/status`, que representa un CGI ejecutado mediante una versión de Bash afectada por CVE-2014-6271.
@@ -255,7 +255,7 @@ La inversión necesaria para construir el contenido de la futura captura es:
 
 Los ocho valores posibles de `r[i]` se decodifican igual porque sus tres bits inferiores se eliminan. Para que el PCAP pueda repetirse de forma determinista se elegirá, por ejemplo, `r[i] = 0` en todas las posiciones; será un parámetro controlado de la captura y no un atributo histórico. Cada `E[i]` generado deberá continuar dentro de U+4E00 a U+9FA5, pues cualquier carácter fuera de ese intervalo rompería la captura de la expresión regular.
 
-El valor decodificado determina uno de dos transportes para el C2. Si comienza por `ssl://`, la muestra abre una conexión TCP protegida con TLS. En cualquier otro caso, abre una conexión TCP sin cifrado. No utiliza HTTP en ninguno de los dos casos. Los prefijos internos `wss://` y `ws://` solo sirven para seleccionar una de esas dos opciones en la biblioteca. En la futura captura, `10.0.2.2:28833` se convertirá en `ws://10.0.2.2:28833` y producirá TCP sin TLS. La dirección se guarda en `last_addr` para reutilizarla si falla una consulta posterior a Twitter.
+El valor decodificado determina uno de dos transportes para el C2. Si comienza por `ssl://`, la muestra abre una conexión TCP protegida con TLS. En cualquier otro caso, abre una conexión TCP sin cifrado. No utiliza HTTP en ninguno de los dos casos. Los prefijos internos `wss://` y `ws://` solo sirven para seleccionar una de esas dos opciones en la biblioteca. En la captura, `1.162.98.240:28833` se convierte en `ws://1.162.98.240:28833` y produce TCP sin TLS. La dirección se guarda en `last_addr` para reutilizarla si falla una consulta posterior a Twitter.
 
 ```java
 String decoded = resolve(account);
@@ -787,7 +787,6 @@ sequenceDiagram
     participant APP as Aplicación XLoader
     participant DNS as Servicio DNS
     participant TW as Twitter emulado
-    participant WV as WebView
     participant WEB as Servidor del WebView
     participant C2 as Servidor C2
     participant VULN as Servicio CGI vulnerable
@@ -831,25 +830,20 @@ sequenceDiagram
 
 ### Laboratorio de generación del PCAP
 
-El laboratorio ejecuta la muestra original en un emulador Android API 22 configurado con la región `ko_KR`. Un `Corefile` autosuficiente resuelve `twitter.com`, `webview.lab` y `vuln.lab` hacia `10.0.2.2`; al capturar la interfaz loopback de Windows, las cabeceras IP de esas conversaciones aparecen como `127.0.0.1`. No es necesario instalar una autoridad de certificación: el certificado incluido contiene `twitter.com` en su SAN y la muestra omite la validación de confianza en esta ruta.
+El laboratorio ejecuta la muestra original en el AVD `GPlayed_API22_AOSP`, configurado previamente con la región `ko_KR`. Android Emulator permanece en Windows y Kali WSL aloja las entidades controladas.
 
-El lanzador Python inicia el servicio HTTPS que proporciona ambos títulos CJK, el servidor HTTP del `WebView` y del CGI, y el C2 en `28833/tcp`. El C2 entrega una APK inocua mediante `getPkgData`, se pausa mientras se confirma su instalación y, al continuar, envía la orden `http` que provoca la petición Shellshock y recibe su respuesta por el mismo canal.
+| Entidad | Dirección y servicio | Procedencia |
+|---|---|---|
+| DNS controlado | `10.230.31.53:53` | Dirección privada asignada al resolutor del laboratorio. |
+| Twitter emulado | `10.230.31.11:443` | Dirección privada elegida para entregar las cadenas codificadas con el C2 y la URL del `WebView`. Representa un servicio legítimo abusado y no es un IOC. |
+| C2 de XLoader | `1.162.98.240:28833` | IOC incluido por Trend Micro entre los servidores de XLoader en su [informe técnico sobre XLoader y FakeSpy](https://documents.trendmicro.com/assets/pdf/wp-evolution-of-xloader-and-fakespy-two-interconnected-android-malware-families.pdf). |
+| Contenido del `WebView` | `10.230.31.20:80` | Dirección y nombre `webview.lab` creados para suministrar contenido inocuo. No son IOC. |
+| CGI vulnerable emulado | `10.230.31.30:80` | Dirección y nombre `vuln.lab` creados para representar el objetivo de la petición Shellshock. No son IOC. |
 
-Antes de abrir la muestra se fija la región coreana y se reinicia Android para que `Locale.getDefault()` seleccione la rama `ko_KR`:
+No es necesario instalar una autoridad de certificación. El certificado del servicio controlado contiene `twitter.com` en su SAN y la muestra omite la validación de confianza en esta ruta. El servidor genera además `xloader-sslkeys.log`, que se almacena junto al PCAP para facilitar el análisis de TLS.
 
-```powershell
-PS: adb root
-PS: adb wait-for-device
-PS: adb shell setprop persist.sys.language ko
-PS: adb shell setprop persist.sys.country KR
-PS: adb shell stop
-PS: adb shell start
-PS: adb wait-for-device
-```
+El C2 entrega una APK inocua mediante `getPkgData`. La muestra abre el instalador de Android y, una vez completada esa interacción en la GUI, el servidor envía la orden `http` que provoca la petición Shellshock emulada y recibe su respuesta por el mismo canal. El pipeline no exige una confirmación intermedia: `INTRO` se reserva para finalizar la captura cuando ya ha concluido toda la secuencia.
 
-Una vez que el emulador vuelve a estar disponible, CoreDNS y el lanzador se ejecutan desde la raíz del laboratorio, cada uno en una terminal distinta:
+La región coreana se fija una sola vez, fuera de la captura, para que `Locale.getDefault()` seleccione la rama `ko_KR`. Cuando la muestra abre el instalador de la APK secundaria, la instalación se completa desde la GUI y se regresa a XLoader; después, la orden `http` provoca la petición Shellshock emulada. Esta interacción sigue siendo manual y no altera el contenido de red descrito.
 
-```powershell
-PS: coredns.exe -conf .\coredns\Corefile
-PS: python .\run_lab.py
-```
+Este escenario está incorporado en `python-labnet` con el identificador `xloader`. La preparación de la topología, el arranque manual del AVD, la captura interactiva y la retirada del entorno se describen en la [guía central de laboratorios Android](Laboratorios%20Android.md). El material de la sesión incluye `xloader-sslkeys.log` para descifrar el canal HTTPS de Twitter.

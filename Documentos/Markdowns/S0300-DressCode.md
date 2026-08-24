@@ -197,11 +197,11 @@ Para el escenario elegido, `VER=0x04`, `CMD=0x01` (`CONNECT`), `DST.PORT=0x0019`
 En SOCKS5 la negociación y la petición no forman una sola estructura, sino dos intercambios:
 
 ```text
-Operador hacia víctima: VER NMETHODS METHODS
-Víctima hacia operador: VER METHOD
+Operador -> víctima: VER NMETHODS METHODS
+Víctima -> operador: VER METHOD
 
-Operador hacia víctima: VER CMD RSV ATYP DST.ADDR DST.PORT
-Víctima hacia operador: VER REP RSV ATYP BND.ADDR BND.PORT
+Operador -> víctima: VER CMD RSV ATYP DST.ADDR DST.PORT
+Víctima -> operador: VER REP RSV ATYP BND.ADDR BND.PORT
 ```
 
 Los valores de `CMD` definidos por [RFC 1928](https://www.rfc-editor.org/rfc/rfc1928) son `0x01` para `CONNECT`, `0x02` para `BIND` y `0x03` para `UDP ASSOCIATE`. `RSV` ocupa un octeto y debe valer `0x00`. La dirección es IPv4 para `ATYP=0x01`, un nombre precedido por su longitud para `ATYP=0x03` o IPv6 para `ATYP=0x04`, aunque esta última posibilidad es rechazada por DressCode.
@@ -219,16 +219,16 @@ sequenceDiagram
     participant S as "Servidor SMTP emulado"
 
     V->>DNS: A dfm.nicsm.net
-    DNS-->>V: 10.0.2.2 (valor del laboratorio)
+    DNS-->>V: 138.201.195.77
     V->>C2: TCP/9001
     V->>C2: HELLO + LF
     C2-->>V: HELLO + LF
     V->>C2: HELLO + LF
     C2-->>V: PING + LF
     V->>C2: PONG + LF
-    C2-->>V: CREATE,10.0.2.2,9002 + LF
+    C2-->>V: CREATE,10.230.30.20,9002 + LF
     V->>O: Nueva conexión TCP/9002
-    O->>V: SOCKS4 CONNECT 10.0.2.2:25
+    O->>V: SOCKS4 CONNECT 10.230.30.25:25
     V->>S: Nueva conexión TCP/25
     V-->>O: SOCKS4 00 5a (petición concedida)
     S-->>V: Banner SMTP
@@ -241,30 +241,21 @@ sequenceDiagram
 
 ### Laboratorio de generación del PCAP
 
-El APK declara `targetSdkVersion=22`. El laboratorio ejecuta la muestra original en Android y emula mediante Python los tres participantes externos: el C2, el cliente SOCKS del operador y el servidor SMTP. CoreDNS resuelve el dominio hardcodeado hacia `10.0.2.2`, dirección especial mediante la que el emulador Android alcanza el host del laboratorio.
+El APK declara `targetSdkVersion=22`. El laboratorio ejecuta la muestra original en Android Emulator sobre Windows y sitúa en Kali WSL el DNS, el C2, el operador SOCKS4 y el servidor SMTP.
 
-El escenario utiliza SOCKS4 para mantener visible una negociación breve y suficiente. El C2 envía `CREATE,10.0.2.2,9002`; la muestra se conecta al cliente SOCKS que escucha en TCP/9002 y este solicita `CONNECT 10.0.2.2:25`. Tras recibir la concesión del proxy, el cliente completa una conversación SMTP a través de la víctima.
+| Entidad | Dirección y servicio | Procedencia |
+|---|---|---|
+| DNS controlado | `10.230.30.53:53` | Dirección privada asignada al resolutor del laboratorio. |
+| C2 de DressCode | `138.201.195.77:9001` | Respuesta A histórica de `dfm.nicsm.net`, observada ocho veces entre abril y julio de 2017 en el [registro de DNS pasivo de Mnemonic](https://api.mnemonic.no/pdns/v3/dfm.nicsm.net). El dominio y TCP/9001 proceden del APK; la IP no está codificada en él. |
+| Operador SOCKS4 | `10.230.30.20:9002` | Dirección y puerto privados elegidos para materializar la conexión inversa ordenada mediante `CREATE`. No son IOC. |
+| Servidor SMTP | `10.230.30.25:25` | Objetivo privado controlado al que el operador solicita acceso mediante `CONNECT`. No es un IOC. |
+
+El escenario utiliza SOCKS4 para mantener visible una negociación breve y suficiente. El C2 envía `CREATE,10.230.30.20,9002`; la muestra se conecta al operador y este solicita `CONNECT 10.230.30.25:25`. Tras recibir la concesión del proxy, el cliente completa una conversación SMTP a través de la víctima.
 
 El servicio remoto representa OpenSMTPD afectado por [CVE-2020-7247](https://nvd.nist.gov/vuln/detail/CVE-2020-7247). El fallo permitía que determinados metacaracteres de shell alcanzaran el tratamiento de `MAIL FROM`; el ejemplo inocuo publicado por Qualys utiliza `MAIL FROM:<;sleep 66;>`, tal como recoge el [advisory de oss-security](https://www.openwall.com/lists/oss-security/2020/01/28/3). El emulador se limita a reconocer esa cadena y devolver respuestas SMTP: no ejecuta `sleep` ni ningún otro comando.
 
-CVE-2020-7247 es posterior a la aparición de DressCode y no forma parte de su implementación. Su uso constituye una decisión controlada para producir una firma de explotación inequívoca dentro del tráfico retransmitido. De igual forma, `10.0.2.2`, TCP/9002 y el servidor SMTP son elementos del laboratorio; `dfm.nicsm.net`, TCP/9001, el protocolo de líneas del C2 y la implementación SOCKS proceden del APK.
+CVE-2020-7247 es posterior a la aparición de DressCode y no forma parte de su implementación. Su uso constituye una decisión controlada para producir una firma de explotación inequívoca dentro del tráfico retransmitido. El emulador solo reconoce la cadena seleccionada y devuelve respuestas SMTP; no ejecuta órdenes.
 
-Desde la raíz del directorio de DressCode, los servicios se inician en cuatro terminales y en este orden:
+Este escenario está incorporado en `python-labnet` con el identificador `dresscode`. La preparación de la topología, el arranque manual del AVD, la captura interactiva y la retirada del entorno se describen en la [guía central de laboratorios Android](Laboratorios%20Android.md).
 
-```powershell
-PS> coredns.exe -conf .\DNS\Corefile
-```
-
-```powershell
-PS> python .\Servidor_SMTP\smtp_emulator.py --bind 0.0.0.0 --port 25
-```
-
-```powershell
-PS> python .\Cliente_Proxy\attacker_socks4_client.py --bind 0.0.0.0 --port 9002 --target-ip 10.0.2.2 --target-port 25
-```
-
-```powershell
-PS> python .\C2\c2_emulator.py --bind 0.0.0.0 --port 9001 --attacker-host 10.0.2.2 --attacker-port 9002
-```
-
-Una vez disponibles los servicios, se inicia la aplicación en Android. La captura debe mostrar la consulta de `dfm.nicsm.net`, el canal C2 sobre TCP/9001, la conexión inversa hacia TCP/9002, la petición SOCKS4 y una conexión distinta desde el dispositivo hacia TCP/25. Las primitivas SMTP deben aparecer tanto en el tramo operador-víctima como en el tramo víctima-servidor, lo que permite demostrar que la segunda conexión nace de `CONNECT` y que sus datos regresan por el mismo túnel.
+La captura debe mostrar la consulta de `dfm.nicsm.net`, el canal C2 hacia `138.201.195.77:9001`, la conexión inversa hacia `10.230.30.20:9002`, la petición SOCKS4 y una conexión distinta desde el dispositivo hacia `10.230.30.25:25`. Las primitivas SMTP deben aparecer tanto en el tramo operador-víctima como en el tramo víctima-servidor, lo que permite demostrar que la segunda conexión nace de `CONNECT` y que sus datos regresan por el mismo túnel. La dirección de origen que resulte del NAT de Android Emulator se conserva sin traducción porque no interviene en la atribución de la infraestructura maliciosa.

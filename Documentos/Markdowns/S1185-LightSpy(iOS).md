@@ -1339,8 +1339,8 @@ El laboratorio no ejecuta la IPA original, sino un cliente emulado en Python 3.1
 | Víctima emulada | `10.118.5.10` | Dirección privada asignada al cliente dentro de la topología aislada. |
 | Resolutor DNS | `8.8.8.8:53` | Dirección publicada para Google Public DNS; el servicio se emula dentro del *namespace* aislado. |
 | Respuesta para `www.baidu.com` | `103.235.46.115` | Respuesta A obtenida el 20 de agosto de 2026. Representa el servicio legítimo consultado y no infraestructura atribuida a LightSpy. |
-| Servidor de *staging* | `45.83.237.13:8088` | Extremo HTTP integrado directamente en el componente `095`. |
-| C2 HTTPS/WSS | `45.134.1.180:50000` | Extremo recuperado de la configuración cifrada de `irc_loader` y entregado al núcleo `light`. |
+| Servidor de *staging* | `45.83.237.13:8088` | Extremo HTTP integrado directamente en el componente `095` y corroborado por [ThreatFabric](https://www.threatfabric.com/blogs/lightspy-mapt-mobile-payment-system-attack). |
+| C2 HTTPS/WSS | `45.134.1.180:50000` | Extremo recuperado de la configuración cifrada de `irc_loader` y entregado al núcleo `light`; [Kaspersky](https://securelist.com/ios-exploit-chain-deploys-lightspy-malware/96407/) atribuye la misma IP al C2 del implante iOS. |
 
 El resolutor controlado escucha en `8.8.8.8:53` y responde únicamente por `www.baidu.com` con `103.235.46.115`. La topología asigna `45.83.237.13` y `45.134.1.180` a la entidad que representa la infraestructura de LightSpy, inicia los servidores de *staging* y C2 y captura los flujos desde la entidad víctima.
 
