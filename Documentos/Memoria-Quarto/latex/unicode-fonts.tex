@@ -1,0 +1,33 @@
+% Fuentes de respaldo para contenido Unicode literal recuperado de las
+% muestras. Babel selecciona automáticamente la escritura, la dirección y la
+% fuente cuando encuentra texto persa, incluso dentro de bloques de código
+% resaltados por Pandoc.
+\babelprovide[import,onchar=ids fonts]{persian}
+\babelfont[persian]{rm}[Scale=MatchLowercase]{Arial}
+\babelfont[persian]{sf}[Scale=MatchLowercase]{Arial}
+\babelfont[persian]{tt}[Scale=MatchLowercase]{Arial}
+
+% En bloques verbatim, la conmutación de Babel no alcanza de forma fiable los
+% ideogramas CJK. ucharclasses trabaja en el nivel de caracteres de XeTeX y
+% conserva la familia exterior al agrupar cada cambio de fuente.
+\newfontfamily\CJKFallback[Scale=MatchLowercase]{Microsoft YaHei}
+\newfontfamily\SymbolFallback[Scale=MatchLowercase]{Segoe UI Symbol}
+\newfontfamily\EmojiFallback[Scale=MatchLowercase]{Segoe UI Emoji}
+\usepackage[
+  CJK,
+  MiscellaneousSymbols,
+  MiscellaneousSymbolsAndArrows,
+  MiscellaneousSymbolsAndPictographs,
+  Dingbats
+]{ucharclasses}
+\setTransitionsForCJK{\CJKFallback}{\ttfamily}
+\setTransitionsFor{MiscellaneousSymbols}{\SymbolFallback}{\ttfamily}
+\setTransitionsFor{MiscellaneousSymbolsAndArrows}{\SymbolFallback}{\ttfamily}
+\setTransitionsFor{Dingbats}{\SymbolFallback}{\ttfamily}
+\setTransitionsFor{MiscellaneousSymbolsAndPictographs}{\EmojiFallback}{\ttfamily}
+
+% Latin Modern Mono no cubre los caracteres de dibujo de cajas usados en
+% algunos bloques de texto heredados. Courier New conserva el ancho fijo y
+% aporta esos glifos; las reglas anteriores siguen sustituyendo solo
+% los fragmentos persas y CJK.
+\setmonofont{Courier New}[Scale=MatchLowercase]

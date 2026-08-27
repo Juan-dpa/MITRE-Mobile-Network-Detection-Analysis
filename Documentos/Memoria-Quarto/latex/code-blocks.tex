@@ -1,0 +1,23 @@
+% Ajustes globales para los bloques de código resaltados por Pandoc.
+% fvextra extiende fancyvrb con partición segura de líneas largas.
+\usepackage{fvextra}
+
+% Pandoc declara Highlighting después de procesar include-in-header. Aplicar
+% esta personalización antes quedaba sobrescrito en el documento final; por
+% eso se difiere hasta \begin{document}.
+\AtBeginDocument{%
+  \RecustomVerbatimEnvironment{Highlighting}{Verbatim}{
+    commandchars=\\\{\},
+    fontsize=\small,
+    tabsize=4,
+    breaklines=true,
+    breakanywhere=true,
+    breaknonspaceingroup=true,
+    breakautoindent=false,
+    breakindent=0pt,
+    breaksymbolleft={},
+    breaksymbolright={},
+    showspaces=false,
+    showtabs=false
+  }%
+}

@@ -1,0 +1,35 @@
+# Base teórica y herramientas
+
+## Fundamentos teóricos
+
+### MITRE ATT&CK for Mobile
+
+### Tráfico de red móvil y capturas PCAP
+
+### Ingeniería inversa de aplicaciones móviles
+
+### Generación controlada de tráfico
+
+## Herramientas y plataformas
+
+### Ghidra e integración mediante MCP
+
+### JADX e integración mediante MCP
+
+### tria.ge
+
+### Wireshark e integración mediante MCP
+
+### JSS7 Attack Simulator
+
+### Kali Linux
+
+### Python y sus bibliotecas
+
+### OpenSSL
+
+### CoreDNS
+
+### Mosquitto
+
+### Android Studio, Android SDK y ADB

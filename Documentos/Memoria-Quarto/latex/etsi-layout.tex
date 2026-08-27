@@ -1,0 +1,53 @@
+% Perfil de lectura digital durante la redacción.
+% Evita la alternancia de márgenes y la corrección de encuadernación de 10 mm
+% que la clase oficial activa para impresión a doble cara.
+\KOMAoptions{open=any,BCOR=0mm}
+\recalctypearea
+
+% Capítulo, sección, subsección y subsubsección en el índice general.
+\setcounter{tocdepth}{3}
+
+% Margen de maniobra para identificadores técnicos en párrafos estrechos.
+% Evita desbordamientos mínimos sin reducir la tipografía ni alterar tablas.
+\setlength{\emergencystretch}{3em}
+
+% Los identificadores técnicos de las tablas (dominios, rutas, hashes, etc.)
+% necesitan poder partirse aunque no contengan espacios. El filtro de Quarto
+% breakable-table-code.lua aplica esta macro únicamente al código en línea
+% situado dentro de tablas.
+\usepackage{seqsplit}
+\newcommand{\BreakableTableCode}[1]{\texttt{\seqsplit{#1}}}
+
+% La clase oficial antepone "Figura" y "Tabla" al número de cada entrada,
+% pero su ancho dinámico solo mide el número (por ejemplo, 4.1). Reservamos
+% explícitamente espacio para la etiqueta completa y evitamos solapamientos.
+\DeclareTOCStyleEntry[
+  numwidth=7em,
+  entrynumberformat=\useheaderfont\figurename~\autodot,
+  linefill=\hfill,
+  entryformat=\uselabelfont,
+  pagenumberformat=\useheaderfont
+]{tocline}{figure}
+\DeclareTOCStyleEntry[
+  numwidth=7em,
+  entrynumberformat=\useheaderfont\tablename~\autodot,
+  linefill=\hfill,
+  entryformat=\uselabelfont,
+  pagenumberformat=\useheaderfont
+]{tocline}{table}
+
+% Compatibilidad entre la línea decorativa de etsibook y las cajas de título
+% que genera Quarto. Se conserva el aspecto oficial usando el ancho efectivo
+% de la caja, en lugar del ancho global de página.
+\makeatletter
+\renewcommand*{\chapterlinesformat}[3]{%
+  \if\relax\detokenize{#2}\relax
+    {\raggedleft#3\par}%
+    {\noindent\color{gray!75}\rule{\linewidth}{3.5pt}\par}%
+  \else
+    \@hangfrom{#2}{#3}%
+    \par\nobreak
+    {\noindent\color{gray!75}\rule{\linewidth}{3.5pt}\par}%
+  \fi
+}
+\makeatother

@@ -1,0 +1,103 @@
+# Técnicas detectables a nivel de red
+
+## Criterio de selección
+
+## T1660 - Phishing
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1660` |
+| Nombre | Phishing |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |
+
+## T1407 - Download New Code at Runtime
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1407` |
+| Nombre | Download New Code at Runtime |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |
+
+## T1604 - Proxy Through Victim
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1604` |
+| Nombre | Proxy Through Victim |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |
+
+## T1430.002 - Impersonate SS7 Nodes
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1430.002` |
+| Nombre | Impersonate SS7 Nodes |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |
+
+## T1428 - Exploitation of Remote Services
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1428` |
+| Nombre | Exploitation of Remote Services |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |
+
+## T1638 - Adversary-in-the-Middle
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1638` |
+| Nombre | Adversary-in-the-Middle |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |
+
+## T1509 - Non-Standard Port
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1509` |
+| Nombre | Non-Standard Port |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |
+
+## T1481.001 - Web Service: Dead Drop Resolver
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1481.001` |
+| Nombre | Web Service: Dead Drop Resolver |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |
+
+## T1481.002 - Web Service: Bidirectional Communication
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1481.002` |
+| Nombre | Web Service: Bidirectional Communication |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |
+
+## T1481.003 - Web Service: One-Way Communication
+
+| Campo | Contenido |
+|---|---|
+| Identificador | `T1481.003` |
+| Nombre | Web Service: One-Way Communication |
+| Descripción | |
+| Evidencia en red | |
+| Muestras asociadas | |

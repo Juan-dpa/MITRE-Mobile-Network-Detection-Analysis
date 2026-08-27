@@ -1,0 +1,18 @@
+% Adaptación de los metadatos de Quarto a la clase oficial etsibook.
+\header{Trabajo Fin de Grado\\$etsi.degree$}
+% El título actual supera una línea en la zona reservada de la cubierta.
+% \relsize funciona tanto en la cubierta como en la portada interior.
+\title{\relsize{-2}$title$}
+\author{$etsi.author$}
+\authorlabel{Autor}
+$for(etsi.directors)$
+\director{$etsi.directors.role$}{$etsi.directors.name$}{$etsi.directors.category$}
+$endfor$
+\date{Sevilla, $etsi.year$}
+\affiliation{$etsi.department$\\%
+  Escuela Técnica Superior de Ingeniería\\%
+  Universidad de Sevilla}
+
+$if(etsi.department-logo)$
+\optlogo{$etsi.department-logo$}
+$endif$

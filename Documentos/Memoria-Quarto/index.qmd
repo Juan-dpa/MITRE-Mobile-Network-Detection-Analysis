@@ -1,0 +1,24 @@
+# Agradecimientos {.unnumbered}
+
+<!-- Contenido pendiente. -->
+
+{{< pagebreak >}}
+
+# Resumen {.unnumbered}
+
+<!-- Contenido pendiente. -->
+
+{{< pagebreak >}}
+
+# Abstract {.unnumbered}
+
+<!-- Contenido pendiente. -->
+
+{{< pagebreak >}}
+
+```{=latex}
+\tableofcontents
+\listoftables
+\listoffigures
+\mainmatter
+```

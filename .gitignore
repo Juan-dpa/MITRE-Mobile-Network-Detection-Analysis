@@ -22,5 +22,30 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Quarto y artefactos auxiliares de LaTeX
+Documentos/Memoria-Quarto/_book/
+Documentos/Memoria-Quarto/*_files/
+Documentos/Memoria-Quarto/.quarto/
+Documentos/Memoria-Quarto/tmp/
+Documentos/Memoria-Quarto/**/*.quarto_ipynb
+Documentos/Memoria-Quarto/Memoria_TFG.aux
+Documentos/Memoria-Quarto/Memoria_TFG.bbl
+Documentos/Memoria-Quarto/Memoria_TFG.bcf
+Documentos/Memoria-Quarto/Memoria_TFG.blg
+Documentos/Memoria-Quarto/Memoria_TFG.lof
+Documentos/Memoria-Quarto/Memoria_TFG.log
+Documentos/Memoria-Quarto/Memoria_TFG.lot
+Documentos/Memoria-Quarto/Memoria_TFG.out
+Documentos/Memoria-Quarto/Memoria_TFG.run.xml
+Documentos/Memoria-Quarto/Memoria_TFG.synctex.gz
+Documentos/Memoria-Quarto/Memoria_TFG.tex
+Documentos/Memoria-Quarto/Memoria_TFG.toc
+Documentos/Memoria-Quarto/texput.log
+
+# Copias locales de datasets benignos externos
+PCAPs/Benigno/*.zip
+PCAPs/Benigno/**/*.zip
+
 Datasets/
 Muestras/

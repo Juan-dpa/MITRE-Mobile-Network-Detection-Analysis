@@ -1,0 +1,69 @@
+project:
+  type: book
+  output-dir: _book
+
+lang: es
+bibliography: referencias.bib
+
+# En PDF, convierte el código en línea de las tablas en texto monoespaciado
+# con puntos de corte invisibles. La fuente QMD puede conservar backticks
+# normales y ninguna corrección depende del .tex generado.
+filters:
+  - filters/breakable-table-code.lua
+
+# Metadatos que alimentan la cubierta y la portada oficiales de la ETSI.
+# Sustituir los valores PENDIENTE antes de entregar la memoria.
+etsi:
+  degree: "PENDIENTE: titulación oficial"
+  author: "PENDIENTE: nombre y apellidos del autor"
+  directors:
+    - role: "Tutor"
+      name: "PENDIENTE: nombre y apellidos del tutor"
+      category: "PENDIENTE: categoría académica del tutor"
+    # Si el tutor no pertenece a la ETSI, añadir aquí otro elemento con
+    # role: "Tutor ponente" y sus datos.
+  department: "PENDIENTE: departamento responsable"
+  year: "2026"
+  # department-logo: "ruta/al/logotipo-del-departamento.pdf"
+
+book:
+  title: "Análisis de rendimiento de NGFW/IDS/IPS en MITRE ATT&CK Mobile"
+  output-file: "Memoria_TFG"
+  chapters:
+    - index.qmd
+    - 01-introduccion.qmd
+    - 02-base-teorica.qmd
+    - 03-tecnicas.qmd
+    - 04-repositorio.qmd
+    - referencias.qmd
+
+format:
+  html:
+    theme: cosmo
+    number-depth: 4
+    code-overflow: wrap
+
+  pdf:
+    pdf-engine: xelatex
+    documentclass: etsibook
+    papersize: a4
+    classoption:
+      - fontsize=10pt
+      - sides=oneside
+      - paper=a4
+      - mode=project
+    template-partials:
+      - latex/title.tex
+      - latex/before-body.tex
+    include-in-header:
+      - latex/etsi-layout.tex
+      - latex/unicode-fonts.tex
+      - latex/code-blocks.tex
+    keep-tex: true
+    # Se generan tras Agradecimientos, Resumen y Abstract desde index.qmd.
+    toc: false
+    lof: false
+    lot: false
+    number-sections: true
+    number-depth: 4
+    code-overflow: wrap
