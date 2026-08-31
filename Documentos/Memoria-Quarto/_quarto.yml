@@ -2,6 +2,12 @@ project:
   type: book
   output-dir: _book
 
+editor:
+  render-on-save: true
+
+preview:
+  watch-inputs: true
+
 lang: es
 bibliography: referencias.bib
 
@@ -9,6 +15,7 @@ bibliography: referencias.bib
 # con puntos de corte invisibles. La fuente QMD puede conservar backticks
 # normales y ninguna corrección depende del .tex generado.
 filters:
+  - filters/isolate-bidi-code.lua
   - filters/breakable-table-code.lua
 
 # Metadatos que alimentan la cubierta y la portada oficiales de la ETSI.
@@ -44,7 +51,7 @@ format:
     code-overflow: wrap
 
   pdf:
-    pdf-engine: xelatex
+    pdf-engine: lualatex
     documentclass: etsibook
     papersize: a4
     classoption:

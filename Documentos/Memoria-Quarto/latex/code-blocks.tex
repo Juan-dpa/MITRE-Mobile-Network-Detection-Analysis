@@ -1,5 +1,7 @@
 % Ajustes globales para los bloques de código resaltados por Pandoc.
-% fvextra extiende fancyvrb con partición segura de líneas largas.
+% Las líneas conservan un tamaño legible y se ajustan al ancho disponible. El
+% salto es exclusivamente visual: no introduce caracteres ni modifica la
+% fuente QMD. Los tramos RTL se aíslan antes mediante un filtro de Pandoc.
 \usepackage{fvextra}
 
 % Pandoc declara Highlighting después de procesar include-in-header. Aplicar
@@ -13,8 +15,9 @@
     breaklines=true,
     breakanywhere=true,
     breaknonspaceingroup=true,
-    breakautoindent=false,
-    breakindent=0pt,
+    breakpreferspaces=true,
+    breakanywheresymbolpre={},
+    breakanywheresymbolpost={},
     breaksymbolleft={},
     breaksymbolright={},
     showspaces=false,

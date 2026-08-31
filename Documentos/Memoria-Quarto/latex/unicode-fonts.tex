@@ -1,33 +1,41 @@
 % Fuentes de respaldo para contenido Unicode literal recuperado de las
-% muestras. Babel selecciona automáticamente la escritura, la dirección y la
-% fuente cuando encuentra texto persa, incluso dentro de bloques de código
-% resaltados por Pandoc.
+% muestras. LuaLaTeX permite que Babel gestione conjuntamente la escritura,
+% la dirección y la fuente, también dentro del código resaltado por Pandoc.
 \babelprovide[import,onchar=ids fonts]{persian}
 \babelfont[persian]{rm}[Scale=MatchLowercase]{Arial}
 \babelfont[persian]{sf}[Scale=MatchLowercase]{Arial}
 \babelfont[persian]{tt}[Scale=MatchLowercase]{Arial}
 
-% En bloques verbatim, la conmutación de Babel no alcanza de forma fiable los
-% ideogramas CJK. ucharclasses trabaja en el nivel de caracteres de XeTeX y
-% conserva la familia exterior al agrupar cada cambio de fuente.
-\newfontfamily\CJKFallback[Scale=MatchLowercase]{Microsoft YaHei}
-\newfontfamily\SymbolFallback[Scale=MatchLowercase]{Segoe UI Symbol}
-\newfontfamily\EmojiFallback[Scale=MatchLowercase]{Segoe UI Emoji}
-\usepackage[
-  CJK,
-  MiscellaneousSymbols,
-  MiscellaneousSymbolsAndArrows,
-  MiscellaneousSymbolsAndPictographs,
-  Dingbats
-]{ucharclasses}
-\setTransitionsForCJK{\CJKFallback}{\ttfamily}
-\setTransitionsFor{MiscellaneousSymbols}{\SymbolFallback}{\ttfamily}
-\setTransitionsFor{MiscellaneousSymbolsAndArrows}{\SymbolFallback}{\ttfamily}
-\setTransitionsFor{Dingbats}{\SymbolFallback}{\ttfamily}
-\setTransitionsFor{MiscellaneousSymbolsAndPictographs}{\EmojiFallback}{\ttfamily}
+% Los ideogramas CJK se asignan a una fuente con cobertura china completa.
+\babelprovide[import=zh-Hans,onchar=fonts]{chinese}
+\babelfont[chinese]{rm}[Scale=MatchLowercase]{Microsoft YaHei}
+\babelfont[chinese]{sf}[Scale=MatchLowercase]{Microsoft YaHei}
+\babelfont[chinese]{tt}[Scale=MatchLowercase]{Microsoft YaHei}
 
-% Latin Modern Mono no cubre los caracteres de dibujo de cajas usados en
-% algunos bloques de texto heredados. Courier New conserva el ancho fijo y
-% aporta esos glifos; las reglas anteriores siguen sustituyendo solo
-% los fragmentos persas y CJK.
+% Los símbolos Unicode y los pictogramas requieren fuentes distintas. Segoe
+% UI Symbol conserva los símbolos monocromos habituales; Segoe UI Emoji cubre
+% los planos suplementarios y los modificadores de las secuencias emoji.
+\babelprovide[script=Symbols,onchar=fonts]{symbols}
+\babelfont[symbols]{rm}[Scale=MatchLowercase]{Segoe UI Symbol}
+\babelfont[symbols]{sf}[Scale=MatchLowercase]{Segoe UI Symbol}
+\babelfont[symbols]{tt}[Scale=MatchLowercase]{Segoe UI Symbol}
+
+\babelprovide[script=Symbols,onchar=fonts]{emoji}
+\babelfont[emoji]{rm}[Scale=MatchLowercase]{Segoe UI Emoji}
+\babelfont[emoji]{sf}[Scale=MatchLowercase]{Segoe UI Emoji}
+\babelfont[emoji]{tt}[Scale=MatchLowercase]{Segoe UI Emoji}
+
+% Rangos presentes en los análisis: flechas, símbolos técnicos, símbolos
+% diversos, dingbats y pictogramas suplementarios. VS16 se mantiene junto a
+% la fuente del símbolo base para no producir un glifo ausente independiente.
+\babelcharproperty{"2190}["21FF]{locale}{symbols}
+\babelcharproperty{"2300}["23FF]{locale}{symbols}
+\babelcharproperty{"2600}["27BF]{locale}{symbols}
+\babelcharproperty{"2B00}["2BFF]{locale}{symbols}
+\babelcharproperty{"1F000}["1FAFF]{locale}{emoji}
+\babelcharproperty{"FE0F}{locale}{symbols}
+
+% Courier New mantiene el ancho fijo y cubre los caracteres de dibujo de cajas
+% usados en algunos bloques heredados. Babel sustituye únicamente los rangos
+% que requieren las fuentes anteriores.
 \setmonofont{Courier New}[Scale=MatchLowercase]
