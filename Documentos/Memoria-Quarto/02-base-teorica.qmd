@@ -1,35 +1,188 @@
-# Base teórica y herramientas
+# Marco teórico
 
-## Fundamentos teóricos
+## MITRE ATT&CK for Mobile
 
-### MITRE ATT&CK for Mobile
+[MITRE ATT&CK](https://attack.mitre.org/) es una base de conocimiento que actúa como referencia elemental para profesionales del mundo de la ciberseguridad. El marco de referencia es globalmente accesible, además de estar constituido en base a comportamientos y procedimientos observados en ataques reales. Esto permite disponer de un lenguaje común para describir las diferentes acciones realizadas por un atacante durante el ciclo de vida de un ataque.
 
-### Tráfico de red móvil y capturas PCAP
+Aunque comúnmente conocida como la matriz MITRE, ATT&CK está realmente estructurado en tres dominios principales:
 
-### Ingeniería inversa de aplicaciones móviles
+1. **Enterprise**: Centrado en redes corporativas tradicionales, entornos en la nube y servicios SaaS, incluyendo sistemas operativos de escritorio como macOS, Linux y Windows. Es el primer dominio desarrollado y el [más adoptado](https://www.paloaltonetworks.com/cyberpedia/what-is-mitre-attack).
+   
+2. **ICS (Industrial Control Systems)**: Basado en las diferentes tecnologías utilizadas dentro de los sistemas de control industrial. Un vector de ataque en este tipo de entornos puede trascender el ámbito digital y generar efectos físicos sobre la manufacturación de diferentes materias, la generación y utilización de energía o el tratamiento de aguas, entre otros.
+   
+3. **Mobile**: Focalizado en las diferentes amenazas atribuibles a dispositivos que ejecutan sistemas operativos Android e iOS. La componente móvil se encuentra ampliamente [desmonitorizada](https://www.paloaltonetworks.com/cyberpedia/what-is-mitre-attack) en comparación con otros componentes de la infraestructura corporativa. Esto constituye un problema especialmente relevante por la extensión del movimiento [BYOD](https://www.ibm.com/think/topics/byod) (_Bring Your Own Device_), mediante el cual dispositivos personales pasan a formar parte, directa o indirectamente, del entorno de una organización.
 
-### Generación controlada de tráfico
+El marco de referencia de este Trabajo Fin de Grado es precisamente este último dominio, particularmente en la versión 18. Antes de continuar desarrollando sus particularidades, conviene mostrar cómo está estructurada cualquiera de las matrices desarrolladas por MITRE.
 
-## Herramientas y plataformas
+### Estructura de la Matriz
 
-### Ghidra e integración mediante MCP
+La estructura es relativamente sencilla. Las diferentes columnas de la matriz identifican las **tácticas**, que buscan responder a la pregunta: ¿Cuál es el objetivo del atacante en una fase particular del ciclo de vida de un ataque? Dentro de cada táctica existen diferentes **técnicas**, que responden precisamente a cómo puede alcanzarse el objetivo. Algunas están a su vez divididas en diferentes **subtécnicas**, que expresan a más bajo nivel diferentes formas de ejecutar una determinada técnica. 
 
-### JADX e integración mediante MCP
+### Objetos Relacionados
+
+La matriz de tácticas, técnicas y subtécnicas constituye únicamente una parte de la información contenida dentro de ATT&CK. Alrededor de estos elementos existe un conjunto adicional de objetos que permite relacionar los comportamientos descritos con actores, herramientas y mecanismos de defensa.
+
+Por un lado, ATT&CK incorpora información relacionada con la **inteligencia sobre amenazas**. Dentro de esta pueden destacarse principalmente los **Groups**, **Software** y **Campaigns**.
+
+- Los [Groups](https://attack.mitre.org/groups/) representan agrupaciones de actividad adversaria documentadas a partir de información pública. Estos grupos pueden relacionarse con diferentes técnicas, herramientas y campañas cuyo uso haya podido ser atribuido a ellos.
+
+- El objeto [Software](https://attack.mitre.org/software/) representa las diferentes herramientas utilizadas para llevar a cabo los comportamientos descritos en ATT&CK. Dentro de esta categoría se incluyen tanto familias de malware como herramientas legítimas utilizadas durante un ataque. **Este objeto resulta especialmente importante dentro del presente trabajo**, ya que permite determinar qué técnicas o subtécnicas han sido documentadas para cada Malware, y por lo tanto tomar decisiones sobre cuales conviene estudiar.
+
+- Las [Campaigns](https://attack.mitre.org/campaigns/) permiten agrupar conjuntos concretos de actividad maliciosa desarrollados durante un determinado periodo y contexto. Estas pueden encontrarse relacionadas con los grupos, software y técnicas observados durante su desarrollo.
+
+Por otro lado, ATT&CK incorpora diferentes elementos relacionados con la **defensa y detección** de las técnicas documentadas.
+
+- Las [Mitigations](https://attack.mitre.org/mitigations/mobile/) representan conceptos de seguridad o clases de tecnologías que pueden impedir o dificultar la ejecución satisfactoria de una técnica o subtécnica. En el caso del dominio Mobile se contemplan, entre otras, medidas relacionadas con productos antimalware, políticas de gestión de dispositivos, actualización de sistemas o filtrado de comunicaciones.
+
+- Las [Detection Strategies](https://attack.mitre.org/detectionstrategies/) representan aproximaciones de alto nivel mediante las que puede detectarse una determinada técnica. Estas estrategias pueden contener diferentes **Analytics**, encargados de concretar la lógica necesaria para realizar la detección sobre una determinada plataforma.
+
+- Los [Analytics](https://attack.mitre.org/analytics/) representan, por tanto, un nivel más próximo a la implementación de la detección. En ellos se especifican los comportamientos o condiciones que deben observarse para identificar una posible ejecución de la técnica.
+
+- Los [Data Components](https://attack.mitre.org/datacomponents/) identifican propiedades o valores concretos cuya observación puede resultar relevante para detectar una técnica o subtécnica. Estos pueden estar relacionados con elementos muy diferentes del sistema, como procesos, archivos, llamadas a APIs o comunicaciones de red.
+
+### Identificación de los Elementos
+
+Los principales elementos de ATT&CK disponen de identificadores propios. La siguiente tabla resume la nomenclatura:
+
+| Elemento           | Formato     | Ejemplo real                                                                                                 |
+| ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------ |
+| Táctica            | `TA####`    | [Command and Control](https://attack.mitre.org/tactics/TA0037/) (`TA0037`)                                   |
+| Técnica            | `T####`     | [Application Layer Protocol](https://attack.mitre.org/techniques/T1437/) (`T1437`)                           |
+| Subtécnica         | `T####.###` | [Web Protocols](https://attack.mitre.org/techniques/T1437/001/) (`T1437.001`)                                |
+| Grupo              | `G####`     | [Confucius](https://attack.mitre.org/groups/G0142/) (`G0142`)                                                |
+| Software           | `S####`     | [Pegasus for Android](https://attack.mitre.org/software/S0316/) (`S0316`)                                    |
+| Campaña            | `C####`     | [Operation Triangulation](https://attack.mitre.org/campaigns/C0054/) (`C0054`)                               |
+| Mitigación         | `M####`     | [Antivirus/Antimalware](https://attack.mitre.org/mitigations/M1058/) (`M1058`)                               |
+| Detection Strategy | `DET####`   | [Detection of Application Layer Protocol](https://attack.mitre.org/detectionstrategies/DET0685/) (`DET0685`) |
+| Analytic           | `AN####`    | [AN1793](https://attack.mitre.org/detectionstrategies/DET0685/#AN1793) (`AN1793`)                            |
+| Data Component     | `DC####`    | [Network Traffic Content](https://attack.mitre.org/datacomponents/DC0085/) (`DC0085`)                        |
+
+### Técnicas Detectables en Red: Criterio de Decisión
+
+El estudio tratará exclusivamente sobre MITRE ATT&CK Mobile, más concretamente sobre las técnicas observables a nivel de red de la matriz. Esto permite determinar cuáles de estos comportamientos pueden generar evidencias en red y, por tanto, ser susceptibles de detección mediante IDS/IPS o NGFW.
+
+Gracias a trabajos previos sobre la misma línea de estudio, se conoce que las técnicas objetivo en MITRE ATT&CK Mobile v18 contienen los siguientes Data Components:
+
+- DC0078-Network Traffic Flow
+- DC0082-Network Connection Creation
+- DC0085-Network Traffic Content
+
+El estudio ha resultado en 7 técnicas detectables a nivel de red, y 4 subtécnicas, formando un total de 11. Todas ellas serán explicadas en detalle en puntos posteriores.
+
+## Funcionamiento en Red de Malware Móvil
+
+### Comunicación con la Infraestructura de Mando y Control
+
+Similarmente a los entornos ICS/Enterprise, en el momento que el atacante ha obtenido acceso en el teléfono de la víctima ([TA-0027 Initial Access](https://attack.mitre.org/versions/v18/tactics/TA0027/)), el malware móvil hace uso de un canal de mando y control o en inglés Command and Control (C2) mediante el cual el atacante mantiene un canal de comunicación con los dispositivos comprometidos. Su función no se limita necesariamente a recibir información; el atacante puede proporcionar configuración, enviar órdenes, actualizar parámetros de ejecución o suministrar nuevos componentes, mientras que el dispositivo puede transmitir información de estado, resultados de las operaciones realizadas o datos recopilados ([TA0037-Command and Control](https://attack.mitre.org/versions/v18/tactics/TA0037/)). 
+
+![Intercambio bidireccional de órdenes, configuración, resultados, estado y datos entre un dispositivo comprometido y el servicio C2.](<images/C&C.png>){#fig-c2-comunicacion-basica fig-alt="Esquema con un dispositivo comprometido que recibe órdenes y configuración del servicio C2 y devuelve resultados, estado y datos." width="95%"}
+
+El malware puede utilizar mecanismos de red perfectamente válidos para transportar sus órdenes y resultados. Es habitual que la comunicación se apoye sobre protocolos de aplicación estandarizados, como HTTP, HTTPS o protocolos de transferencia de archivos, comportamiento recogido por ([T1437 – Application Layer Protocol](https://attack.mitre.org/versions/v18/techniques/T1437/)). Sobre estos protocolos se construye una **semántica propia del C2**, definida por el formato de los mensajes, códigos de operación, parámetros y respuestas. Alternativamente, algunas familias implementan directamente un protocolo de aplicación propietario sobre conexiones TCP o UDP. Incluso pueden utilizarse mecanismos no basados en IP, como SMS, quedando estas comunicaciones fuera de la ruta de inspección habitual de los IDS/IPS o NGFW desplegados sobre la red IP doméstica o corporativa. Asimismo, el contenido de estas comunicaciones puede encontrarse cifrado independientemente de la protección proporcionada por el propio protocolo ([T1521 – Encrypted Channel](https://attack.mitre.org/versions/v18/techniques/T1521/)).
+
+Una manera sencilla de entender cómo funciona el canal C2 es representarla como una máquina de estados finitos. En ella, las órdenes enviadas por el atacante hacia la víctima pueden ser vistas como entradas, y de manera opuesta, los resultados relativos a las órdenes como salidas. En base a las órdenes, el malware va transicionando entre estados. Por lo tanto, existe una relación inequívoca entre órdenes y técnicas.
+
+![Ciclo simplificado de un agente C2 para T1407: registro, recepción de una orden, descarga y ejecución de un módulo, y envío del resultado.](<images/C&C_2.png>){#fig-c2-ciclo-t1407 fig-alt="Máquina de estados simplificada que pasa por inicio, registro, espera de órdenes, descarga, ejecución y envío de resultados." width="95%"}
+
+### Criterios de Decisión
+
+Con las bases sobre el funcionamiento en red de malware móvil claras, se han tomado las siguientes decisiones. Inicialmente, se concebían 2 opciones para la generación del banco de tráfico usado para analizar el rendimiento de los sistemas a estudiar.
+
+1. Obtener PCAPs a partir de Conjuntos de datos públicos
+2. Obtener PCAPs a partir de emulación de tráfico real.
+
+La primera fue rápidamente descartada. Los Datasets de PCAPs relativos al entorno móvil son escasos y de poca calidad. Sus limitaciones principales son:
+
+- No indican a qué familia de malware pertenece la captura de tráfico, por lo que las relaciones que ofrece MITRE ATT&CK Mobile entre técnicas/familias de malware no son aplicables. En consecuencia, no existe pista alguna sobre si el dato es de interés o no. 
+- Tampoco se expresa qué ocurre en el PCAP de forma general, lo cual podría apuntar a qué técnicas se pueden estar aplicando. Esto permitiría tener indicios sobre si el dato tiene algún valor, aún desconociendo la familia malware a la que pertenece.
+
+Ambas limitaciones obligan a analizar las capturas una a una, lo cual es evidentemente tedioso al usar cada malware una semántica y/o protocolos diferentes para la comunicación. 
+
+Por lo tanto, se ha optado por generar el conjunto de datos de entrada con tráfico emulado. El procedimiento ha sido:
+
+1. Estudiar las familias malware asociadas a las técnicas objetivo según MITRE ATT&CK Mobile y obtener IOCs (Indicadores de Compromiso) a partir de las referencias.
+2. Obtener una muestra a partir de los IOCs obtenidos.
+3. Desarrollar un triaje de la muestra, con el objetivo de corroborar si incluye la o las técnicas detectables a nivel de red referenciadas por MITRE ATT&CK Mobile o inclusivamente, otras técnicas objetivo no enlazadas a la familia. Para ello, se han utilizado herramientas de ingeniería inversa.
+4. En caso de que la muestra pase el triaje correctamente y aplique la técnica y/o técnicas a estudiar, hacer un análisis estático más exhaustivo que permita conocer detalles criptográficos, semánticos y causales del servicio de C&C, junto con los protocolos y puertos utilizados. A todos los efectos, "descifrar" la máquina de estados del servicio C&C adoptado por el malware.
+5. Desarrollar un servidor de comando y control que ofrezca los comandos en el formato y orden necesarios para ejecutar las técnicas. Idealmente el propio malware se ha ejecutado en un entorno virtualizado y se ha comunicado con el servidor desarrollado. En ciertos casos, se ha optado por no ejecutar la muestra y emularla como un simple cliente red que consuma los servicios del servidor generado.
+6. Obtener el PCAP relativo a la comunicación generada.
+
+Para mejorar los resultados y aligerar el proceso, era de interés aplicar metodologías de inteligencia artificial. Las capacidades de los modelos de lenguaje actuales para actividades de análisis estático son bien conocidas y [ayudan considerablemente ante una de las mayores limitaciones](https://ieeexplore.ieee.org/abstract/document/10924165), la ofuscación ([T1406](https://attack.mitre.org/techniques/T1406/)). Esta limitación se basa en que un atacante provoque que la lectura (de código en este caso) sea compleja, debido a técnicas de codificación, encriptación u otras. En resumen, el código pierde toda semántica que permita leerlo de manera sencilla, pero la aplicación mantiene su ejecución normal.
+
+```java
+} catch (Exception e) {
+    if (h.a(this.f35a).a()) {
+        i();
+        new StringBuilder("url:")
+                .append(com.kmc.prod.c.a.a(this.f35a).a())
+                .append(str);
+    }
+}
+```
+
+En este ejemplo, los nombres de clases y métodos son **identificadores reducidos o sustituidos por nombres carentes de significado semántico**, que hacen complejo entender qué sucede en dichas líneas. 
+
+## Plataformas: iOS y Android
+
+iOS es el sistema operativo móvil desarrollado por Apple para sus dispositivos iPhone y, hasta la aparición de iPadOS en 2019, también para iPad. Android, por su parte, es un sistema operativo de código abierto cuyo desarrollo principal está dirigido por Google a través de AOSP (_Android Open Source Project_), y es utilizado por numerosos fabricantes de dispositivos móviles. Ambas plataformas parten de filosofías diferentes tanto en su arquitectura como en su modelo de distribución y seguridad de aplicaciones.
+
+### iOS
+
+En iOS, las aplicaciones se distribuyen habitualmente mediante paquetes `.ipa`, que contienen el paquete de la aplicación junto con sus recursos y componentes asociados. El ejecutable principal se encuentra en formato **Mach-O** y contiene código máquina compilado, normalmente para arquitectura ARM64. Por tanto, aunque el código original haya sido desarrollado principalmente en Swift u Objective-C, el artefacto disponible para su análisis estático contiene código nativo ya compilado, con la consecuente pérdida de parte de la información presente originalmente en el código fuente. Esto complica notablemente el análisis de malware asociado a la plataforma.
+
+La distribución a través de la App Store introduce diferentes mecanismos de control sobre las aplicaciones publicadas. El desarrollador envía a Apple una compilación binaria de la aplicación junto con sus metadatos, que posteriormente es sometida al proceso de [**App Review**](https://developer.apple.com/app-store/review/guidelines/es/) antes de su publicación. Este proceso, unido al sistema de firma de código y a las restricciones de ejecución impuestas por iOS, dificulta la distribución de aplicaciones maliciosas mediante los canales oficiales. Además, Apple históricamente ha imposibilitado la instalación de aplicaciones de terceros en el sistema operativo. Esto ha resultado en que se considere un sistema propiamente securizado, aunque no significa que carezca de campañas  de malware asociadas.
+
+### Android
+
+En Android, el formato instalable históricamente utilizado por las aplicaciones es el `.apk`. Un APK no es más que un paquete el cual contiene en su interior recursos, manifiesto de la aplicación y uno o varios ficheros `.dex`, que contienen el código generado a partir de lenguajes como Java o Kotlin. También es posible incluir código nativo compilado, normalmente en forma de bibliotecas ELF `.so`, al que la aplicación puede acceder mediante JNI (_Java Native Interface_).
+
+Google, a través de Google Play Store, también incorpora mecanismos destinados a detectar aplicaciones potencialmente maliciosas mediante servicios como **Google Play Protect**. Sin embargo, históricamente su proceso de revisión ha resultado más permisivo que el aplicado por Apple. Mientras que la App Store combina análisis automáticos con una revisión humana de cada aplicación y actualización, Google Play ha dependido en mayor medida de mecanismos automatizados y de la detección posterior de aplicaciones maliciosas ya publicadas. Esta diferencia ha permitido que numerosas campañas consiguieran distribuir malware a través de la propia tienda oficial.
+
+A esto se suma el modelo abierto de Android, que permite instalar aplicaciones procedentes de otras tiendas o directamente mediante paquetes APK. La combinación de una tienda oficial históricamente más permeable y la posibilidad de distribuir aplicaciones fuera de ella ha convertido a Android en una plataforma especialmente atractiva para campañas de malware móvil.
+
+## Herramientas de Ingeniería Inversa
+
+Se han seleccionado 2 herramientas de análisis estático. El uso de cada una ha dependido del sistema operativo al que estuviera enfocado el malware (iOS/Android). 
+
+En ambas herramientas, se han utilizado extensiones [MCP](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro) (Model Context Protocol). MCP permite exponer a un modelo de lenguaje funciones proporcionadas por la herramienta de análisis, de modo que este no se limita al tratamiento de fragmentos de código introducidos manualmente, sino que puede consultar elementos del programa y utilizar las capacidades de navegación y análisis disponibles. 
+
+### Ghidra e integración MCP
+
+[Ghidra](https://github.com/nationalsecurityagency/ghidra) es un software de ingeniería inversa creado y mantenido por la NSA (_National Security Agency_). Está orientado al análisis y descompilación de software compilado para múltiples arquitecturas, entre ellas x86, AMD64 y ARM, junto con sus diferentes variantes. Aunque incorpora numerosas funciones de análisis, una de las más útiles es su capacidad para generar pseudocódigo similar a C a partir del código ensamblador del programa.
+
+Sin embargo, este pseudocódigo debe interpretarse con cautela. Durante el proceso de compilación se pierde parte de la información presente en el código fuente original, por lo que Ghidra debe reconstruirla mediante análisis. Esto afecta especialmente a programas orientados a objetos, donde conceptos como clases, métodos o relaciones entre objetos no siempre pueden recuperarse de forma directa. Del mismo modo, la herramienta puede no determinar correctamente los argumentos y valores de retorno de una función, así como los tipos de las variables y estructuras utilizadas.
+
+El propio programa permite el uso de "extensiones", por lo que se pueden amplificar sus funciones como si de un IDE (Integrated Development Enviroment) se tratase. Como solución MCP se ha concretado en **[ghidra-mcp](https://github.com/bethington/ghidra-mcp)**.
+
+En el ámbito del trabajo, la herramienta ha sido usada exclusivamente para desarrollar ingeniería inversa sobre ejecutables maliciosos iOS.
+
+### JADX e integración MCP
+
+JADX es una herramienta de ingeniería inversa capaz de generar código fuente Java a partir de ficheros `.dex` y `.apk`. Por lo tanto, es un instrumento exclusivo para aplicaciones Android.
+
+Al conservar los ficheros `.dex` una representación intermedia con información sobre clases, métodos, tipos y relaciones entre los diferentes elementos del programa, el proceso de descompilación puede recuperar código de alto nivel mucho más próximo al original.
+
+En condiciones favorables, los resultados generados por JADX son, por tanto, de gran calidad y permiten analizar directamente una parte considerable de la lógica de la aplicación. 
+
+Al igual que Ghidra, la aplicación permite el uso de "extensiones" y por lo tanto resulta sencillo integrar un servicio MCP. Más concretamente, se ha seleccionado [jadx-ai-mcp](https://github.com/zinja-coder/jadx-ai-mcp)
+
+## Herramientas Adicionales
 
 ### tria.ge
 
+La WEB [tria.ge](https://tria.ge/) es una plataforma pública de análisis de malware que permite tanto ejecutar muestras en entornos virtualizados como consultar análisis realizados previamente por otros usuarios. Su buscador resulta especialmente útil para localizar muestras a partir de IOCs, permitiendo realizar consultas directas sobre hashes mediante operadores como `md5:<hash>` o `sha256:<hash>`, además de búsquedas por familia, etiquetas u otros atributos.
+
+La plataforma permite descargar tanto la muestra original como las capturas PCAP generadas durante su ejecución en una máquina virtual. Sin embargo, estas últimas han resultado insuficientes para los objetivos del presente trabajo. En numerosas muestras antiguas, la infraestructura C2 ya no se encontraba operativa en el momento en el que se realizó el análisis, por lo que la captura contenía únicamente intentos de conexión o comunicaciones parciales.
+
+Dentro de las plataformas gratuitas evaluadas durante el desarrollo del trabajo, tria.ge ha resultado la alternativa más útil para la localización y obtención de muestras de malware.
+  
 ### Wireshark e integración mediante MCP
 
+[Wireshark](https://www.wireshark.org/) es un analizador de protocolos ampliamente utilizado para la captura e inspección de tráfico de red. En el presente trabajo se ha empleado tanto durante la generación de las capturas como para su posterior revisión, permitiendo analizar las comunicaciones reproducidas y comprobar que los PCAP obtenidos contienen las técnicas de interés.
+
+Para agilizar esta fase del análisis se ha utilizado [**wireshark-mcp**](https://pypi.org/project/wireshark-mcp/), un servidor MCP que expone a los modelos de lenguaje diferentes funciones de análisis. De esta forma, el modelo puede consultar paquetes, seguir flujos, extraer campos y obtener estadísticas directamente sobre las capturas, reduciendo el trabajo manual necesario durante su inspección.
+  
 ### JSS7 Attack Simulator
 
-### Kali Linux
+B
 
-### Python y sus bibliotecas
-
-### OpenSSL
-
-### CoreDNS
-
-### Mosquitto
-
-### Android Studio, Android SDK y ADB
+------COSAS RELATIVAS A LA COMPARATIVA DE RENDIMIENTO

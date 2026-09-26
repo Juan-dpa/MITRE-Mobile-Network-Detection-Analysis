@@ -234,7 +234,6 @@ sequenceDiagram
 
 El laboratorio no ejecuta la biblioteca original en un dispositivo iOS. Tanto el cliente que representa al teléfono como los servicios de Apple y del C2 se emulan mediante Python. La realidad es que el malware es extremadamente antiguo. Por el contexto histórico de la muestra, conviene suponer que funciona en versiones iOS 7.0. Montar un laboratorio funcional en un dispositivo de más de 10 años de antiguedad puede llegar a ser tedioso. Además, el protocolo de exfiltración es bastante sencillo de emular y queda bastante claro a partir del análisis estático.
 
-
 Los artefactos de red useleccionados son:
 
 | Entidad | Dirección y servicio | Procedencia |

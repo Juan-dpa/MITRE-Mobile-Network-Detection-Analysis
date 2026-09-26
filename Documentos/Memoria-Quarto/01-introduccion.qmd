@@ -1,2 +1,19 @@
-# Introducción
+# Objetivos y alcance
 
+Continuando con la línea de investigación desarrollada por el departamento, este trabajo forma parte de unas evaluaciones de las capacidades de detección relativas a sistemas IDS Snort, FortiGate y PaloAlto. El marco de referencia utilizado es MITRE ATT&CK, en este caso específico, MITRE ATT&CK MOBILE.
+
+En resumen, se busca comparar el rendimiento detectivo de sistemas Open Source y sistemas NGFW (Cortafuegos de próxima generación) en el entorno móvil (Android/iOS). 
+
+El estudio se puede descomponer en las siguientes fases:
+
+- Obtener capturas de tráfico (PCAPs) de red que contengan las técnicas detectables a nivel de red definidas en MITRE ATT&CK MOBILE. 
+- Investigar volcados de red contenidos en Datasets (conjuntos de datos) en la Web y utilizarlos si es posible.
+- Producir y/o obtener capturas de tráfico benigno (no malicioso) que permitan también recabar información sobre falsos positivos.
+- Analizar los resultados del IDS Snort (logs generados), utilizando reglas Emerging Threats, Talos?..... **MIRAR MÁS REGLAS**
+- Alimentar a los sistemas NGFW previamente mencionados con las capturas de tráfico desarrolladas y extraídas, con el objetivo de analizar los resultados tal y como se hará con el IDS Snort.
+- Finalmente, suministrar tráfico benigno a ambos sistemas (OpenSource y NGFW) para proyectar los falsos positivos generados.
+- Crear una tabla de detecciones que compile los resultados obtenidos de los análisis..... **A DESARROLLAR**
+- Discutir los resultados de detección de ataques para cada conjunto de reglas de Snort.... **A DESARROLLAR**
+- Realizar un análisis comparativo entre Snort y los NGFW...**A DESARROLLAR**
+
+Las conclusiones obtenidas serán subidas a un repositorio GitHub, el cual contendrá el malware analizado, las capturas obtenidas y descargadas, junto con las tablas y resultados.... **AFINAR CUANDO ESTÉ TERMINADO**

