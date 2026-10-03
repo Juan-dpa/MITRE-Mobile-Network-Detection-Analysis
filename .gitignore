@@ -44,8 +44,8 @@ Documentos/Memoria-Quarto/Memoria_TFG.toc
 Documentos/Memoria-Quarto/texput.log
 
 # Copias locales de datasets benignos externos
-PCAPs/Benigno/*.zip
-PCAPs/Benigno/**/*.zip
+/PCAPs/Benigno/*
+!/PCAPs/Benigno/Fuente.md
 
 Datasets/
 Muestras/
