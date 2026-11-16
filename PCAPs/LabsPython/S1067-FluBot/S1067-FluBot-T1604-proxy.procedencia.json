@@ -1,0 +1,1252 @@
+{
+  "generated_date": "2026-11-10",
+  "original": "PCAPs/LabsPython/S1067-FluBot/S1067-FluBot.pcap",
+  "original_sha256": "17167c7a3edf389b9ae817ecf3881f7563761b36fcf256ef3a78693d49803326",
+  "output": "S1067-FluBot-T1604-proxy.pcap",
+  "output_sha256": "3453468166fad7444f67ad53bf0bf6cfe2e7e6c6d26a93078c3ad4e0c0659ce5",
+  "target_technique": "T1604",
+  "collateral_techniques": [],
+  "selection": "frame.number <= 78",
+  "packet_count": 78,
+  "max_frame_bytes": 488,
+  "frames_over_4000": 0,
+  "capture_header_and_record_headers_preserved": true,
+  "timestamps_lengths_seq_ack_flags_options_preserved": true,
+  "no_resegmentation_synthetic_packets_or_added_closures": true,
+  "socks_port_header_edits": 9,
+  "socks_port_advertisement_edits": 1,
+  "transport_checksum_edits": 78,
+  "reconstruction": "Copy original global PCAP header; select original_frame records in listed order; keep each record header and apply edits in order at zero-based offsets from packet bytes.",
+  "original_frame_mapping": [
+    {
+      "output_frame": 1,
+      "original_frame": 1,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21c1",
+          "after_hex": "1f2c",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 2,
+      "original_frame": 2,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21d1",
+          "after_hex": "bed2",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 3,
+      "original_frame": 3,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "97c6",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 4,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "c28c",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 5,
+      "original_frame": 5,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "efa4",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 6,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2de8",
+          "after_hex": "b6da",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 7,
+      "original_frame": 7,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "ef3c",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 8,
+      "original_frame": 8,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2ee9",
+          "after_hex": "cd4c",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 9,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "edd5",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 10,
+      "original_frame": 10,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2de0",
+          "after_hex": "b5a7",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 11,
+      "original_frame": 11,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "ed70",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 12,
+      "original_frame": 12,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2dc7",
+          "after_hex": "ac71",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 13,
+      "original_frame": 13,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "ed2c",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 14,
+      "original_frame": 14,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "ed2a",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 15,
+      "original_frame": 15,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "ed2a",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 16,
+      "original_frame": 16,
+      "original_stream": 0,
+      "output_stream": 0,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "ed29",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 17,
+      "original_frame": 17,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21c1",
+          "after_hex": "6243",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 18,
+      "original_frame": 18,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21d1",
+          "after_hex": "01ea",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 19,
+      "original_frame": 19,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "6a56",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 20,
+      "original_frame": 20,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "735d",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 21,
+      "original_frame": 21,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "a075",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 22,
+      "original_frame": 22,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2de8",
+          "after_hex": "6caf",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 23,
+      "original_frame": 23,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "a00f",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 24,
+      "original_frame": 24,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2f29",
+          "after_hex": "6691",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 25,
+      "original_frame": 25,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "9e67",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 26,
+      "original_frame": 26,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2de0",
+          "after_hex": "6738",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 27,
+      "original_frame": 27,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "9e05",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 28,
+      "original_frame": 28,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2dd7",
+          "after_hex": "f165",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 29,
+      "original_frame": 29,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "9db0",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 30,
+      "original_frame": 30,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "9daf",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 31,
+      "original_frame": 31,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "9dad",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 32,
+      "original_frame": 32,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "9dad",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 33,
+      "original_frame": 33,
+      "original_stream": 1,
+      "output_stream": 1,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "9dac",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 34,
+      "original_frame": 34,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21c1",
+          "after_hex": "0277",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 35,
+      "original_frame": 35,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21d1",
+          "after_hex": "a21d",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 36,
+      "original_frame": 36,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "5648",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 37,
+      "original_frame": 37,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "90a7",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 38,
+      "original_frame": 38,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "bdc0",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 39,
+      "original_frame": 39,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2de8",
+          "after_hex": "8cf3",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 40,
+      "original_frame": 40,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "bd5a",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 41,
+      "original_frame": 41,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2f09",
+          "after_hex": "29a1",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 42,
+      "original_frame": 42,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "bbd4",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 43,
+      "original_frame": 43,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2de1",
+          "after_hex": "8280",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 44,
+      "original_frame": 44,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "bb6f",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 45,
+      "original_frame": 45,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2de7",
+          "after_hex": "e3c6",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 46,
+      "original_frame": 46,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "bb0b",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 47,
+      "original_frame": 47,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "bb09",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 48,
+      "original_frame": 48,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "bb08",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 49,
+      "original_frame": 49,
+      "original_stream": 2,
+      "output_stream": 2,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "bb06",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 50,
+      "original_frame": 50,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21c1",
+          "after_hex": "24da",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 51,
+      "original_frame": 51,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21d1",
+          "after_hex": "c480",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 52,
+      "original_frame": 52,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "0285",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 53,
+      "original_frame": 53,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "68c6",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 54,
+      "original_frame": 54,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "95c9",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 55,
+      "original_frame": 55,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d87",
+          "after_hex": "d294",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 56,
+      "original_frame": 56,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "95c3",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 57,
+      "original_frame": 57,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d87",
+          "after_hex": "9597",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 58,
+      "original_frame": 58,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "95be",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 59,
+      "original_frame": 59,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2da3",
+          "after_hex": "f7e9",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 60,
+      "original_frame": 60,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "959e",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 61,
+      "original_frame": 61,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 66,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "Announced SOCKS data port 4444 -> 1080 (u16 big-endian)"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d85",
+          "after_hex": "9159",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 62,
+      "original_frame": 62,
+      "original_stream": 3,
+      "output_stream": 3,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "9597",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 63,
+      "original_frame": 63,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21c1",
+          "after_hex": "d50b",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 64,
+      "original_frame": 64,
+      "original_stream": null,
+      "output_stream": null,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 40,
+          "before_hex": "21d1",
+          "after_hex": "74b2",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 65,
+      "original_frame": 65,
+      "original_stream": 4,
+      "output_stream": 4,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 36,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "SOCKS port 4444 -> 1080"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "7278",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 66,
+      "original_frame": 66,
+      "original_stream": 4,
+      "output_stream": 4,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 34,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "SOCKS port 4444 -> 1080"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "9516",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 67,
+      "original_frame": 67,
+      "original_stream": 4,
+      "output_stream": 4,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 36,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "SOCKS port 4444 -> 1080"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "c22f",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 68,
+      "original_frame": 68,
+      "original_stream": 4,
+      "output_stream": 4,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 34,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "SOCKS port 4444 -> 1080"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8c",
+          "after_hex": "ac59",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 69,
+      "original_frame": 69,
+      "original_stream": 4,
+      "output_stream": 4,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 36,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "SOCKS port 4444 -> 1080"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "c1c6",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 70,
+      "original_frame": 70,
+      "original_stream": 5,
+      "output_stream": 5,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2320",
+          "after_hex": "3f99",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 71,
+      "original_frame": 71,
+      "original_stream": 5,
+      "output_stream": 5,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2320",
+          "after_hex": "f975",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 72,
+      "original_frame": 72,
+      "original_stream": 5,
+      "output_stream": 5,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2318",
+          "after_hex": "268f",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 73,
+      "original_frame": 73,
+      "original_stream": 4,
+      "output_stream": 4,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 36,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "SOCKS port 4444 -> 1080"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d8b",
+          "after_hex": "c15b",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 74,
+      "original_frame": 74,
+      "original_stream": 4,
+      "output_stream": 4,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 34,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "SOCKS port 4444 -> 1080"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "c1bb",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 75,
+      "original_frame": 75,
+      "original_stream": 5,
+      "output_stream": 5,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2339",
+          "after_hex": "0306",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 76,
+      "original_frame": 76,
+      "original_stream": 5,
+      "output_stream": 5,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2318",
+          "after_hex": "266c",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 77,
+      "original_frame": 77,
+      "original_stream": 4,
+      "output_stream": 4,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 36,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "SOCKS port 4444 -> 1080"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2da4",
+          "after_hex": "9e33",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    },
+    {
+      "output_frame": 78,
+      "original_frame": 78,
+      "original_stream": 4,
+      "output_stream": 4,
+      "original_transport_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 34,
+          "before_hex": "115c",
+          "after_hex": "0438",
+          "reason": "SOCKS port 4444 -> 1080"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "2d83",
+          "after_hex": "c196",
+          "reason": "Complete transport checksum, including any port/payload changes"
+        }
+      ]
+    }
+  ]
+}

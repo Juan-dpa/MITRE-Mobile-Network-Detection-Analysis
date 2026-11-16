@@ -1,0 +1,344 @@
+{
+  "verified_date": "2026-10-26",
+  "source": "PCAPs/LabsAndroidStudio/S0539-RedAlert2.0/S0539-RedAlert2.0.pcap",
+  "source_sha256": "cdc776ceb1d10240cd82f080345c71e8e6f7c9b1e6eb6102261a1fa2a21c941e",
+  "original_unchanged": true,
+  "selected_source_packets": 62,
+  "outputs_disjoint": true,
+  "no_synthetic_packets_or_resegmentation": true,
+  "outputs": [
+    {
+      "file": "S0539-RedAlert2.0-T1481.001-resolver.pcap",
+      "sha256": "b2ec26924d6e08950341d5e733cdef79d727102d04db518bdeddc113bc1b1062",
+      "packet_count": 32,
+      "max_frame_bytes": 1294,
+      "frames_over_4000": 0,
+      "exact_source_selection_and_manifest_reconstruction": true,
+      "original_payloads_seq_ack_headers_timestamps_preserved_except_transport_checksum": true,
+      "ipv4_tcp_udp_checksums_mathematically_valid": true,
+      "transport_checksum_completions": 14,
+      "unchanged_packets": 18,
+      "tcp_packet_count": 24,
+      "udp_packet_count": 8,
+      "tshark_analysis_or_malformed_frames": [],
+      "tcp_flows": [
+        {
+          "output_stream_index": 0,
+          "client": [
+            "172.22.0.1",
+            54205
+          ],
+          "server": [
+            "10.230.39.10",
+            80
+          ],
+          "packet_count": 10,
+          "handshake_output_frames": [
+            5,
+            6,
+            7
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "acks_beyond_observed_data": 0,
+          "closure": "both_FIN_acknowledged",
+          "rst_output_frames": [],
+          "directions": [
+            {
+              "source": [
+                "10.230.39.10",
+                80
+              ],
+              "tcp_payload_bytes": 251,
+              "payload_sha256": "9267aca1a7b2b5372b3c91f67575176128edce8f1f941f8033f90a7529e99938",
+              "fin_count": 1,
+              "unacknowledged_sequence_positions": 0
+            },
+            {
+              "source": [
+                "172.22.0.1",
+                54205
+              ],
+              "tcp_payload_bytes": 311,
+              "payload_sha256": "cffb62a59985fce191baff731a52d32cd4c0f7da2f384104e00b7211d6439727",
+              "fin_count": 1,
+              "unacknowledged_sequence_positions": 0
+            }
+          ]
+        },
+        {
+          "output_stream_index": 1,
+          "client": [
+            "172.22.0.1",
+            54206
+          ],
+          "server": [
+            "10.230.39.11",
+            443
+          ],
+          "packet_count": 14,
+          "handshake_output_frames": [
+            19,
+            20,
+            21
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "acks_beyond_observed_data": 0,
+          "closure": "original_server_FIN_then_RST; client TLS close alert (37 bytes) has no normal ACK before RST",
+          "rst_output_frames": [
+            32
+          ],
+          "directions": [
+            {
+              "source": [
+                "10.230.39.11",
+                443
+              ],
+              "tcp_payload_bytes": 1878,
+              "payload_sha256": "8f17fc229fa9facc984a2b8b369d3d7081e5ae3520173678167d0485712c48e2",
+              "fin_count": 1,
+              "unacknowledged_sequence_positions": 0
+            },
+            {
+              "source": [
+                "172.22.0.1",
+                54206
+              ],
+              "tcp_payload_bytes": 720,
+              "payload_sha256": "cd7107b54bce2a1c35fd2a8b30a34685a287a5534a79d111192a59af0cf74c51",
+              "fin_count": 0,
+              "unacknowledged_sequence_positions": 37
+            }
+          ]
+        }
+      ],
+      "semantics": {
+        "timeapi_response_body_sha256": "8a260989ed740e8d0df150ad6651a55e60a8c006bba19c39bedf5a1007c1fb79",
+        "twitter_account_matches_timeapi_and_sample_hash": true,
+        "twitter_account": "86d08d31c9d4733",
+        "tls_decrypted_follow_matches_original": true,
+        "tls_decrypted_follow_sha256": "611c7d2800cda14b4217b1a36d3a712257e736f36b24af24b8d45c13cb6e6733",
+        "tweet_returns_ip": "192.168.56.20",
+        "destination_ports_tcp": [
+          80,
+          443
+        ],
+        "no_connections_to_7878_or_8060": true,
+        "no_collateral_T1509": true,
+        "excluded_failover_steps": [
+          "failed_primary_connection",
+          "alternate_C2_ping_validation",
+          "registration",
+          "template_download"
+        ]
+      }
+    },
+    {
+      "file": "S0539-RedAlert2.0-T1407-descarga-T1509.pcap",
+      "sha256": "53aad20a108b97451d0e74e68098314fc781b572cd3e62371c7359e9a444dcad",
+      "packet_count": 30,
+      "max_frame_bytes": 860,
+      "frames_over_4000": 0,
+      "exact_source_selection_and_manifest_reconstruction": true,
+      "original_payloads_seq_ack_headers_timestamps_preserved_except_transport_checksum": true,
+      "ipv4_tcp_udp_checksums_mathematically_valid": true,
+      "transport_checksum_completions": 12,
+      "unchanged_packets": 18,
+      "tcp_packet_count": 30,
+      "udp_packet_count": 0,
+      "tshark_analysis_or_malformed_frames": [],
+      "tcp_flows": [
+        {
+          "output_stream_index": 0,
+          "client": [
+            "172.22.0.1",
+            54214
+          ],
+          "server": [
+            "192.168.56.20",
+            8060
+          ],
+          "packet_count": 10,
+          "handshake_output_frames": [
+            1,
+            2,
+            3
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "acks_beyond_observed_data": 0,
+          "closure": "both_FIN_acknowledged",
+          "rst_output_frames": [],
+          "directions": [
+            {
+              "source": [
+                "172.22.0.1",
+                54214
+              ],
+              "tcp_payload_bytes": 806,
+              "payload_sha256": "42c6b9a70aa6b985f65471b0737d8d9731f828e705dfc7e07c07816e77da0900",
+              "fin_count": 1,
+              "unacknowledged_sequence_positions": 0
+            },
+            {
+              "source": [
+                "192.168.56.20",
+                8060
+              ],
+              "tcp_payload_bytes": 305,
+              "payload_sha256": "1276391ab89f7af9297f969984fde445903d336841177f2c5610dff25eae3114",
+              "fin_count": 1,
+              "unacknowledged_sequence_positions": 0
+            }
+          ]
+        },
+        {
+          "output_stream_index": 1,
+          "client": [
+            "172.22.0.1",
+            54215
+          ],
+          "server": [
+            "192.168.56.20",
+            8060
+          ],
+          "packet_count": 10,
+          "handshake_output_frames": [
+            11,
+            12,
+            13
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "acks_beyond_observed_data": 0,
+          "closure": "both_FIN_acknowledged",
+          "rst_output_frames": [],
+          "directions": [
+            {
+              "source": [
+                "172.22.0.1",
+                54215
+              ],
+              "tcp_payload_bytes": 379,
+              "payload_sha256": "eee16d1f5ad46b6c370bef2093bd33a99fa41baa69a5dd9e0e6438db33933990",
+              "fin_count": 1,
+              "unacknowledged_sequence_positions": 0
+            },
+            {
+              "source": [
+                "192.168.56.20",
+                8060
+              ],
+              "tcp_payload_bytes": 663,
+              "payload_sha256": "0bfcb8807069dd294356e3b78fe9f367598dc1c80cc359985561378ab349de0d",
+              "fin_count": 1,
+              "unacknowledged_sequence_positions": 0
+            }
+          ]
+        },
+        {
+          "output_stream_index": 2,
+          "client": [
+            "172.22.0.1",
+            54216
+          ],
+          "server": [
+            "192.168.56.20",
+            8060
+          ],
+          "packet_count": 10,
+          "handshake_output_frames": [
+            21,
+            22,
+            23
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "acks_beyond_observed_data": 0,
+          "closure": "both_FIN_acknowledged",
+          "rst_output_frames": [],
+          "directions": [
+            {
+              "source": [
+                "172.22.0.1",
+                54216
+              ],
+              "tcp_payload_bytes": 377,
+              "payload_sha256": "f5c8a93856ace20e1f6a1c351397317da012bae04a84618311bb62032e3b0b81",
+              "fin_count": 1,
+              "unacknowledged_sequence_positions": 0
+            },
+            {
+              "source": [
+                "192.168.56.20",
+                8060
+              ],
+              "tcp_payload_bytes": 481,
+              "payload_sha256": "ee1777ae8d7834b24219ad7ec79c24e2f98c8f36098bc72b250fdc2c6b975591",
+              "fin_count": 1,
+              "unacknowledged_sequence_positions": 0
+            }
+          ]
+        }
+      ],
+      "semantics": {
+        "http_operations": [
+          "POST /sban",
+          "POST /gt",
+          "POST /gt"
+        ],
+        "http_statuses": [
+          200,
+          200,
+          200
+        ],
+        "catalogue_selectors_match_download_requests": true,
+        "templates": [
+          {
+            "selector": "SELECTOR_PRINCIPAL_LAB",
+            "bytes": 462,
+            "sha256": "addd3308b1a9032efdcc20645d5e91f288bd66adfffdae0a7368fe5ce07d74c6",
+            "matches_original_capture_and_lab_template": true,
+            "lab_file": "python-labnet/android-labs/redalert/source/templates/principal.html"
+          },
+          {
+            "selector": "SELECTOR_TECNICO_LAB",
+            "bytes": 280,
+            "sha256": "b6397ea41506d416b81b2dae2c8093f9ed65f4f2907f835f8402bda84f29ca62",
+            "matches_original_capture_and_lab_template": true,
+            "lab_file": "python-labnet/android-labs/redalert/source/templates/technical.html"
+          }
+        ],
+        "only_destination_port_tcp": 8060,
+        "collateral_techniques": [
+          "T1509"
+        ],
+        "resolver_registration_and_other_c2_operations_absent": true
+      }
+    }
+  ],
+  "wireshark_mcp": {
+    "tools": [
+      "wireshark_extract_fields",
+      "wireshark_stats_expert_info"
+    ],
+    "checks": [
+      "Source resolver DNS and complete TCP connections",
+      "Output resolver only HTTP/80 and TLS/443",
+      "Output catalogue and both templates via HTTP/8060",
+      "Original TLS terminal RST retained"
+    ],
+    "expected_expert_warning": {
+      "file": "S0539-RedAlert2.0-T1481.001-resolver.pcap",
+      "output_frame": 32,
+      "message": "Connection reset (RST)",
+      "present_in_original_frame": 38
+    }
+  },
+  "limitations": [
+    "Resolver stops at recovery of backup address; connection validation /ping is excluded.",
+    "Templates are the unchanged laboratory HTML; packet capture does not establish successful execution or overlay display.",
+    "No NGFW or Snort replay has been performed."
+  ]
+}

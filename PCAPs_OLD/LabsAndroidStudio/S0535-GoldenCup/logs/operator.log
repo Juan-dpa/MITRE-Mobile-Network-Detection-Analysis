@@ -1,0 +1,4 @@
+[operator] esperando RT/AP/<client-id>/I/A = ON en 107.175.144.26:1883
+[operator] dispositivo 51111110635824006 disponible; esperando el acuse RT/AP/51111110635824006/I/B
+[operator] publicado RT/SV/51111110635824006/C/a = http://www.goldncup.com/payloads/stage_621622916.data
+[operator] acuse recibido: RT/AP/51111110635824006/I/B|YES

@@ -1,0 +1,7 @@
+AVD: golden_api21_aosp
+DNS del laboratorio: 10.230.35.53
+Comando de PowerShell para el arranque manual:
+& "C:\Users\jdelp\AppData\Local\Android\Sdk\emulator\emulator.exe" "@golden_api21_aosp" -port 5554 -dns-server 10.230.35.53 -no-snapshot-load
+Rutas de Windows hacia Kali WSL:
+  10.230.35.53/32
+  107.175.144.26/32

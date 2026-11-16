@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-25",
+  "original": "PCAPs/LabsAndroidStudio/S0318-XLoaderForAndroid/S0318-XLoaderForAndroid.pcap",
+  "original_sha256": "3bf4c00db8b3eb0721f55f6b7b0a68ae741fee10482ba159d378307d562fac64",
+  "original_unchanged": true,
+  "tshark_version": "TShark (Wireshark) 4.6.5 (v4.6.5-0-gb40c46f83867).",
+  "outputs": [
+    {
+      "file": "S0318-XLoader-T1407-descarga-T1509.pcap",
+      "sha256": "f259d951d43ec552f735a11e4b9d03a07daaeee03b51d8df350ae1525f5ab663",
+      "packets": 21,
+      "max_frame_bytes": 1514,
+      "complete_opening_handshake": true,
+      "tcp_analysis_warnings": 0,
+      "malformed_packets": 0,
+      "checksums_good": true,
+      "payload_bytes_match_selected_original": true,
+      "no_undocumented_byte_changes": true,
+      "original_timestamps_preserved": true
+    },
+    {
+      "file": "S0318-XLoader-T1428-explotacion.pcap",
+      "sha256": "28f5c06203131c4abd8eeeecf175144ef5da11586856e6f3046c54193a458e54",
+      "packets": 10,
+      "max_frame_bytes": 224,
+      "complete_opening_handshake": true,
+      "tcp_analysis_warnings": 0,
+      "malformed_packets": 0,
+      "checksums_good": true,
+      "payload_bytes_match_selected_original": true,
+      "no_undocumented_byte_changes": true,
+      "original_timestamps_preserved": true
+    },
+    {
+      "file": "S0318-XLoader-T1481.001-resolver.pcap",
+      "sha256": "8299c43e93ee245d8dc2e0555754ace74af5440a6428ff62e3d9600787cd6366",
+      "packets": 18,
+      "max_frame_bytes": 1345,
+      "complete_opening_handshake": true,
+      "tcp_analysis_warnings": 0,
+      "malformed_packets": 0,
+      "checksums_good": true,
+      "payload_bytes_match_selected_original": true,
+      "no_undocumented_byte_changes": true,
+      "original_timestamps_preserved": true
+    },
+    {
+      "file": "S0318-XLoader-T1604-proxy-T1509.pcap",
+      "sha256": "a38cd07873ce1380285ba23ba130272e6dce8e956fe1f27084e636f2ae0cb1eb",
+      "packets": 11,
+      "max_frame_bytes": 419,
+      "complete_opening_handshake": true,
+      "tcp_analysis_warnings": 0,
+      "malformed_packets": 0,
+      "checksums_good": true,
+      "payload_bytes_match_selected_original": true,
+      "no_undocumented_byte_changes": true,
+      "original_timestamps_preserved": true
+    }
+  ],
+  "resolver_decryption": "GET /sdfghuio342, HTTP 200, body length150; original TLS keylog remains in original directory",
+  "mcp_checks": [
+    "Proxy: original opening handshake preserved and rebased SEQ/ACK coherent",
+    "Download: expert analysis retains one expected connection-reset warning for the original terminal RST; no tcp.analysis.flags or malformed packets."
+  ],
+  "scope": "Checks on capture files; no live replay on NGFW or Snort performed.",
+  "independent_review": {
+    "scope": "Independent read-only audit of all four output files",
+    "internet_checksum_sum_valid": true,
+    "sequence_ack_consistency": true,
+    "rfc6455_rpc_and_apk_hash_valid": true,
+    "resolver_tls_decryption_valid": true,
+    "concerns": [
+      "Download reuses the original final C2 closure in a different context; documented",
+      "Proxy retains original Shellshock content inside RPC; separation is by communication segment"
+    ]
+  }
+}

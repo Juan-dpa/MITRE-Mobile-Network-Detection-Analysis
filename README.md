@@ -1,21 +1,19 @@
 # Análisis de rendimiento de NGFW/IDS/IPS en MITRE ATT&CK Mobile
 
-Este repositorio reúne la documentación, los laboratorios y las capturas de tráfico de un Trabajo Fin de Grado que continúa la línea de investigación del departamento de Ingeniería Telemática - Universidad de Sevilla sobre las capacidades de detección de Snort, FortiGate y Palo Alto. El marco de referencia utilizado es **MITRE ATT&CK Mobile, versión 18**, centrado en el entorno móvil Android/iOS.
+Continuando con la línea de investigación del departamento de Ingeniería Telemática de la Universidad de Sevilla, este Trabajo Fin de Grado estudia las capacidades de detección de Snort, FortiGate y Palo Alto en el entorno móvil (Android/iOS). El marco de referencia utilizado es **MITRE ATT&CK Mobile, versión 18**.
 
-El objetivo es comparar el rendimiento detectivo de un sistema Open Source y sistemas NGFW (Cortafuegos de próxima generación), atendiendo tanto a las detecciones de tráfico malicioso como a los falsos positivos generados con tráfico benigno. El alcance se limita a las técnicas y subtécnicas que dejan evidencias observables a nivel de red.
+El objetivo es comparar el rendimiento detectivo de Snort como sistema Open Source frente a los NGFW (Cortafuegos de próxima generación) de Fortinet y Palo Alto, utilizando tráfico malicioso y benigno para evaluar las detecciones y los falsos positivos. El estudio se centra en las técnicas y subtécnicas observables a nivel de red.
 
 ## Procedimiento
 
 El estudio se puede descomponer en las siguientes fases:
 
-1. **Seleccionar las técnicas y muestras.** Identificar los comportamientos observables en red y las familias de malware que permiten estudiarlos.
-2. **Analizar las muestras.** Revisar su código y las referencias técnicas para determinar los protocolos, mensajes y secuencias de comunicación asociados a cada técnica.
-3. **Obtener las capturas.** Investigar PCAPs disponibles en datasets y generar tráfico en laboratorios controlados, mediante muestras ejecutadas en Android Emulator o reproducciones de sus comunicaciones con clientes y servidores Python.
-4. **Validar el tráfico.** Comprobar en Wireshark que las capturas contienen las comunicaciones descritas, utilizando las claves o secretos de sesión del laboratorio cuando sea necesario.
-5. **Evaluar los sistemas.** Suministrar las capturas a Snort, con los conjuntos de reglas seleccionados, y a FortiGate y Palo Alto. Repetir la evaluación con tráfico benigno para recoger los falsos positivos.
-6. **Comparar los resultados.** Recopilar las alertas, relacionarlas con las técnicas estudiadas y discutir las diferencias de detección y las limitaciones de cada sistema.
-
-
+1. Seleccionar las técnicas de MITRE ATT&CK Mobile observables en red y las familias de malware que permitan estudiarlas.
+2. Analizar el código de las muestras y las referencias técnicas para identificar los protocolos, mensajes y secuencias de comunicación asociados a cada técnica.
+3. Obtener capturas de tráfico (PCAPs) de datasets o generarlas en laboratorios controlados, ejecutando muestras en Android Emulator o reproduciendo sus comunicaciones mediante clientes y servidores Python. Recopilar también tráfico benigno de aplicaciones legítimas.
+4. Comprobar en Wireshark que las capturas contienen los comportamientos descritos, utilizando las claves o secretos de sesión del laboratorio cuando sea necesario.
+5. Suministrar las capturas a Snort, con los conjuntos de reglas seleccionados, y a FortiGate y Palo Alto. Analizar los logs generados tanto con tráfico malicioso como con tráfico benigno.
+6. Crear tablas de detecciones que relacionen las alertas con las técnicas estudiadas y comparar la cobertura, los falsos positivos y las limitaciones de cada sistema.
 
 ## Contenido del repositorio
 

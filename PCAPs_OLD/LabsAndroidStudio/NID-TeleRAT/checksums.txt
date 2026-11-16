@@ -1,0 +1,13 @@
+20b194e0dca172a5181369a1352203b91ac4cf391203082fba219bb083531b51  /home/juadelavi/python-labnet/android-labs/telerat/run.sh
+ca3f973031c749bc575ab132fcae84f0ca12c97c743f166841062ad8b3a93e3f  /home/juadelavi/python-labnet/android-labs/telerat/topology.conf
+71a7f24b6f6c9eedb74cf95b1bcdd0eac6bbe42ebe584429a3431fc02a9243af  /home/juadelavi/python-labnet/android-labs/telerat/android.conf
+cff0c01155a234abff548c4251f5a24c8b014b998d068e881f87ffac8490cb59  /home/juadelavi/python-labnet/tools/labnet.sh
+a84e45973742a76c490341d6748b38412239cd2d1381d23255fce59d88d850b4  /home/juadelavi/python-labnet/tools/runlib.sh
+4c8050823acffc960f23b3888f9aa1ab673694c7b45aa31c3631a6ef2f424a4d  /home/juadelavi/python-labnet/tools/android-runlib.sh
+b443fb5a5c39750d844b4f947acbf6dd725356ab109f8b0a9a961bb64427946e  /home/juadelavi/python-labnet/tools/android-windows.ps1
+86b9b10f1ac255d70429a13cc7cc238ba87e4946fa8539c3055f59b432ce68e7  /home/juadelavi/python-labnet/android-labs/telerat/source/bot_api_server.py
+14638fcc07858e03c207242997b67d8db8dd48a4e6c3e8cbefa3d4d30ba98ce4  /home/juadelavi/python-labnet/android-labs/telerat/source/certs/api.telegram.org.cert.pem
+021e50d278d06b8e915dd9891f5cc4fa001596f9a31c6b6e96d38f63dd1beb5d  /home/juadelavi/python-labnet/android-labs/telerat/source/certs/api.telegram.org.key.pem
+1b81fa80a92f55a0b122e28257fc4f2450956ef486130b42dcb598636c6361d5  /home/juadelavi/python-labnet/android-labs/telerat/source/certs/telerat-lab-ca.pem
+d2a0a62d267c7824110b895d56aa843ed2fab52455afbd05f1c55f1177ba5ad8  /home/juadelavi/python-labnet/android-labs/telerat/source/certs/telerat-lab-ca.sha256.txt
+1115910b1858fbc602188e39b3e2f0dfe960f6db66b13d416c3e49757ab3d8c0  /home/juadelavi/python-labnet/android-labs/telerat/source/operator_server.py

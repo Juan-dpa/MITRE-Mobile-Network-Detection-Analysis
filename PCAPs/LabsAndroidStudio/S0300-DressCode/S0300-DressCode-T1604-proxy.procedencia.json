@@ -1,0 +1,1062 @@
+{
+  "original": "PCAPs/LabsAndroidStudio/S0300-DressCode/S0300-DressCode.pcap",
+  "original_sha256": "960160ec184db42e9083ed5d9ae541f6820a8b8945a07cd1f071e8d4c2860d81",
+  "output": "S0300-DressCode-T1604-proxy.pcap",
+  "output_sha256": "03ed173f2de0eb1420d0cb7169faabcf465f551176724bbbafd87c5cb6565181",
+  "generated_date": "2026-10-25",
+  "selection": "DNS frames 15-18; TCP streams 0,1,2 up to frame 72; pure ACK derived from frame 74",
+  "target_technique": "T1604",
+  "packets": 43,
+  "max_frame_bytes": 97,
+  "original_frame_mapping": [
+    {
+      "output_frame": 1,
+      "original_frame": 15,
+      "original_stream": null,
+      "derivation": "selected original",
+      "output_stream": null
+    },
+    {
+      "output_frame": 2,
+      "original_frame": 16,
+      "original_stream": null,
+      "derivation": "selected original",
+      "output_stream": null
+    },
+    {
+      "output_frame": 3,
+      "original_frame": 17,
+      "original_stream": null,
+      "derivation": "selected original",
+      "output_stream": null
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 18,
+      "original_stream": null,
+      "derivation": "selected original",
+      "output_stream": null
+    },
+    {
+      "output_frame": 5,
+      "original_frame": 19,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 20,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 7,
+      "original_frame": 21,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 8,
+      "original_frame": 22,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 23,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 10,
+      "original_frame": 24,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 11,
+      "original_frame": 25,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 12,
+      "original_frame": 26,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 13,
+      "original_frame": 27,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 14,
+      "original_frame": 28,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 15,
+      "original_frame": 37,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 16,
+      "original_frame": 46,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 17,
+      "original_frame": 47,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 18,
+      "original_frame": 48,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 19,
+      "original_frame": 49,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 20,
+      "original_frame": 50,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 21,
+      "original_frame": 51,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 22,
+      "original_frame": 52,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 23,
+      "original_frame": 53,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 24,
+      "original_frame": 54,
+      "original_stream": 0,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 25,
+      "original_frame": 55,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 2
+    },
+    {
+      "output_frame": 26,
+      "original_frame": 56,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 2
+    },
+    {
+      "output_frame": 27,
+      "original_frame": 57,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 2
+    },
+    {
+      "output_frame": 28,
+      "original_frame": 58,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 29,
+      "original_frame": 59,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 30,
+      "original_frame": 60,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 2
+    },
+    {
+      "output_frame": 31,
+      "original_frame": 61,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 32,
+      "original_frame": 62,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 33,
+      "original_frame": 63,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 34,
+      "original_frame": 64,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 2
+    },
+    {
+      "output_frame": 35,
+      "original_frame": 65,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 2
+    },
+    {
+      "output_frame": 36,
+      "original_frame": 66,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 2
+    },
+    {
+      "output_frame": 37,
+      "original_frame": 67,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 38,
+      "original_frame": 68,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 39,
+      "original_frame": 69,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 2
+    },
+    {
+      "output_frame": 40,
+      "original_frame": 70,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 2
+    },
+    {
+      "output_frame": 41,
+      "original_frame": 71,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 42,
+      "original_frame": 72,
+      "original_stream": 1,
+      "derivation": "selected original",
+      "output_stream": 1
+    },
+    {
+      "output_frame": 43,
+      "original_frame": 74,
+      "original_stream": 2,
+      "derivation": "synthetic ACK, no application data",
+      "output_stream": 2
+    }
+  ],
+  "changes": [
+    {
+      "output_frame": 2,
+      "original_frame": 16,
+      "original_frame_bytes": 73,
+      "output_frame_bytes": 73,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 40,
+          "before_hex": "d56a",
+          "after_hex": "3b05",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 18,
+      "original_frame_bytes": 89,
+      "output_frame_bytes": 89,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 40,
+          "before_hex": "d57a",
+          "after_hex": "1618",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 20,
+      "original_frame_bytes": 66,
+      "output_frame_bytes": 66,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "fa54",
+          "after_hex": "b413",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 23,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "fa48",
+          "after_hex": "ef94",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 10,
+      "original_frame": 24,
+      "original_frame_bytes": 60,
+      "output_frame_bytes": 60,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "fa4e",
+          "after_hex": "0beb",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 12,
+      "original_frame": 26,
+      "original_frame_bytes": 59,
+      "output_frame_bytes": 59,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "fa4d",
+          "after_hex": "46eb",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 14,
+      "original_frame": 28,
+      "original_frame_bytes": 59,
+      "output_frame_bytes": 59,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "fa4d",
+          "after_hex": "44dc",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 16,
+      "original_frame": 46,
+      "original_frame_bytes": 79,
+      "output_frame_bytes": 79,
+      "original_checksum_state": "offload_seed",
+      "transformations": [
+        "create_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 54,
+          "before_hex": "4352454154452c31302e3233302e33302e32302c393030320a",
+          "after_hex": "4352454154452c31302e3233302e33302e32302c313038300a",
+          "reason": "CREATE operator port matches TCP/1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "fa61",
+          "after_hex": "4ed0",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 17,
+      "original_frame": 47,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "fa48",
+          "after_hex": "ef5f",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 19,
+      "original_frame": 49,
+      "original_frame_bytes": 66,
+      "output_frame_bytes": 66,
+      "original_checksum_state": "good",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 36,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "2a5b",
+          "after_hex": "494d",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 20,
+      "original_frame": 50,
+      "original_frame_bytes": 66,
+      "output_frame_bytes": 66,
+      "original_checksum_state": "offload_seed",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 34,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "d537",
+          "after_hex": "99fe",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 21,
+      "original_frame": 51,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "good",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 36,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "b5d3",
+          "after_hex": "d4c5",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 22,
+      "original_frame": 52,
+      "original_frame_bytes": 63,
+      "output_frame_bytes": 63,
+      "original_checksum_state": "offload_seed",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 34,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "d534",
+          "after_hex": "a85b",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 26,
+      "original_frame": 56,
+      "original_frame_bytes": 66,
+      "output_frame_bytes": 66,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d53c",
+          "after_hex": "eb75",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 28,
+      "original_frame": 58,
+      "original_frame_bytes": 62,
+      "output_frame_bytes": 62,
+      "original_checksum_state": "good",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 36,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "8c48",
+          "after_hex": "ab3a",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 29,
+      "original_frame": 59,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 34,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "d52b",
+          "after_hex": "d574",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 30,
+      "original_frame": 60,
+      "original_frame_bytes": 97,
+      "output_frame_bytes": 97,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d55b",
+          "after_hex": "3a88",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 31,
+      "original_frame": 61,
+      "original_frame_bytes": 97,
+      "output_frame_bytes": 97,
+      "original_checksum_state": "good",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 36,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "c94d",
+          "after_hex": "e83f",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 32,
+      "original_frame": 62,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 34,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "d52b",
+          "after_hex": "d549",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 33,
+      "original_frame": 63,
+      "original_frame_bytes": 73,
+      "output_frame_bytes": 73,
+      "original_checksum_state": "offload_seed",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 34,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "d53e",
+          "after_hex": "975b",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 35,
+      "original_frame": 65,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d530",
+          "after_hex": "26bf",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 36,
+      "original_frame": 66,
+      "original_frame_bytes": 79,
+      "output_frame_bytes": 79,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d549",
+          "after_hex": "ca98",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 37,
+      "original_frame": 67,
+      "original_frame_bytes": 79,
+      "output_frame_bytes": 79,
+      "original_checksum_state": "good",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 36,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "595e",
+          "after_hex": "7850",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 38,
+      "original_frame": 68,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 34,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "d52b",
+          "after_hex": "d51d",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 40,
+      "original_frame": 70,
+      "original_frame_bytes": 74,
+      "output_frame_bytes": 74,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d544",
+          "after_hex": "167d",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 41,
+      "original_frame": 71,
+      "original_frame_bytes": 74,
+      "output_frame_bytes": 74,
+      "original_checksum_state": "good",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 36,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "a542",
+          "after_hex": "c434",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 42,
+      "original_frame": 72,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [
+        "socks_port_1080"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 34,
+          "before_hex": "232a",
+          "after_hex": "0438",
+          "reason": "SOCKS operator port 9002 to 1080"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "d52b",
+          "after_hex": "d509",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    },
+    {
+      "output_frame": 43,
+      "original_frame": 74,
+      "original_frame_bytes": 78,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "good",
+      "transformations": [
+        "synthetic_ack_derived_from_original_74"
+      ],
+      "byte_edits": [
+        {
+          "packet_offset": 54,
+          "before_hex": "4d41494c2046524f4d3a3c3b736c6565702036363b3e0d0a",
+          "after_hex": "",
+          "reason": "Remove attack data; retain ACK of prior SMTP reply"
+        },
+        {
+          "packet_offset": 47,
+          "before_hex": "18",
+          "after_hex": "10",
+          "reason": "Pure ACK; no PSH"
+        },
+        {
+          "packet_offset": 16,
+          "before_hex": "0040",
+          "after_hex": "0028",
+          "reason": "IPv4 total length for ACK without data"
+        },
+        {
+          "packet_offset": 24,
+          "before_hex": "f8f8",
+          "after_hex": "f910",
+          "reason": "IPv4 checksum for ACK without data"
+        },
+        {
+          "packet_offset": 50,
+          "before_hex": "cba8",
+          "after_hex": "25d2",
+          "reason": "Recalculate checksum after transformation"
+        }
+      ]
+    }
+  ],
+  "selected_original_checksum_states": {
+    "good": 22,
+    "offload_seed": 21
+  },
+  "tcp_states": {
+    "0": {
+      "initial": [
+        2489979251,
+        3181338119
+      ],
+      "next": [
+        19,
+        43
+      ],
+      "acked": [
+        19,
+        43
+      ],
+      "fin": [
+        true,
+        true
+      ],
+      "frames": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        23,
+        24
+      ],
+      "original_stream": 0,
+      "payload_sha256_by_direction": [
+        "f4071ccd652ea969ee9e178e1779f4147faa3a8ff75657df570767eb6b4bf829",
+        "235f51ac4c7279dc4c6eee16404bb7ee006da54a1cdb32f7e02a27858d0fe075"
+      ],
+      "payload_bytes_by_direction": [
+        17,
+        41
+      ]
+    },
+    "1": {
+      "initial": [
+        1281302264,
+        1675448429
+      ],
+      "next": [
+        97,
+        29
+      ],
+      "acked": [
+        97,
+        29
+      ],
+      "fin": [
+        false,
+        false
+      ],
+      "frames": [
+        19,
+        20,
+        21,
+        22,
+        28,
+        29,
+        31,
+        32,
+        33,
+        37,
+        38,
+        41,
+        42
+      ],
+      "original_stream": 1,
+      "payload_sha256_by_direction": [
+        "1fdb73881351ca889f69af87ac0e8558d68c213d1a47a366c3bb1fb7ec739a95",
+        "cdd314bff5df28a4dae7c528041eaead2f804035573a87cb69270e2e2413be3e"
+      ],
+      "payload_bytes_by_direction": [
+        96,
+        28
+      ]
+    },
+    "2": {
+      "initial": [
+        3084442330,
+        1018692312
+      ],
+      "next": [
+        20,
+        89
+      ],
+      "acked": [
+        20,
+        89
+      ],
+      "fin": [
+        false,
+        false
+      ],
+      "frames": [
+        25,
+        26,
+        27,
+        30,
+        34,
+        35,
+        36,
+        39,
+        40,
+        43
+      ],
+      "original_stream": 2,
+      "payload_sha256_by_direction": [
+        "69ed0eb5de6b506b7289084f8b01fb946100c4436c2caa9a62228059d65c2777",
+        "c5af773fa08bb13308c02c7f8d9b716b37142018752f3a371c93c8e06448d7ce"
+      ],
+      "payload_bytes_by_direction": [
+        19,
+        88
+      ]
+    }
+  },
+  "handshakes_synthesized": false,
+  "closures_synthesized": false,
+  "frames_resegmented": 0,
+  "synthetic_ack_count": 1,
+  "timestamps_preserved": true,
+  "application_changes": [
+    "CREATE port 9002 -> 1080",
+    "ACK-only projection removes attack payload from frame 74"
+  ],
+  "validation": {
+    "all_opening_handshakes_present": true,
+    "tcp_sequence_gaps": 0,
+    "all_bytes_acknowledged_at_end": true,
+    "checksums_ipv4_tcp_udp_good": true,
+    "frames_over_4000": 0,
+    "source_unchanged": true
+  },
+  "notes": [
+    "Tratamiento del PCAP existente; no es una nueva ejecucion del malware.",
+    "Origen observado 172.22.0.1: extremo del emulador visible tras su traduccion de red.",
+    "Los offsets de byte_edits se cuentan desde el inicio de la trama Ethernet; aplicarlos por orden para reproducir cada salida.",
+    "Los timestamps de todos los registros, incluido el ACK derivado, son los de sus tramas originales.",
+    "Contexto DNS restringido a la resolucion inicial de dfm.nicsm.net, tramas 15 a 18.",
+    "Corte de datos de aplicacion tras 72. El primer ataque aparece en 73 (tunel) y 74 (SMTP).",
+    "C2 de control stream 0 cerrado naturalmente; SOCKS y SMTP streams 1 y 2 abiertos y operativos.",
+    "9002 se sustituye por 1080 tanto en CREATE como en ambos sentidos de SOCKS; la longitud de CREATE no cambia.",
+    "El ACK derivado de 74 conserva SEQ, ACK, ventana y tiempo. Se retiran 24 bytes de ataque y PSH; se ajustan longitudes y checksums."
+  ]
+}

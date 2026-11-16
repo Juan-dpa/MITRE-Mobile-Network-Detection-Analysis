@@ -1,0 +1,453 @@
+{
+  "original": "PCAPs/LabsAndroidStudio/S0318-XLoaderForAndroid/S0318-XLoaderForAndroid.pcap",
+  "original_sha256": "3bf4c00db8b3eb0721f55f6b7b0a68ae741fee10482ba159d378307d562fac64",
+  "output": "S0318-XLoader-T1481.001-resolver.pcap",
+  "output_sha256": "8299c43e93ee245d8dc2e0555754ace74af5440a6428ff62e3d9600787cd6366",
+  "generated_date": "2026-10-25",
+  "target_technique": "T1481.001",
+  "accompanying_techniques": [],
+  "packets": 18,
+  "max_frame_bytes": 1345,
+  "original_frames_selected": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "original_to_output": [
+    {
+      "output_frame": 1,
+      "original_frame": 2,
+      "original_stream": null,
+      "original_frame_bytes": 71,
+      "output_frame_bytes": 71,
+      "payload_slice": [
+        0,
+        29
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": null
+    },
+    {
+      "output_frame": 2,
+      "original_frame": 3,
+      "original_stream": null,
+      "original_frame_bytes": 71,
+      "output_frame_bytes": 71,
+      "payload_slice": [
+        0,
+        29
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 41,
+          "before_hex": "68",
+          "after_hex": "f0"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": null
+    },
+    {
+      "output_frame": 3,
+      "original_frame": 4,
+      "original_stream": null,
+      "original_frame_bytes": 71,
+      "output_frame_bytes": 71,
+      "payload_slice": [
+        0,
+        29
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": null
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 5,
+      "original_stream": null,
+      "original_frame_bytes": 87,
+      "output_frame_bytes": 87,
+      "payload_slice": [
+        0,
+        45
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 40,
+          "before_hex": "d678",
+          "after_hex": "f691"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": null
+    },
+    {
+      "output_frame": 5,
+      "original_frame": 6,
+      "original_stream": 0,
+      "original_frame_bytes": 66,
+      "output_frame_bytes": 66,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 7,
+      "original_stream": 0,
+      "original_frame_bytes": 66,
+      "output_frame_bytes": 66,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d62e",
+          "after_hex": "62bc"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 7,
+      "original_frame": 8,
+      "original_stream": 0,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 8,
+      "original_frame": 9,
+      "original_stream": 0,
+      "original_frame_bytes": 272,
+      "output_frame_bytes": 272,
+      "payload_slice": [
+        0,
+        218
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 10,
+      "original_stream": 0,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d622",
+          "after_hex": "9d69"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 10,
+      "original_frame": 11,
+      "original_stream": 0,
+      "original_frame_bytes": 1345,
+      "output_frame_bytes": 1345,
+      "payload_slice": [
+        0,
+        1291
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "db2d",
+          "after_hex": "c47e"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 11,
+      "original_frame": 12,
+      "original_stream": 0,
+      "original_frame_bytes": 180,
+      "output_frame_bytes": 180,
+      "payload_slice": [
+        0,
+        126
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 12,
+      "original_frame": 13,
+      "original_stream": 0,
+      "original_frame_bytes": 280,
+      "output_frame_bytes": 280,
+      "payload_slice": [
+        0,
+        226
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d704",
+          "after_hex": "7c0d"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 13,
+      "original_frame": 14,
+      "original_stream": 0,
+      "original_frame_bytes": 344,
+      "output_frame_bytes": 344,
+      "payload_slice": [
+        0,
+        290
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 14,
+      "original_frame": 15,
+      "original_stream": 0,
+      "original_frame_bytes": 244,
+      "output_frame_bytes": 244,
+      "payload_slice": [
+        0,
+        190
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d6e0",
+          "after_hex": "2f0c"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 15,
+      "original_frame": 16,
+      "original_stream": 0,
+      "original_frame_bytes": 233,
+      "output_frame_bytes": 233,
+      "payload_slice": [
+        0,
+        179
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d6d5",
+          "after_hex": "6238"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 16,
+      "original_frame": 17,
+      "original_stream": 0,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 17,
+      "original_frame": 18,
+      "original_stream": 0,
+      "original_frame_bytes": 85,
+      "output_frame_bytes": 85,
+      "payload_slice": [
+        0,
+        31
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 18,
+      "original_frame": 19,
+      "original_stream": 0,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    }
+  ],
+  "tcp_sequence_rebased": false,
+  "original_isns_and_syn_options_preserved": true,
+  "sequence_mapping_retained_intervals": null,
+  "application_bytes_preserved": true,
+  "original_timestamps_preserved": true,
+  "handshakes_synthesized": false,
+  "closures_synthesized": false,
+  "closure_context_reused": false,
+  "closure_original_frames": [
+    16,
+    17,
+    18,
+    19
+  ],
+  "original_frames_resegmented": [],
+  "resegmentation_tcp_payload_limit": null,
+  "selected_original_checksum_states": {
+    "good": 10,
+    "offload_seed": 8
+  },
+  "tcp_state": {
+    "initial": [
+      3416940427,
+      1154736916
+    ],
+    "next": [
+      666,
+      1888
+    ],
+    "acked": [
+      635,
+      1888
+    ],
+    "fin": [
+      false,
+      true
+    ],
+    "reset": true,
+    "frames": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "payload_bytes_by_direction": [
+      665,
+      1886
+    ],
+    "payload_sha256_by_direction": [
+      "a01c8cae8c7dfd8f854760d475c89cc76d46aa1bc8a9e0c71ae22d791782fe2e",
+      "9bfe118a88c13471f849081aa82cd1204c7adec81c51df76647268cd4a00841a"
+    ]
+  },
+  "application_validation": {
+    "tls_connection_original_stream": 0,
+    "request_path": "/sdfghuio342",
+    "decoded_c2": "1.162.98.240:28833",
+    "webview_resolver_excluded": true,
+    "tls_keylog_reference": "PCAPs/LabsAndroidStudio/S0318-XLoaderForAndroid/keys/xloader-sslkeys.log"
+  },
+  "validation": {
+    "all_initial_tcp_handshakes_present": true,
+    "tcp_sequence_gaps": 0,
+    "acknowledgments_coherent": true,
+    "ip_tcp_udp_checksums_valid": true,
+    "frames_over_4000": 0,
+    "original_unchanged": true
+  },
+  "notes": [
+    "Derivado del PCAP existente; no ejecucion nueva.",
+    "Los timestamps de partes resegmentadas coinciden con su trama de origen.",
+    "Cada salida se reproduce seleccionando las tramas indicadas, aplicando payload_slice y header_edits, y actualizando caplen/wirelen.",
+    "Los campos source/original son relativos a la raiz del repositorio; output es relativo a este informe."
+  ]
+}

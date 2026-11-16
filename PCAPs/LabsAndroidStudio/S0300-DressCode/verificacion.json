@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-25",
+  "original": "PCAPs/LabsAndroidStudio/S0300-DressCode/S0300-DressCode.pcap",
+  "original_sha256": "960160ec184db42e9083ed5d9ae541f6820a8b8945a07cd1f071e8d4c2860d81",
+  "original_unchanged": true,
+  "tshark_version": "TShark (Wireshark) 4.6.5 (v4.6.5-0-gb40c46f83867).",
+  "outputs": [
+    {
+      "file": "S0300-DressCode-T1428-explotacion.pcap",
+      "sha256": "2c311bca5d0f47fe0183f658d3cb9cb7b976322cff75fe65d8505fcb34bdd220",
+      "packets": 26,
+      "max_frame_bytes": 105,
+      "tcp_streams": 1,
+      "handshakes_complete": true,
+      "sequence_ack_validation": "passed in preparation",
+      "checksums_good": true,
+      "tcp_analysis_warnings": 0,
+      "malformed_packets": 0,
+      "exact_source_reconstruction_from_documented_byte_edits": true,
+      "no_undocumented_packet_byte_changes": true,
+      "timestamps_unchanged": true
+    },
+    {
+      "file": "S0300-DressCode-T1604-proxy.pcap",
+      "sha256": "03ed173f2de0eb1420d0cb7169faabcf465f551176724bbbafd87c5cb6565181",
+      "packets": 43,
+      "max_frame_bytes": 97,
+      "tcp_streams": 3,
+      "handshakes_complete": true,
+      "sequence_ack_validation": "passed in preparation",
+      "checksums_good": true,
+      "tcp_analysis_warnings": 0,
+      "malformed_packets": 0,
+      "exact_source_reconstruction_from_documented_byte_edits": true,
+      "no_undocumented_packet_byte_changes": true,
+      "timestamps_unchanged": true
+    }
+  ],
+  "mcp_checks": [
+    "C2 CREATE specifies 1080",
+    "SOCKS4 request, grant, banner and EHLO round trip preserved without MAIL FROM",
+    "SMTP exploitation stream includes real handshake, attack and original close",
+    "Proxy active streams have no FIN/RST; final SMTP ACK confirms prior response"
+  ],
+  "scope": "Verificacion sobre los archivos. No se ha ejecutado de nuevo el laboratorio ni reproducido las capturas en NGFW/Snort."
+}

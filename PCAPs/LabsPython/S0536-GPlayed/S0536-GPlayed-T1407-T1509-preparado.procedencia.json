@@ -1,0 +1,1824 @@
+{
+  "generated_date": "2026-11-10",
+  "original": "PCAPs/LabsPython/S0536-GPlayed/S0536-GPlayed.pcap",
+  "original_sha256": "99882b84c5a318433a053bd09cdb8ad517cffc130422c8c2dce448d2f51bdde0",
+  "output": "S0536-GPlayed-T1407-T1509-preparado.pcap",
+  "output_sha256": "9be877de4773795382f133c20cc9ac9277bfe3c95c1648932886ad3f7d18618d",
+  "target_technique": "T1407",
+  "collateral_techniques": [
+    "T1509"
+  ],
+  "selection": "All 60 original frames; only frame 44 resegmented",
+  "original_selected_packets": 60,
+  "output_packets": 63,
+  "max_frame_bytes": 1514,
+  "frames_over_4000": 0,
+  "ip_mtu": 1500,
+  "negotiated_mss": 1460,
+  "split_tcp_payload_limit": 1448,
+  "resegmented_original_frames": [
+    44
+  ],
+  "transport_checksum_changes": 63,
+  "unchanged_properties": [
+    "global PCAP header",
+    "packet timestamps",
+    "MAC and IP addresses",
+    "ports",
+    "IPv4 ID and DF",
+    "TCP ACK, window and options",
+    "original handshakes and closures",
+    "ordered application bytes"
+  ],
+  "tcp_flags_policy": "Original ACK preserved; PSH remains only on last child of a resegmented packet; no original SYN/FIN/RST packet is split.",
+  "timestamp_policy": "All children retain the original timestamp and are inserted consecutively before the next original record.",
+  "ipv4_id_policy": "Original IPv4 ID retained on all children; original DF remains set, and no IP fragmentation is introduced.",
+  "reconstruction": "Copy global PCAP header. For each output mapping, take original frame unchanged if selected_original; otherwise concatenate its header up to original_payload_offset_from_frame_start with original_payload_range [start,end) of its TCP payload. Apply edits in order. Preserve original record timestamp and set captured/original lengths to output_frame_length.",
+  "original_frame_mapping": [
+    {
+      "output_frame": 1,
+      "original_frame": 1,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "07d3852103e53d5b34b2107182cf9472d566c1664ce1cd4c642a1268251c0746",
+      "output_frame_sha256": "7f809bc9c7c37562f0e59675dafdd7d2e6bc2a47414b54660e6f2b819d49b680",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "50c8",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 2,
+      "original_frame": 2,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "82b5fcb6efd8c9ce373bd00e6256d4f8441981b39595389c10282046f1dd7de5",
+      "output_frame_sha256": "2aab3e6d912dbe9408bc0c9d8cd76ea5e6e389c649fd8fbcb8e10d4331bf52ca",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "22a0",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 3,
+      "original_frame": 3,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "517bdeef19bfa51888a627aa7feac5940e9153673b4216fafc1ecf2c9bddef74",
+      "output_frame_sha256": "bd9c5189a8c4fd41750cc7d244cc10b3be7ce7a0e1fc962059e481d818fb591a",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "4fb8",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 4,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        716
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 782,
+      "output_frame_length": 782,
+      "original_frame_sha256": "906c3186f21e6e17acb4148136f93040cec7bedd8fff6b6c643e9d37281707d7",
+      "output_frame_sha256": "f8dbf8cc6f99e8f35bf256fbb4c7987d333d7fc7f59ec12ba1d4f7f6ade08f46",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3a1c",
+          "after_hex": "7726",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 5,
+      "original_frame": 5,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "40168ff8a81bb66164faeb048fe64b808b3b8769306b442ef00168ddc8f8bdfe",
+      "output_frame_sha256": "932f8ecc7b7220c866c8d04961bc3578000ce2d3d9540446ba2ea1886108f258",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "4cec",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 6,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        158
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 224,
+      "output_frame_length": 224,
+      "original_frame_sha256": "e6962a191dd8ccd954621e6fce752b283446fefa6ce7cf4e761bf080fc5cfd29",
+      "output_frame_sha256": "fb0e94acba6621560373407d8a9c0525f72a19e1a837fe564a6bb0b9df5d5e1e",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37ee",
+          "after_hex": "bf6b",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 7,
+      "original_frame": 7,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "62ee7674fd00c263c48690188e1aec41ca0a24efcce3c381807b8e5c1de3f8f5",
+      "output_frame_sha256": "13b8c4a4e83418d3a4118e58a27e9a14d6219c719383ef33482fec1072ac4738",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "4c4c",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 8,
+      "original_frame": 8,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        27
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 93,
+      "output_frame_length": 93,
+      "original_frame_sha256": "e8a1b52a3012f1cc8f3279eb0d226caa491b2db7857fab6d2d4a296e3ead6685",
+      "output_frame_sha256": "92410bad0eac32ebc3344d71f77abe218808622143deddad02298e2c55fe1c85",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "376b",
+          "after_hex": "8d2d",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 9,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "cec2b9517c9becb50d605dd5ad5484925ed3190559b2f71feb942f400ed24f7a",
+      "output_frame_sha256": "b54d4d855095bdeadb5d466387de8dd0ccbfc42fffa877966a0782f9644c6eea",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "4c31",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 10,
+      "original_frame": 10,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "3b1c050cbcfce52bd9a9dc7cf4d4034d20a0777531877f1744b4e5aa034520d0",
+      "output_frame_sha256": "ce700145d2fd35aa72528ae4c4041f2bbfe71c2950bb7401622460674669067e",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "4c30",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 11,
+      "original_frame": 11,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "4675784b81861dcdaf5e0c6dd494fad195aa1b385a3030ea33a756427b82302c",
+      "output_frame_sha256": "e789cb330d3a78d276fa6f8ebfb43b53fefe4bb58f76441d4452fa45ac191d18",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "4c2e",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 12,
+      "original_frame": 12,
+      "original_stream": 0,
+      "output_stream": 0,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "274c10f965de2ea9d648685f7d96e4db75933ae7dbedae454b61e3d196764110",
+      "output_frame_sha256": "18bedd536f2016a86d5007600fba2612c8f82fcb86e5eb0663f66665f645f529",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "4c2d",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 13,
+      "original_frame": 13,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "062439b9f3a3ac4aa451c62a3fb95f74b1384111d975498effca898e904bdaa8",
+      "output_frame_sha256": "c43f46f97c0a4843e77d79ea4f6c98b75e5e208436758f26f95651634269143d",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "b960",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 14,
+      "original_frame": 14,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "3124c74e90a37b7c2ebfb27bf68b648a0bfa7beae9e51901fd8f8189db44a109",
+      "output_frame_sha256": "6a0565aeb3cb206c715b211d23b1e9b49c643b62e8f52f3794f5b64a7a1be0a4",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "4855",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 15,
+      "original_frame": 15,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "b390f43ccd8885748370f2e7a9b211d0260fa113b27c15696572686c20dcf833",
+      "output_frame_sha256": "cb24ea2685385a3c4a3c8a33ea9f690a761f7833bccf2ea274ab53b317fca588",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "756d",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 16,
+      "original_frame": 16,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        172
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 238,
+      "output_frame_length": 238,
+      "original_frame_sha256": "9b96923be91a552a63adb2f55269ea8453826ff7d81a0c1d3eb896a360678121",
+      "output_frame_sha256": "522c782afbee4b4bfe65dff4414d7b28d2c0f5a075c8e14dfd4250edb01884c9",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37fc",
+          "after_hex": "ad70",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 17,
+      "original_frame": 17,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "17aefbaa2fc017338f18c8d8cc1332e2fc3f061e20c1ec505e5e2d648d5ae798",
+      "output_frame_sha256": "38efc547250a768a120dc25ce1b14f029ce202a0adc9c6782b077be9abdbc4af",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "74bf",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 18,
+      "original_frame": 18,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        159
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 225,
+      "output_frame_length": 225,
+      "original_frame_sha256": "c6d8edeffa118f81181fb91c154ce119cc7a74fcb1777f31936271f491612273",
+      "output_frame_sha256": "1afae0b175aa603b8ea0b60f1684c258072f9581e76221540c8fb572c92edc0a",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37ef",
+          "after_hex": "b83a",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 19,
+      "original_frame": 19,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "f1408dcf16ca6362d8a632e19b0eed416ed381ac29a131a76827719819430257",
+      "output_frame_sha256": "33ac67d6b34a8d89e388ea18d37e11312a65847aa8383299bf9fd01aeee7eee5",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "741f",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 20,
+      "original_frame": 20,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        145
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 211,
+      "output_frame_length": 211,
+      "original_frame_sha256": "6bd8c6e9e57c6ee30d0dfcc6571f8623c74277b1aa9e0ec91721011ef76a7f4a",
+      "output_frame_sha256": "7e094bad45ce52e7fe6de25bf15506857a7ba46fc2537684ce909ba3b291fee5",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37e1",
+          "after_hex": "78dc",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 21,
+      "original_frame": 21,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "1253c7cc6c8b53bbc318ec3771aa9b4e880d5716d6d1160d789be900345d288e",
+      "output_frame_sha256": "93e8d75be72690649b04776e98822c5d1b26ee5308b05a7a2dfa04e841af81b9",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "738c",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 22,
+      "original_frame": 22,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "7c985bfcf7a368f7bedb1f445b2a4ef08136b84baddecb438926b500d85ef6e9",
+      "output_frame_sha256": "88369332f8ba41fa1c4d75aadb28107a5bc68b0d08f3b43a3e435a77eed8d146",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "738a",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 23,
+      "original_frame": 23,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "d19c65dce46ba362ed481f4dc45cc644ac85ae96a2cb8396682ab3aa8b29b267",
+      "output_frame_sha256": "599e688be7e17233906210ccb9bc99e76ec45b2cd459c605b3416e5d493d2b59",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "7389",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 24,
+      "original_frame": 24,
+      "original_stream": 1,
+      "output_stream": 1,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "4f8abd8c0dad6a5fde580b5c07e4ccea60295f7a063dfdc2d432a8fc37eaf162",
+      "output_frame_sha256": "282210e06c9cb6bb0b27a19ca1b6f7871f92ecb6a17f469334be719071557fb7",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "7387",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 25,
+      "original_frame": 25,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "277be7808436ea1b6c1028aa38d87130537c847ffe31854962bb50077ac00aee",
+      "output_frame_sha256": "c6af5845c3dff4b8244efe952fb5e4cc6cf5d3841900653d5f143b4de04595ea",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "cefc",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 26,
+      "original_frame": 26,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "080af4f95bebd1d004a7d1023ef5c102f7fc62bbc4770856d0dfdc442114479a",
+      "output_frame_sha256": "7c8a70fa128afb325dcc52cbaab31eeb4dcb8f90eaca33f0dd93aa8c9869b523",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "c33a",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 27,
+      "original_frame": 27,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "ba2c78648427e383216eba28cee2ac7863eb738e259d98bdbba0defca8bb2b35",
+      "output_frame_sha256": "f353e2968faddd79f7f89db79da4654af609f44e5e947a1f300b562925fc1cfc",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "f053",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 28,
+      "original_frame": 28,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        172
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 238,
+      "output_frame_length": 238,
+      "original_frame_sha256": "705a62ac4c79712a6b34e82b5ceb9201660646db174946710d66b2f903b3a66b",
+      "output_frame_sha256": "ce59642d04cc6d1c6351bec36c83a3d95c0f4317c4bfb83bb3c9c829cc46c424",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37fc",
+          "after_hex": "2857",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 29,
+      "original_frame": 29,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "6eb5ec6acbc5f607d715815badd1a8eec26bb0f8a52357791a62a1331fc0956d",
+      "output_frame_sha256": "5cee5b5f0fd264a384f2ec6c7c6e895436f4cdd2e0a3af7941c86d520fb2039e",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "efa6",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 30,
+      "original_frame": 30,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        159
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 225,
+      "output_frame_length": 225,
+      "original_frame_sha256": "fd7b8634d8ff03b8ccf3cf44eb8a0cccdb69d7796e4d277326087b356e5504ac",
+      "output_frame_sha256": "d30dc9c415151e8b5ed795c1e0c3a5f63df365684e0274e5bbedbbf5db806675",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37ef",
+          "after_hex": "331c",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 31,
+      "original_frame": 31,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "ee6bbee34c3e56de50f891b5c37e84d891cd8c6e4b7725552fe67734e6fcc588",
+      "output_frame_sha256": "0c79e7f18fe33a2a76d54881c3a3f4c206e0ff20e3bec6bf0c54f91310228e91",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "ef04",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 32,
+      "original_frame": 32,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        195
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 261,
+      "output_frame_length": 261,
+      "original_frame_sha256": "b3ebf74a2503ee17ffb4ca09ea9d6535cef904f0e3aafae0d48f33fd3497ab1a",
+      "output_frame_sha256": "7b5072a944875ab59d1142e6a6b93c0edc7a0d560b4410f2a77cffcc1747d0f1",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3813",
+          "after_hex": "8777",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 33,
+      "original_frame": 33,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "8831498875ecf442576c22b6b8b24c194719816597eb0735996433b863f7ee8f",
+      "output_frame_sha256": "879f5425da4cf4ec4e772a87d66b45cfa718399440ba0dd2e4d81c3dcbbfee9c",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "ee41",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 34,
+      "original_frame": 34,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "d2b9b3688c9b82c565e9758966f88dac2b3bc2635e190fc1d88bc334a2d627f9",
+      "output_frame_sha256": "6f2c44278cc973b5c019e86d1b62f173f0117d4121cda700bd3f84d72a1fd881",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "ee3f",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 35,
+      "original_frame": 35,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "6aed7a5113e5d134000045a28d6e462babf2cd10619507662e0a1da600b9786a",
+      "output_frame_sha256": "88af797f771726ac3f63583298adeea4638405c9dc76fd175be8ca6bb7e4ee20",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "ee3e",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 36,
+      "original_frame": 36,
+      "original_stream": 2,
+      "output_stream": 2,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "b65cfb183bbf58b45b30818058f1a32b9047f1ca5a81dc631addc8ba413ae5e7",
+      "output_frame_sha256": "8e7e931344a4891d529885c1fbf4e8f6c3fc93e07ab51d84a57a76b09fdb2022",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "ee3c",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 37,
+      "original_frame": 37,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "810b63c99b199e1d10b64ed97eacea69be38b590d18a5380a265803806ecc887",
+      "output_frame_sha256": "549ba10075c98722eb3eeb6d9c0dfffa383a9f768aeadb4adc19f7f77552f862",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "9661",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 38,
+      "original_frame": 38,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "9c26b5ef359e8d10d8e8411b0a321192d89ab4741d494bdb75dc78f3607f73c7",
+      "output_frame_sha256": "b8d2f12f6386b192658cbc05b0c1af233c393c21a374c58e0f86dc71bf805222",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "ab21",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 39,
+      "original_frame": 39,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "daa34c57e9c963932abe5cc45378a3a9a2211898f8bd4f684269917f94844c92",
+      "output_frame_sha256": "6edd8455feb5d46de9afe5d4a8c534245dfc1792fcf81f8203b424de94269659",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "d83a",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 40,
+      "original_frame": 40,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        172
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 238,
+      "output_frame_length": 238,
+      "original_frame_sha256": "159cce505da8a21ec5f2da1e1364a13cd8fea7c787525a331c6f13f5391bb604",
+      "output_frame_sha256": "eee5cb64615c5d359ced710438584d5c53f5599ba444023c42b1ec24c01b08ae",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37fc",
+          "after_hex": "103e",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 41,
+      "original_frame": 41,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "760c8515c7052e7077265b0072b348176a6b9d78d82863c9925ec67b4eb48604",
+      "output_frame_sha256": "81edb62976249bd37128e20a4fef423a522ae8e030c0454eeee2b1bbe4937d98",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "d78d",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 42,
+      "original_frame": 42,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        160
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 226,
+      "output_frame_length": 226,
+      "original_frame_sha256": "72505468c2aee49904b2f639b4be1a6b9bc1b6cfba809de4d49054d8b7ca9dc5",
+      "output_frame_sha256": "5825e017f4993bf828eb4cf24c74803fb59b5d234265d642563c0dac2b89a3a6",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37f0",
+          "after_hex": "10d9",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 43,
+      "original_frame": 43,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "7a31376141138f309a465a8fe961cc79af5cfbb4574b347276905a0e50b8577b",
+      "output_frame_sha256": "351f27e1cfa74daf16b7c56ed2ba697ad3715f84d2bc6f19afac53dcd1d17627",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "d6ea",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 44,
+      "original_frame": 44,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "tcp_resegmentation",
+      "segment_index": 1,
+      "segment_count": 4,
+      "original_payload_range": [
+        0,
+        1448
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 5609,
+      "output_frame_length": 1514,
+      "original_frame_sha256": "cd5f2ff4b7d6d57fef38cf85b01b4d92ce0627035a620110372542f89e3161fa",
+      "output_frame_sha256": "c6a0fb64304d165c41c072f38e5561c4cf6e76d90af8dbf62eb17865a9809a2a",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 16,
+          "before_hex": "15db",
+          "after_hex": "05dc",
+          "reason": "IPv4 total length of TCP segment"
+        },
+        {
+          "offset_from_frame_start": 47,
+          "before_hex": "18",
+          "after_hex": "10",
+          "reason": "PSH retained on final segment only"
+        },
+        {
+          "offset_from_frame_start": 24,
+          "before_hex": "c45c",
+          "after_hex": "d45b",
+          "reason": "IPv4 header checksum"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "4cf7",
+          "after_hex": "1bb0",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 45,
+      "original_frame": 44,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "tcp_resegmentation",
+      "segment_index": 2,
+      "segment_count": 4,
+      "original_payload_range": [
+        1448,
+        2896
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 5609,
+      "output_frame_length": 1514,
+      "original_frame_sha256": "cd5f2ff4b7d6d57fef38cf85b01b4d92ce0627035a620110372542f89e3161fa",
+      "output_frame_sha256": "1e850c9adb85fce8a4cd48d835f1d10c39d18eabfd4ab797e3ad35844dac0cad",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 16,
+          "before_hex": "15db",
+          "after_hex": "05dc",
+          "reason": "IPv4 total length of TCP segment"
+        },
+        {
+          "offset_from_frame_start": 38,
+          "before_hex": "1c1b6d8c",
+          "after_hex": "1c1b7334",
+          "reason": "TCP sequence offset within original payload"
+        },
+        {
+          "offset_from_frame_start": 47,
+          "before_hex": "18",
+          "after_hex": "10",
+          "reason": "PSH retained on final segment only"
+        },
+        {
+          "offset_from_frame_start": 24,
+          "before_hex": "c45c",
+          "after_hex": "d45b",
+          "reason": "IPv4 header checksum"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "4cf7",
+          "after_hex": "3dfe",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 46,
+      "original_frame": 44,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "tcp_resegmentation",
+      "segment_index": 3,
+      "segment_count": 4,
+      "original_payload_range": [
+        2896,
+        4344
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 5609,
+      "output_frame_length": 1514,
+      "original_frame_sha256": "cd5f2ff4b7d6d57fef38cf85b01b4d92ce0627035a620110372542f89e3161fa",
+      "output_frame_sha256": "2e0a1a3e369c3c26b5245cbfd25ce17939019630a00c4f018042de71946d0f17",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 16,
+          "before_hex": "15db",
+          "after_hex": "05dc",
+          "reason": "IPv4 total length of TCP segment"
+        },
+        {
+          "offset_from_frame_start": 38,
+          "before_hex": "1c1b6d8c",
+          "after_hex": "1c1b78dc",
+          "reason": "TCP sequence offset within original payload"
+        },
+        {
+          "offset_from_frame_start": 47,
+          "before_hex": "18",
+          "after_hex": "10",
+          "reason": "PSH retained on final segment only"
+        },
+        {
+          "offset_from_frame_start": 24,
+          "before_hex": "c45c",
+          "after_hex": "d45b",
+          "reason": "IPv4 header checksum"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "4cf7",
+          "after_hex": "c8cc",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 47,
+      "original_frame": 44,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "tcp_resegmentation",
+      "segment_index": 4,
+      "segment_count": 4,
+      "original_payload_range": [
+        4344,
+        5543
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 5609,
+      "output_frame_length": 1265,
+      "original_frame_sha256": "cd5f2ff4b7d6d57fef38cf85b01b4d92ce0627035a620110372542f89e3161fa",
+      "output_frame_sha256": "c4326df3df533a35db8a1e4642d59302d7c96a5ed97658684fbb0a0a5389cf5a",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 16,
+          "before_hex": "15db",
+          "after_hex": "04e3",
+          "reason": "IPv4 total length of TCP segment"
+        },
+        {
+          "offset_from_frame_start": 38,
+          "before_hex": "1c1b6d8c",
+          "after_hex": "1c1b7e84",
+          "reason": "TCP sequence offset within original payload"
+        },
+        {
+          "offset_from_frame_start": 24,
+          "before_hex": "c45c",
+          "after_hex": "d554",
+          "reason": "IPv4 header checksum"
+        },
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "4cf7",
+          "after_hex": "a30f",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 48,
+      "original_frame": 45,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "f3e23f37eda0cf59200b63819f1cdff9cf12477e3885ef849eb9ca2632a577e7",
+      "output_frame_sha256": "ab65ec4bbfb16dd42bce63296566b94fa2304f778f83320d8aac356a594cac8a",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "c138",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 49,
+      "original_frame": 46,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "647ad178558773bcc81166fdf42a697a500b1f2dbbaa7c0c2ecdd8033d906f2c",
+      "output_frame_sha256": "c7b81882ec67896608ea68855d64f09173c802a0e52c40dd25a4850ccda23078",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "c141",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 50,
+      "original_frame": 47,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "bbff2f5c5615b1e98c128419bfc1af3e2591b090cb48dd52741a84b6cd124017",
+      "output_frame_sha256": "0bc065733422a794a77a7d4b72a72f2c9ae9087341474afa9b0b1eccebc7f452",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "c136",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 51,
+      "original_frame": 48,
+      "original_stream": 3,
+      "output_stream": 3,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "b2e1eb57c0896bbb3300905f7160f2b200494f8d4e9b4023862782640bd9247a",
+      "output_frame_sha256": "67cf4f7868b47411b5fc266eeda50b1154255862bfa9931ec5e5e6f9adf83e91",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "c140",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 52,
+      "original_frame": 49,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "d9ba22331d77fc6e5e44806fdb6e11a9eb1e65419f9fbedc3c8b40b174e88d98",
+      "output_frame_sha256": "7a7c5030aa556894a16a18019e27887d2058c001c428603f1d913f58d6308094",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "6c5d",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 53,
+      "original_frame": 50,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 74,
+      "original_frame_length": 74,
+      "output_frame_length": 74,
+      "original_frame_sha256": "b6665ec4173c6daf3ccb8240f0492d1f5afcf365fd20925d2ad644e868f6376e",
+      "output_frame_sha256": "30b8d26542771a109c339ee8d0a21262719b427d7478570fa10c84a55d3025b3",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3758",
+          "after_hex": "a086",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 54,
+      "original_frame": 51,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "d3d14feacf237bdf04e047e2a39fbd95d4138eb68cf1ab0d390be6ce006845a5",
+      "output_frame_sha256": "c02426a24e61e333767e6173c8b83c4244bde4ee3be3a60a93e74f0248f239e8",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "cd9f",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 55,
+      "original_frame": 52,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        172
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 238,
+      "output_frame_length": 238,
+      "original_frame_sha256": "ddf1bd828b283c24972c020a13363dba5d1c7a85994b44a230de13d1e59440e3",
+      "output_frame_sha256": "cd4c8a3beac24594f4f6bc4015c7f516ae3f6cb18d4a830f6146d4f4736b62b6",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37fc",
+          "after_hex": "05a3",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 56,
+      "original_frame": 53,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "fe013417352f0f48687024c6c76b8183542eccc2083fdf31c0dc7a9a59f77357",
+      "output_frame_sha256": "d0fe496a48efd565b98348b14a8f86d28bdbfc7a9b0ae7a0072f6bb6a01c172a",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "ccf2",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 57,
+      "original_frame": 54,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        159
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 225,
+      "output_frame_length": 225,
+      "original_frame_sha256": "645b0e0875256c3e44864155ce82a82dae1da2a56a3921bc90003c703f12735d",
+      "output_frame_sha256": "0894b34c1f87a11ace03338045f7550292194016e13c4ac4c8ff8fe291c38dd0",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "37ef",
+          "after_hex": "076c",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 58,
+      "original_frame": 55,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "ece2ed0069d80548be72156a5366a7c732c1dcc71fe735dbd7b25a24ff3e084d",
+      "output_frame_sha256": "53e8a562409e680f494469cf931ec081e4dcb699a8c46751ad744255e2d9223f",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "cc50",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 59,
+      "original_frame": 56,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        658
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 724,
+      "output_frame_length": 724,
+      "original_frame_sha256": "0be867236d3912a4ecffa25e73e9a3c11eb5de19ed99a99f22c3b6d443ceae72",
+      "output_frame_sha256": "e6a7ac17071487a976fca1d061c94dd37259b53b7f84337b1f1f96cb20ece2de",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "39e2",
+          "after_hex": "cb0c",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 60,
+      "original_frame": 57,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "b6eea23f64f9662577a3abb7f03e879fa3f694ce39b700304c782ea4bd5084b2",
+      "output_frame_sha256": "0e93f0b0d5f7fa09f30c0d617149d109a4fa35d49003780e796d5ad693353220",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "c9be",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 61,
+      "original_frame": 58,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "e5aa665a3103b844284c9df25926dc98841da2cd71aee2d7719548c8ef1749bf",
+      "output_frame_sha256": "0973014b9318581dcd3ed9da8d0e5aed611777363e3e442680a2ba44d5624f12",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "c9bc",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 62,
+      "original_frame": 59,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "3d10c2393e41e21abb75012c7cc30292656dc4e2c172b7b37705627495e7c35f",
+      "output_frame_sha256": "6229d7800a6f227242e288389b01b27d6e9b0517c6cbda8cf71b248c2c413cd5",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "c9bc",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 63,
+      "original_frame": 60,
+      "original_stream": 4,
+      "output_stream": 4,
+      "operation": "selected_original",
+      "segment_index": 1,
+      "segment_count": 1,
+      "original_payload_range": [
+        0,
+        0
+      ],
+      "original_payload_offset_from_frame_start": 66,
+      "original_frame_length": 66,
+      "output_frame_length": 66,
+      "original_frame_sha256": "29bae3c6a73ea2d3eab0c145b11720d4c7cf9f840b52692403cadc750ca9418a",
+      "output_frame_sha256": "4ff92e91398da6ea08cbca63c520143a0fb178977e761bdb208b6b712f323689",
+      "original_checksum_status": "partial_offload_seed",
+      "edits": [
+        {
+          "offset_from_frame_start": 50,
+          "before_hex": "3750",
+          "after_hex": "c9bb",
+          "reason": "Complete transport checksum"
+        }
+      ]
+    }
+  ]
+}

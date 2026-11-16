@@ -1,0 +1,2225 @@
+{
+  "prepared_date": "2026-10-26",
+  "source": "PCAPs/LabsPython/S1054-Drinik/S1054-Drinik.pcap",
+  "source_sha256": "ad497812d993135804f0441ee56d366f4f8392518c5cdc0375bbd5b4c8cee9e2",
+  "output_file": "S1054-Drinik-T1481.003-one-way.pcap",
+  "output_sha256": "9d5ad81f8fb8f74b819c3ca0826f8cf764cdd0d4e6ab5049c02ac02f4cfaacd1",
+  "target_technique": "T1481.003",
+  "collateral_techniques": [],
+  "selection": {
+    "source_frames": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148
+    ],
+    "source_tcp_streams": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      7,
+      8
+    ]
+  },
+  "packet_count": 136,
+  "max_frame_bytes": 2719,
+  "frames_over_4000": 0,
+  "transformations": [
+    "whole_connection_extraction",
+    "complete_verified_offload_transport_checksums"
+  ],
+  "transport_checksum_completions": 136,
+  "synthetic_packets": 0,
+  "resegmented_packets": 0,
+  "preserved": [
+    "pcap_global_header",
+    "capture_record_headers",
+    "timestamps",
+    "lengths",
+    "payload",
+    "seq_ack",
+    "addresses_ports",
+    "ip_headers",
+    "tcp_options",
+    "initial_handshakes",
+    "original_FIN_ACK_flags_and_mtalk_half_close"
+  ],
+  "scope_note": "Vista One-Way: registro Firebase/FCM, orden DOWNLOADAPK por push y confirmaciones por HTTP al panel; sin conexion al servidor de descarga. Conserva el semicierre original de mtalk.",
+  "frame_mapping": [
+    {
+      "output_frame": 1,
+      "source_frame": 1,
+      "original_frame_sha256": "ec121d42fe6596828817e55c78ea35d2eff166b82d29e57f1cc1acf260bcb4fc",
+      "output_frame_sha256": "db69cc42ca3d968c4fda222604289bdbeda0e7498d10112886927edc17b9390e",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ed2",
+          "new_hex": "6407",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 2,
+      "source_frame": 2,
+      "original_frame_sha256": "afcf0187883a3e6eaefea069e77547b9ef977f7bd0e0d1586d86a9afb4c6feca",
+      "output_frame_sha256": "54b2b4d4eadf1b8d69e50c036716d8ba4ef6471f1d8c01a8015c4646cecaeee6",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ee2",
+          "new_hex": "00b9",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 3,
+      "source_frame": 3,
+      "original_frame_sha256": "4ca66cbbd25a09e3adc10c1251b83ed91f04f53646a8e6e23b8ddb12a92f5364",
+      "output_frame_sha256": "507272f899b8d272092155fb73e1198f37f73e436e1d33cbf441694270084119",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d7f",
+          "new_hex": "239b",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 4,
+      "source_frame": 4,
+      "original_frame_sha256": "60a04427fca337a3c65632c42c81baf1a77f3cb143ac8b4c5491a04ec6b168ba",
+      "output_frame_sha256": "43242651caff7b921c338fb7504ecff2f419ab309f3bd1ab9cf61c0ad49e018b",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d7f",
+          "new_hex": "70eb",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 5,
+      "source_frame": 5,
+      "original_frame_sha256": "92de28aa2fe6bfb9e132c8e48c4596fd1c681a3ba3888524c6df70175fda659b",
+      "output_frame_sha256": "0afcc35048caf1f6253521cc54b54c232477947981b3a0a2c320d65d92d7cccd",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "9e04",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 6,
+      "source_frame": 6,
+      "original_frame_sha256": "8b5747a8eb1be7756b3fa2d7c1600243913ac0e9bf8e936e149b2da1b67b016a",
+      "output_frame_sha256": "07dabcae7eae604bef5ad087e453172908873244ffa9cd8ae2854b8a03afac45",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3420",
+          "new_hex": "252a",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 7,
+      "source_frame": 7,
+      "original_frame_sha256": "2bd232c64156b173e1e15afe92386a58dee8295c59e5a369051f65d5fac7c6ad",
+      "output_frame_sha256": "5a97015a3d7301747b8c9b515eaf332164277a57d7e5bea3dac4e321216d3678",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "9751",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 8,
+      "source_frame": 8,
+      "original_frame_sha256": "20643f72118b2dee037e8df7ebd54bc172a3bd6e9e9ebc11777130f4bff14a3a",
+      "output_frame_sha256": "1b0c6afba3cff0115a0f672a42bca4c14d453faee6235600e0cd6a5d8bd6fe00",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "37d4",
+          "new_hex": "a56c",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 9,
+      "source_frame": 9,
+      "original_frame_sha256": "9e6f54ae478f1ca2ab90031cfaaba6bc5033032b6ca45e0ffb62866d5a17977e",
+      "output_frame_sha256": "8e792ac97caa0f56227ba4acd361f6d269853b5037786a0cdfb57aac1bd6e59d",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "8cee",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 10,
+      "source_frame": 10,
+      "original_frame_sha256": "1cf988057c0f170f11f5e95df37f569d107fb0a00e54e933d93809dbbd4403d4",
+      "output_frame_sha256": "0e1d963999ae1ccfd7af70a2dae5e738d64c1c37eef7d9dc2f169a4a1819d0a9",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2dc7",
+          "new_hex": "6946",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 11,
+      "source_frame": 11,
+      "original_frame_sha256": "80b5673f0723291e186604ddeb5689ce7c56fa75a2bfc8865f3b9acf88452304",
+      "output_frame_sha256": "e503010ec0ae3ef2f01a5f1796da6ac492f5b9a95fa934be9282d256f083351b",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2e76",
+          "new_hex": "95fc",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 12,
+      "source_frame": 12,
+      "original_frame_sha256": "42ce44b5e8af8caae57ff51cb6f2e07514bddbf3352b7a3e81fc112d0d151847",
+      "output_frame_sha256": "25132c7e65b4b5243f8cc937734ffb170d72f6a862cf57e1d0e7c0017ab34c48",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2f4c",
+          "new_hex": "1c7b",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 13,
+      "source_frame": 13,
+      "original_frame_sha256": "12fd11c9685b934000348bb2ec3d6a88704a51483dd7af4a252ef1c7fc617592",
+      "output_frame_sha256": "17b97caedafdd068712a124d0b9ef2b3b651a984306fab5419ee6664d0d3a72d",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2e76",
+          "new_hex": "be6a",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 14,
+      "source_frame": 14,
+      "original_frame_sha256": "e66abeb1238ed1f4066d17ab4c84508fa86471617d71d5c5411272aa196c9282",
+      "output_frame_sha256": "24755c3c301ec4b9512bc1ad3073c1bafd598f3f7a6a07730efa8a908f54f0ad",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "8897",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 15,
+      "source_frame": 15,
+      "original_frame_sha256": "2087ecfeda485cf15ca992613adaa29ade6b6e73583ab53030f72170323f4e3b",
+      "output_frame_sha256": "ba4d3600b68564af72ebd78c38f1efd8784883147733bd67663f98c3d9911bcb",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2f25",
+          "new_hex": "9051",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 16,
+      "source_frame": 16,
+      "original_frame_sha256": "ba9f0954783695556ac0cb2035133ac245d2b1ef58f78cbf32bbc0b6ea6026b8",
+      "output_frame_sha256": "edf66fd5ca431d5396ddf646db8a2e89c8d2539ad177750d0631f179e1a63b45",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "86bb",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 17,
+      "source_frame": 17,
+      "original_frame_sha256": "6d73a8f5ab9c51e6db737e9254fa619c9c427f4f0f0fcaf8dfc9f6e6daf2347d",
+      "output_frame_sha256": "8253a4923c93b6b5f09349c5fec1eb685a91a05cd1b51f404fffbddeb3addbac",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d8f",
+          "new_hex": "2a92",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 18,
+      "source_frame": 18,
+      "original_frame_sha256": "9bf50ba2bcceb6c121c7ffa14cbdbe243980f0624267652587b61d1ade566932",
+      "output_frame_sha256": "15df5763610fa789a90bdd0ce2d48abf8b0fafeda42ddf7f4f8d1e35b6d72cfd",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "86a2",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 19,
+      "source_frame": 19,
+      "original_frame_sha256": "a3ebf3c1fdb6e2f8f13f8b744aefbfa1dfbbf3d73b8683d7ec1b0c1a6e02f325",
+      "output_frame_sha256": "9e03b6fd9cf38e8b3bd15584c13e2cc7a202743fd949755e9799694bfb19d8e4",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "86a7",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 20,
+      "source_frame": 20,
+      "original_frame_sha256": "8d65155ab61bd67f125af11e6858f0e8d5899dd47072ff0ba6cb5ca54fd918d9",
+      "output_frame_sha256": "729ec27a84af84e53611f3c9e6f8a99df1082dc29b17d505d9259363ced28a25",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "869f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 21,
+      "source_frame": 21,
+      "original_frame_sha256": "dd8198d0cec8331a8033859b946b2ec162388f5b4e8b6a3cabc2770a0ce2434d",
+      "output_frame_sha256": "cab36003793b8f88105c0cae8b4c93e28573480dfde739baa2170f2b847b0518",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ec5",
+          "new_hex": "d2d5",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 22,
+      "source_frame": 22,
+      "original_frame_sha256": "bb84aa3c7fc4b9f37cd70802a49c129ff3f6d81cc1583576b10f95a487846091",
+      "output_frame_sha256": "f7b261dcf0010b3e76db9b4c1569b600634bbb37ac251fb3954144a0dab9a702",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ed5",
+          "new_hex": "21d5",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 23,
+      "source_frame": 23,
+      "original_frame_sha256": "c3c0a3a59673e71875a04c531494054e8e6bc391b07036a69bd173c78f032f78",
+      "output_frame_sha256": "c73718b85e040e7c6a2744e1f7baa0df098142ab0e8a106cb35dc91381b10707",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d7f",
+          "new_hex": "eab8",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 24,
+      "source_frame": 24,
+      "original_frame_sha256": "317513c7fcacb457d0e4f1a46317aff6387b54c9d9e4f2f73dbf17fd76bcf58c",
+      "output_frame_sha256": "21556c06361da044062116ce1b50ca2d88613b12e1e6e735cf8b0499b84ae071",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d7f",
+          "new_hex": "d8d8",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 25,
+      "source_frame": 25,
+      "original_frame_sha256": "c6f39f1f9f8483bb1d1ebb5690aec4f9874ca499f6fb8da1d51326ea81fd40fa",
+      "output_frame_sha256": "709f4d3fc90cf8e4a16183b5f5c22cf4f5fa60a965dad7ae67e2013241fb8299",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "05f2",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 26,
+      "source_frame": 26,
+      "original_frame_sha256": "d0f4bb0cf80f8d219f36729f03bc498c78eabed3d8d7edf4983e3cdda37ca19d",
+      "output_frame_sha256": "882bcd6c6e9c000cf4d6c56aae960a9e9ab47a1c8c3d681faee7a289499eeb71",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3413",
+          "new_hex": "8bca",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 27,
+      "source_frame": 27,
+      "original_frame_sha256": "272f172a0100743d606df00bb503a3b29d3a857519f4e1d9b627d5b3fa40dbcf",
+      "output_frame_sha256": "dfb6e0df716ce8f2b75d36b9037e9e00d87caf005c8f4a56b619f2a0d2322365",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "ff4f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 28,
+      "source_frame": 28,
+      "original_frame_sha256": "81a4b87710ca18a4f7d8c448f0eea8d464a564fcd646d1a393e839144b1d599a",
+      "output_frame_sha256": "5ccfc3adb96b72229803f54154ec7251bd78e241947da9bc7fbe27b33a3e6229",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "37d4",
+          "new_hex": "a441",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 29,
+      "source_frame": 29,
+      "original_frame_sha256": "d122d2f76c02d66ba873e74f7aa174d07da8227ee94ae493da47f3aa60107462",
+      "output_frame_sha256": "18068f23595173f44da021637981402ae080a00a7ff90e8345fab62f26ca8334",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "f4eb",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 30,
+      "source_frame": 30,
+      "original_frame_sha256": "859ad2930878f5d72b93df0234e24de2d907c785e2519fc632e287a89a19061d",
+      "output_frame_sha256": "cc6750f150adc71ccbb1751bdfacbc499425000c118c89fddb47a7d568538bbd",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2dc7",
+          "new_hex": "dccf",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 31,
+      "source_frame": 31,
+      "original_frame_sha256": "0ef81c281d9689e129240edbe78b0c9de02b826776c306fad3102313b5e7179f",
+      "output_frame_sha256": "40bbe364b2b0b97a0d3e51e72a6f9e17f77726790a8f7ab20eef6002dbebffca",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2e76",
+          "new_hex": "697d",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 32,
+      "source_frame": 32,
+      "original_frame_sha256": "974e9134b91d54bf669d60964ea93492f21f100f5435530cfe907dfb350a5aad",
+      "output_frame_sha256": "cedb03d5353e589fec48add3bf36c46668c1fb04c1367d65862443ed061dd2c5",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2ecf",
+          "new_hex": "454f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 33,
+      "source_frame": 33,
+      "original_frame_sha256": "4e65d441df17fd72423a350e67028569a4ca0006075b24616b4a070938bd76d2",
+      "output_frame_sha256": "e340bb82cccb963f01bd4b3b5fee709189f1fc913fbf0275c04277c7662cac54",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2e76",
+          "new_hex": "6603",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 34,
+      "source_frame": 34,
+      "original_frame_sha256": "519c8e7be776b6d6e9c359ea8e43b22ee2e463d60ffbb0e503840992471d83cf",
+      "output_frame_sha256": "48fbbe0648f6663b4f497bb8c53e2662699985d526eee8497d9b583cc1fea8bf",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "f110",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 35,
+      "source_frame": 35,
+      "original_frame_sha256": "3bde31a95f63cfbd420c6b76bfc8b05f1b412d6f0efecd2213bbd7ba0cd55654",
+      "output_frame_sha256": "8630216fd382613fc2fa1985ed948b71ad7407e885436417eacbe0f86386a297",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2e72",
+          "new_hex": "30b4",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 36,
+      "source_frame": 36,
+      "original_frame_sha256": "7e2ae258d848386a76f36b79c5649a0415bdd66d2bcd3a31bd659ed6c66686cf",
+      "output_frame_sha256": "01da840478caf2b26b6e0731764e110c8531acd06d23e36a1d760991d686c396",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "efe7",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 37,
+      "source_frame": 37,
+      "original_frame_sha256": "198212c9132f07a59921da1dcf82ecc97d8bb2024121464287445ba8f5e56769",
+      "output_frame_sha256": "7827945314729b178c08314ecbbbab9ce32b44dfdd61831e626effa8fc852a48",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d8f",
+          "new_hex": "740d",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 38,
+      "source_frame": 38,
+      "original_frame_sha256": "8bcecca3c5c1de9bd85bb23b1a766ef0a36fe6081efeb01f40751fc0923aaa8d",
+      "output_frame_sha256": "6a3fc6a89e690001ea436a4299feb21d0717c6c95a153e855067a2e79fdef2f5",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "efcd",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 39,
+      "source_frame": 39,
+      "original_frame_sha256": "2a87d9c94685142a91d1a783765f1c73e645046a1095ce1a19c8c6c6d574a186",
+      "output_frame_sha256": "20be423ed15df3fd229fa2f6e02494270a1f7908e8db33b4840ced716a21b004",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "efd2",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 40,
+      "source_frame": 40,
+      "original_frame_sha256": "0655f9ea02f3b82818978e5ece67029710251208b954a71973b197145cf6f1bb",
+      "output_frame_sha256": "9c769eff606bb873f8f0953ff6820e49f87e5f0ee42677cdcb2eddda3e47c718",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "2d77",
+          "new_hex": "efcb",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 41,
+      "source_frame": 41,
+      "original_frame_sha256": "d345eae4a769ee90da0affc289267b282d036c4c568bd1435f519f395377d5d3",
+      "output_frame_sha256": "ca02b6fc3808cac89c89d60660206c21da337fd1cdb567e30f48eb1bb53c6379",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ebe",
+          "new_hex": "77d4",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 42,
+      "source_frame": 42,
+      "original_frame_sha256": "56f6dd6fa2348ff975d94b73599954c50e1af1062a9874821a742266e71e8f1a",
+      "output_frame_sha256": "0c16edac8be5e6587f3fccf9614b4c70903e34ed2da33edeea2642c4ec1f4dc8",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ec0",
+          "new_hex": "4cff",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 43,
+      "source_frame": 43,
+      "original_frame_sha256": "f0de19c8a56523be92003ba7fb71661c0039cc1578cc76fa8b4273f48074d539",
+      "output_frame_sha256": "d4eedca20aac2ed4923de624c7d428e3992f0bde9374d335ca642500192075c1",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ece",
+          "new_hex": "b6f6",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 44,
+      "source_frame": 44,
+      "original_frame_sha256": "7866827f8e27b27c5ba17677b0a8b85820c8a873572d447f26534d65caf2ff29",
+      "output_frame_sha256": "6cf528d338c327c16a495d33945978b6ad639c449ac96b84fb3cb04e0edec4a9",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ed0",
+          "new_hex": "d774",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 45,
+      "source_frame": 45,
+      "original_frame_sha256": "78a1602fe0ca5e14e8fdb260d6fc67e95a5df3232612219df2f1f98c2aec1e6c",
+      "output_frame_sha256": "2d6ab7a39b142cc2eee338e59202b189d8d1c4f93c9030f7458f546c45636547",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b0e",
+          "new_hex": "518f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 46,
+      "source_frame": 46,
+      "original_frame_sha256": "f7e82e70cb9d0fd92e7d20bd40df10c245396268112ee516f2520ec409bdf7e7",
+      "output_frame_sha256": "0a5fea5b998d1cb1f5780cdd263e857e2d7445025a9b57bf8ffacd883df8eb39",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fbb",
+          "new_hex": "69f6",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 47,
+      "source_frame": 47,
+      "original_frame_sha256": "f86c6490793227bf64783258b4899c6cd374aaed54c26ff63fc01cbd4abba78e",
+      "output_frame_sha256": "4cdeb9ff32197ba648ddfa0333542218f0b7f47df97586346582edd583466920",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fbb",
+          "new_hex": "f00a",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 48,
+      "source_frame": 48,
+      "original_frame_sha256": "1b81c90e5a8310f647b8e8510c176362985d143052be348093fbba89b709f943",
+      "output_frame_sha256": "6762ecaec70792d7aa4091c4156024dd07b839ecdba06d4bd5d5620c66134adc",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b0e",
+          "new_hex": "f745",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 49,
+      "source_frame": 49,
+      "original_frame_sha256": "af0c4d8d4c4b20e5770e90581d7e03e3372b7ea9fe392575a80fc583d0764630",
+      "output_frame_sha256": "d1b60a484df31fa7b670072a33e73303200a34d0dc4d3753004f6b53eb86e5a4",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "1d24",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 50,
+      "source_frame": 50,
+      "original_frame_sha256": "90f5d4e3ad691ab7de867c378e549c9d4db44dc486ebd9103039c94db06e869a",
+      "output_frame_sha256": "6cb3a16e938eea9dc67880142c6e1fb1c64835be4d75db8d2755f9354b848e4e",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b06",
+          "new_hex": "245f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 51,
+      "source_frame": 51,
+      "original_frame_sha256": "b231993efbd43f57d34b086df7259d0851e43bf88b4e3964e8f54274a313e23b",
+      "output_frame_sha256": "3e6727d971cb4a1dc2a4291caa517ceb9244ec5668f92eebbe770f97e1e3cc66",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "40df",
+          "new_hex": "2543",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 52,
+      "source_frame": 52,
+      "original_frame_sha256": "5dca040477d0818aa5d4ecba8e8eec45036bcd528e85bcdcbcb3e79571314a43",
+      "output_frame_sha256": "f507ae59567b60129c31786fa525aac50ae3942e1a6800691d6a7aaadfc9aba6",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "1bf5",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 53,
+      "source_frame": 53,
+      "original_frame_sha256": "31488605e96eba54ba460401c70238749fedf1d8af9af38a1e0957657a40ecf6",
+      "output_frame_sha256": "5fe6a5625caf8de045692414944b0b58e968e310811b49c6b16f3cc9331cc994",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "919b",
+          "new_hex": "d8fe",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 54,
+      "source_frame": 54,
+      "original_frame_sha256": "68d0bb997fb005e91ce088a0c4840024ea5d288594958a35696f37861e10b054",
+      "output_frame_sha256": "32abed00249257d860d4442259ee9527e8e69919f133830d7194809dbb065022",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b06",
+          "new_hex": "1dc2",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 55,
+      "source_frame": 55,
+      "original_frame_sha256": "9e06540a50b729102af4a3a9bee38a360577d15d070f48ef9cfcef6df957005e",
+      "output_frame_sha256": "ac067021c3b491fd4cd10457a5fba3492af990ce87b530902bec7baafee716a4",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "403f",
+          "new_hex": "5e97",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 56,
+      "source_frame": 56,
+      "original_frame_sha256": "b43de66d4bb2b8871ab25344f24826e527b6cde94cb725dd1f38612cd5838a7b",
+      "output_frame_sha256": "73bb4c3a3836ccc0bc2d3baf46c091092988f795fb9964f110f48bcff6b1bb53",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "1b66",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 57,
+      "source_frame": 57,
+      "original_frame_sha256": "398bf063b6817ffcf726a4f85ce0e88503dbaf14f48781c09c7d1789c467039f",
+      "output_frame_sha256": "f45d4d021b2d9b26a22f1cde2cd023ab056bda14f8c20b6f395682eec6dac188",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb5",
+          "new_hex": "cc0f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 58,
+      "source_frame": 58,
+      "original_frame_sha256": "6504bd6aee8fdd06f8983a8a719bcf39786e06a9357ca47dcbc234b7faa9ce88",
+      "output_frame_sha256": "efeeef204ececbf092e9227281ea6a65294276be88f7b85f5410a6042f237827",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "1b64",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 59,
+      "source_frame": 59,
+      "original_frame_sha256": "6c9acb99af904388f8fb6b04303ca95e7fc704cc1f80d4d827d7da866fe56be7",
+      "output_frame_sha256": "ea786598a5ceb5a7f6dc084a7fd5b530e1c23ae4a306d15a0f76629df5bf4c4e",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "1b62",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 60,
+      "source_frame": 60,
+      "original_frame_sha256": "6a578502f29d2d1ff84235b0a1caa6ef7155e442413a136475f3174b3f890f31",
+      "output_frame_sha256": "03f5fe64cdd492bba7e78f97b2a0038b927491a6fe2c9dd43ba6870b0b9f843a",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "1b62",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 61,
+      "source_frame": 61,
+      "original_frame_sha256": "7e791dae697855513c7fb15535c03a013c93e33769eb509e260d3cd626027c85",
+      "output_frame_sha256": "8ee9a26c595101ebc76adba3dbe95b6c87f48b8b988bf35a8ed4824c269876a7",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "1b61",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 62,
+      "source_frame": 62,
+      "original_frame_sha256": "30483a3fdddc05a0e8428b014f941fd67e9156373c699cc9ffe3c3dc6bb06ad2",
+      "output_frame_sha256": "1b99767d57334ebc14e80899991a3c188a721cb78eaf20d264d399eeba7df600",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "9563",
+          "new_hex": "723d",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 63,
+      "source_frame": 63,
+      "original_frame_sha256": "6d2ed879e1b7877d9325ae778b7166670b10199ab98ddebf8af478db8b6ac86f",
+      "output_frame_sha256": "71f9211d6d49f8c3a4772e750444b6b5d0f5d5007a72001dee84b161c2515685",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b06",
+          "new_hex": "135d",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 64,
+      "source_frame": 64,
+      "original_frame_sha256": "2f3aa3af473e8a5a054491964f46f1f6a8666a0405b86440b4037fa1623675f5",
+      "output_frame_sha256": "8b115559a237007e3440ab2e7f1674c20bce5d89b6b3faa0d38aa4c19fbf99f4",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b56",
+          "new_hex": "1bbe",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 65,
+      "source_frame": 65,
+      "original_frame_sha256": "8ea529221559d3bc0e541557ead476b0752b2f8a44ff628bcb92c50c1c5e8a8a",
+      "output_frame_sha256": "73e42fadcb437beb2c4f493e9f340b447bf9c19ebf20b493be3ee35fae394139",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8c05",
+          "new_hex": "6918",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 66,
+      "source_frame": 66,
+      "original_frame_sha256": "e68854538f85aaa7f7af7986f617ce07ec1adb75c11c601dbe2c56708009197b",
+      "output_frame_sha256": "f1e6666fcb2e14e279c3a08c859bc83bbda07ff0ced07e471eb036096a2dd160",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b5f",
+          "new_hex": "4e43",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 67,
+      "source_frame": 67,
+      "original_frame_sha256": "863d83f35ea7fb4c309e02709b842450c9cd8ac507fd5d2c0630289c0d0226a6",
+      "output_frame_sha256": "05443362385c67f24ea425a7bd64f95ee9156ca1c8de504b7ffaf8f3a8da450e",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8c05",
+          "new_hex": "ae5a",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 68,
+      "source_frame": 68,
+      "original_frame_sha256": "7c8d04ea9eb26f7e3e749d26804e2073c2d659d02fe7a8902ebe0004a89f3a85",
+      "output_frame_sha256": "ca48bf290c5515bf6d7d0bf8d6a1476aebc649a47a0dcdf0652f7bc5d0aec78f",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b06",
+          "new_hex": "1082",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 69,
+      "source_frame": 69,
+      "original_frame_sha256": "a9387996a9e4f55b84ac29f3c400df21b7347aad4e38181a5f65032d76698eb8",
+      "output_frame_sha256": "59f10339990848abb49a05112caeaea8eb66ccb64dea81404f74778780caf109",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b2a",
+          "new_hex": "a8df",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 70,
+      "source_frame": 70,
+      "original_frame_sha256": "1120feb5b0c788c1f26a68dee4594d41586862de08de160972e917c5bf27cf70",
+      "output_frame_sha256": "8fbe8b5570a7d20a6317884cfa93efeb13e25dd3c2fa9713535687bad827d0c1",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b06",
+          "new_hex": "1033",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 71,
+      "source_frame": 71,
+      "original_frame_sha256": "719d321dba9d9c30b9ec39977c35e4f1e6917d6ca4e3d2b06c7d82e471d07763",
+      "output_frame_sha256": "8f3ea7613b787c5737aed16f669bacc9a1a55ecb6414a8da238abccf2b24b62a",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "4167",
+          "new_hex": "16e7",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 72,
+      "source_frame": 72,
+      "original_frame_sha256": "e8e37c6d59483e84a9f361c5ad9b2aea8777fd83c1eedcd409be48c4e3e9d552",
+      "output_frame_sha256": "959a6d1a462396fda60145b5e8f22d7269bcf35b86e6edca34d5a6ee70e4599b",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "4177",
+          "new_hex": "b398",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 73,
+      "source_frame": 73,
+      "original_frame_sha256": "8015cce85a9b5a50d29c9eda1c7050c1a7887c264b7a3d6637c160a5965917f6",
+      "output_frame_sha256": "002a764b7e75d0c3e418002646a63cb461415cb2e2616c97ba7b79f80536b096",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "5026",
+          "new_hex": "6a41",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 74,
+      "source_frame": 74,
+      "original_frame_sha256": "582ae975e429b3215da13b6cc6aba858bd9c3c69c0492a3a818bd72d75ace043",
+      "output_frame_sha256": "1c293e3674b4f40b5cc360f53ae6bf488ff1d0d114c5100d72112cc08996d3db",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "5026",
+          "new_hex": "2f6e",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 75,
+      "source_frame": 75,
+      "original_frame_sha256": "3624f1379713c1bd2266034e13634949cc6788b6b12e844ad1def8a2e533cf66",
+      "output_frame_sha256": "15df2d27c288e7a9794838665239acbeeda126caff39d0b8ea5603290237b52b",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "501e",
+          "new_hex": "5c86",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 76,
+      "source_frame": 76,
+      "original_frame_sha256": "d9568e189324907e30b472783d280aa18a93efca91bccd7db27ac300fdc034dd",
+      "output_frame_sha256": "35310beaf89f191a2c1945f657065978134601bf35094f22459ad165c3d54d43",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "56b5",
+          "new_hex": "e476",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 77,
+      "source_frame": 77,
+      "original_frame_sha256": "f110fab2e3c422e0938aa07bbbf42eaeec9afe1fead601fccaf54332ca230af3",
+      "output_frame_sha256": "2dbf403c1a379dd2c76de81152414e9592120867ac8a65b404bf3de76af1b6d0",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "501e",
+          "new_hex": "55e9",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 78,
+      "source_frame": 78,
+      "original_frame_sha256": "c7d3836e51c830d04bfea6a0a032292bf1e8de75c8e4f70bc1bf4754b88a28f8",
+      "output_frame_sha256": "08f8025efaeedc8c40c63fcd521a379e6048fd87db62cc522a0b63394e7ec188",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "5a7b",
+          "new_hex": "8c1c",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 79,
+      "source_frame": 79,
+      "original_frame_sha256": "8b02433492046656bc589423a5cd45b3efc0aa113b2c1b15be38fe146e0062b2",
+      "output_frame_sha256": "6caf27151f0f9897a8eff08d1a9219a3480cc8b9f7de1d718cb8acc6205bc60b",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "501e",
+          "new_hex": "4b84",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 80,
+      "source_frame": 80,
+      "original_frame_sha256": "b23f48e5f7dbac76789b1548e3b6c61e28a7cd082de42a12b05705b0a9e05035",
+      "output_frame_sha256": "871e9a28a27d2019ffa536244ecc8ce50eb5656fec6fb20cb10c0b64ce3a341e",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "506e",
+          "new_hex": "6645",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 81,
+      "source_frame": 81,
+      "original_frame_sha256": "f9c1ca46545ddc08d3169be175f34988e10b8d061e7c32a0f4f0ea0e510da3ce",
+      "output_frame_sha256": "aab16ac602d6ef9797af3f286bc992e9e9cbc6462b4dbcca8612d23972586232",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "511d",
+          "new_hex": "9cf2",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 82,
+      "source_frame": 82,
+      "original_frame_sha256": "75ee9e7ed02a12476dd80b38070fba93a5ee859032dcad2f3702689c7c6ac918",
+      "output_frame_sha256": "adc25cf3f0b04c9fc682b9cbf9ad667675482cf7e108559b374add24edb192db",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "515e",
+          "new_hex": "df8b",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 83,
+      "source_frame": 83,
+      "original_frame_sha256": "0f188dde8e2040b0fe7c17e71f96103770187deb145f2e55d68ec1138214ddb7",
+      "output_frame_sha256": "daa6100277493520409264f22a7e85ae891e54620732b048eca3a57847d4b68b",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "511d",
+          "new_hex": "a62a",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 84,
+      "source_frame": 84,
+      "original_frame_sha256": "308a65fd86581e92994ff6507a2795dd8d3678ef1d5f331370f53dfc4f51e14e",
+      "output_frame_sha256": "9d25c373c68a1365c44abc1ffb18b6a0e5dab8347b17fa5b624cda526b065bb3",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b5a",
+          "new_hex": "f4b2",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 85,
+      "source_frame": 85,
+      "original_frame_sha256": "7fc370a5204469fda90e621c11b15020679c1ea1edaa7373373b2574a0353fb0",
+      "output_frame_sha256": "53d0654b340e9461ae5faf9efcd150705cf24784f9ee703f423043163690db1c",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b06",
+          "new_hex": "0c20",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 86,
+      "source_frame": 86,
+      "original_frame_sha256": "1614a60399c4526ba7cf19422f242f00f4ccff9e54abe6bb8b4b5af1f2f09a27",
+      "output_frame_sha256": "d5513ec4c96c561460e6fe04c59bbd0a1fa16463e679bb328cb1ebe14bf0279a",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b06",
+          "new_hex": "0c1f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 87,
+      "source_frame": 87,
+      "original_frame_sha256": "1556f03723918691a758a111e2bd0d8605526b339570bd6478c50d70ad6f110e",
+      "output_frame_sha256": "13eba463f01172d45a3d5d89936135af1cc63a045293cfe4d418f2cfbf82d754",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ec0",
+          "new_hex": "85d9",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 88,
+      "source_frame": 88,
+      "original_frame_sha256": "43cd1d0ab43bc9f48dcd4b12129e90396a08a91bf63cc2c66a7064fc53450beb",
+      "output_frame_sha256": "d859e31de0706f5f7deb0f0db3d9d177324730baff48f33d984198e4e056ea20",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ed0",
+          "new_hex": "104f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 89,
+      "source_frame": 89,
+      "original_frame_sha256": "3e77de9c600c6fe52b57474ed8faf626aec415b9541fe3bd6e7f7f48ce83f6d6",
+      "output_frame_sha256": "dee5bfe9ca9bcb54dab4e0fbd91feb87bb2a654d5953bb52f46bad5371e916d7",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fbb",
+          "new_hex": "146b",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 90,
+      "source_frame": 90,
+      "original_frame_sha256": "28b279f840a44701bf8ab874b3cce4aabf6935ba39350548ffb621e28ba761bb",
+      "output_frame_sha256": "434b26f660e8ab35d9c557aa16c669d1af4647c4791fb4183643a86ab69ac1ca",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fbb",
+          "new_hex": "7852",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 91,
+      "source_frame": 91,
+      "original_frame_sha256": "71073eb75c35c81f0fed9ac15a5712087ac73c1f46979b58ab5cea9b2ff96f7b",
+      "output_frame_sha256": "b6e793c5122e72f5e9a035d2085ff7b72befaef5b695b3be0d880667ec35ad8a",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a56a",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 92,
+      "source_frame": 92,
+      "original_frame_sha256": "4a1af672cf8c4f8d84c97c385ee63dbe3aad98d5dcf65c9893c732ae4c055c41",
+      "output_frame_sha256": "4c1296c1c883fbe1f015bd0e87a4c8e1bf9c3649f2e80eccb53fbb4d46885b57",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "4157",
+          "new_hex": "f9f1",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 93,
+      "source_frame": 93,
+      "original_frame_sha256": "ef40379838ce6f2394290654c394f34aebad571d311feaa1f373290bb36a1a04",
+      "output_frame_sha256": "7db2717c54c6f8af20d44958cb3c02255f8000d5627a8a3b7d5b007ba89f6032",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a3c4",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 94,
+      "source_frame": 94,
+      "original_frame_sha256": "0eb33a702f2364acfa7cee84f640654b54bd129424fbfe389ddcffac7c6191bf",
+      "output_frame_sha256": "41db633230d9af0cdbc7fb72826e65eb48789a5325477c1c4ba6d48a8736be60",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "403f",
+          "new_hex": "e666",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 95,
+      "source_frame": 95,
+      "original_frame_sha256": "42582d5226dadd363312710603813776cd5629c05a0af4881b24c4fecbf69ec2",
+      "output_frame_sha256": "c49019c84dada1445e59746f328fd7567f4d0a5483ff11d3e6ff42829276aeb4",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a335",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 96,
+      "source_frame": 96,
+      "original_frame_sha256": "a7bb3904f41de3b4d33a4728fbb5449ea868f2b7a7642845ce8fdf6846e12824",
+      "output_frame_sha256": "31fd645e488a548b17b5c4023e961601797bdafd3cb938ea31404e20cccc4cad",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb5",
+          "new_hex": "53de",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 97,
+      "source_frame": 97,
+      "original_frame_sha256": "127ec9c8e0901f832ea3a4b5b29321ee7482ba3225befc0e66cf3b70a984cd02",
+      "output_frame_sha256": "bad2416d5fffeae1208d47f2f6da3ebb0c603085d9cfa21eb47b129d3e8c1521",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a331",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 98,
+      "source_frame": 98,
+      "original_frame_sha256": "5102f8289ff8d98d1538c2d71109679b9897b016096f7ebcdd775084c9fc4288",
+      "output_frame_sha256": "08b78a2f032168a039777f0d2abd289bc195f352a0a1c9d3b995bc8fecc14616",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a32f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 99,
+      "source_frame": 99,
+      "original_frame_sha256": "fd9371e03669c37e99bab4644def5b7740fa21a9c32dbca825d89e5033fefd8c",
+      "output_frame_sha256": "94033c69f8643fddf56829506159cdb0d47b636490461829aa2690684f5ea78f",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a32f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 100,
+      "source_frame": 100,
+      "original_frame_sha256": "4a7663fce771f22163c65a4d614fab57df59fc401c93eaaf8f57f9c0d71c4956",
+      "output_frame_sha256": "3cdf3711dd55ae0c365124a4bb4163b14bdae9cd0a037a1ee59ef5a5e2fe1ff9",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a32e",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 101,
+      "source_frame": 113,
+      "original_frame_sha256": "a09613b2d5e1b9a28f49a5ef6e8f8d757010b2acd777c497c3234c90284d8338",
+      "output_frame_sha256": "f4e467b94e7ede66d8048ed998c8a3cb37ee7a7c7ffcee74b90cedff2f8538d2",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ec0",
+          "new_hex": "900d",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 102,
+      "source_frame": 114,
+      "original_frame_sha256": "5d3ea472d5b637cb4a9060ab92454c651321cf93fa48a615984013426330b47d",
+      "output_frame_sha256": "9737b8e888751061aff9af94499782324cf48e13373fa49a1ffd8f832076938d",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ed0",
+          "new_hex": "1a83",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 103,
+      "source_frame": 115,
+      "original_frame_sha256": "2ba84659ec545b4e3379c19fb29211dfcb5fdf21a52c17d28a68724fb5ea0bb5",
+      "output_frame_sha256": "cf2449542e2be78953c25d4f518d2e869e0def7fb0268a8834b5abbb9680887d",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fbb",
+          "new_hex": "626b",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 104,
+      "source_frame": 116,
+      "original_frame_sha256": "9b9ede5d9c6a589f8a02e7079431e802958202dfd9cba5bc2f7194f4c1fddcae",
+      "output_frame_sha256": "45a9c58f8ec84c5f1954caba599eb630b63e327a5eeaab5f6b6ebb751242c162",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fbb",
+          "new_hex": "7932",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 105,
+      "source_frame": 117,
+      "original_frame_sha256": "0ef6dbc93bbd4eea5032a6d9e1bcb3f017a73011971aa92412a8fe29ba4523fc",
+      "output_frame_sha256": "6c1303c2b8e693767b504680225e402d2821c0a6f4ea1c59156d00a6e9b38172",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a64b",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 106,
+      "source_frame": 118,
+      "original_frame_sha256": "feca99901e4ede981674e9fff4e468865cbf919f82e0fe0a71062116c9440b1b",
+      "output_frame_sha256": "1c8d96fa59271400d45b2b73fc5e92183893850c217c7d4b81fb4964a3de6d63",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "4121",
+          "new_hex": "e4bc",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 107,
+      "source_frame": 119,
+      "original_frame_sha256": "866e25e1579772968193efe69f3913f70e626b6b99fae11841ed4d402f8c78e8",
+      "output_frame_sha256": "6a1e0ec99d7c10378f5a30d3a2800989fce3243211422f9e2d07c798695087fa",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a4dc",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 108,
+      "source_frame": 120,
+      "original_frame_sha256": "e5f62d65aaa95d22176ecd15c7517630e845ba535dc75a94861b51ff47737002",
+      "output_frame_sha256": "1ea17de12aee9ef2428eee0435f65c3bcb7525a06271fa38f90699b51af14315",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "403f",
+          "new_hex": "e77f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 109,
+      "source_frame": 121,
+      "original_frame_sha256": "9c3a2e24505517253efd267bfe3fbdc55c15dcf5adf46e5117ee4e325c073275",
+      "output_frame_sha256": "902fc10db20414048b070d43614bb07d375709244e623725c947b16cfa60fe3f",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a44f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 110,
+      "source_frame": 122,
+      "original_frame_sha256": "9bd89e8c80e07b7ea5321b2d420c77bfe7d03c678fc71b20e0dbb66f70511bb1",
+      "output_frame_sha256": "3f8fc235dd0383a4c1c02a491b6f6a6b797815b544bfbc06a8e69018442e6e5f",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb5",
+          "new_hex": "54f9",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 111,
+      "source_frame": 123,
+      "original_frame_sha256": "e807a6fa7001cc0acced04a02cc3260eac8e342aba6443d8dd844958ab86644b",
+      "output_frame_sha256": "bdc58371afed569fe51418f35ec09d31d51fc2eee7fe187339b09a1133ed94a0",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a44d",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 112,
+      "source_frame": 124,
+      "original_frame_sha256": "66e292afbd61f31fe2f320e808641ca8bc7ea2c02e9493f8c84f1309474606a9",
+      "output_frame_sha256": "c08c27ed73a28ff805fb06a91868e901f5a801fe637619f8fb9081c86c6fc8bc",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a44b",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 113,
+      "source_frame": 125,
+      "original_frame_sha256": "62b2f74af3b1d002d2635257befdb6fe326d517c70150c9b6a598e6d51f4102c",
+      "output_frame_sha256": "f892b0ccc4b52a64b6d7465d97c49a80566cb604b489a29fa44364f317e284ba",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a44b",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 114,
+      "source_frame": 126,
+      "original_frame_sha256": "770f2240db6d2a95af9c6c495c70f166b3dd2f2acca31b5e36765936584aef39",
+      "output_frame_sha256": "b3ae69b7b8d3db366b01be7361a307d1bf6fdacc3683166bf415b41600b4cacd",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "a44a",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 115,
+      "source_frame": 127,
+      "original_frame_sha256": "3efefddb66840f9b3cc14d13ca463b6a1145d4c7d27421dd19addc6698973a01",
+      "output_frame_sha256": "2f09a164795c58e53bbf0eb68bbe6157b86eefc91c9a50cc11f3405ec151470b",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ec0",
+          "new_hex": "18a4",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 116,
+      "source_frame": 128,
+      "original_frame_sha256": "46ea2d2a3ef5194ac13175a4355fd14934dab06d3d48ae9deaa9eaf0eeff8992",
+      "output_frame_sha256": "2e9100ce53dd0e51b759f103fdd0db970c786d4551d34838f770f3aec77ce1a3",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "1ed0",
+          "new_hex": "a319",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 117,
+      "source_frame": 129,
+      "original_frame_sha256": "901d98e7b10983d365895556a0e2681be87753202634fe0b21086114554afde2",
+      "output_frame_sha256": "3da1a12e63ee4ba8738d805b440e8d8bf05485df57cfbebbd7c33d52c33d9d5c",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fbb",
+          "new_hex": "77bc",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 118,
+      "source_frame": 130,
+      "original_frame_sha256": "cd30b8e1183a2ca2afbd2db30810cbab79d742a54ff3f9338bd24c5d316ba1ac",
+      "output_frame_sha256": "87f641fe7732c1283f8897216ca38bcc42d2940c4957cb80c7bb7957b39265b6",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fbb",
+          "new_hex": "84a3",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 119,
+      "source_frame": 131,
+      "original_frame_sha256": "0fe0b83ac093e401e855c6308ef1c83b35ad11adea5df056a1f9115609304d07",
+      "output_frame_sha256": "421e5c0e2b2492e63788cb5b01283f81a6ee575b18f1c28a6be4ca130b370139",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "b1bc",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 120,
+      "source_frame": 132,
+      "original_frame_sha256": "29aa58d48187dfd2c7dc461a2245177644a849d55a36d85b656ec48473cd4e55",
+      "output_frame_sha256": "b9a947eb0862a8a1642e517f7ba262d7a489fd128685a3c1b39278851ba42377",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "414c",
+          "new_hex": "a858",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 121,
+      "source_frame": 133,
+      "original_frame_sha256": "242f9863dd3f8ee79063a213775242edb77daa221da24e1569bd317fa73eba0a",
+      "output_frame_sha256": "dfe1830534fbca0ec2c9b6e14feb9c2ac4a26543e12a9bcbd6ceb2958c99949d",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "b020",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 122,
+      "source_frame": 134,
+      "original_frame_sha256": "d59d267bf09f0567848b8de939129938b01ae6d1aca7af0673f87ce81740dc82",
+      "output_frame_sha256": "8da17aeaa8692fff82ff4e4abdbe5293ce9e553788d5e570af050d99cfcbdb71",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "403f",
+          "new_hex": "f2c3",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 123,
+      "source_frame": 135,
+      "original_frame_sha256": "94ce0c51a8b778e294ec4cb9079105a976501e89e69dc5110c357e1a95c0f1b6",
+      "output_frame_sha256": "91d2a3e4c6971a8ce48fad177f1701e56cdd947cc50d624d92555260ba372902",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "af93",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 124,
+      "source_frame": 136,
+      "original_frame_sha256": "04e1c84a5e5fcf4b5e578529f3a08d7e29475deb04bb0bade95dae9445efc2b9",
+      "output_frame_sha256": "ad3ab5ba96ec640674d99664a119e370177630fbebf85501b73724ba5d30cca5",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb5",
+          "new_hex": "603d",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 125,
+      "source_frame": 137,
+      "original_frame_sha256": "59e99410ea3c7dd49023d829a9c244b6b4d55bde8040747cce087d833e3dfb50",
+      "output_frame_sha256": "af5903a88538ec44203d6311959abcc0fcf4586c8a0829b32abd09da490d4cdb",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "af91",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 126,
+      "source_frame": 138,
+      "original_frame_sha256": "5013848b184229da9fb753c563796baa57af86d938b120c84ae1c95f7923b4da",
+      "output_frame_sha256": "fbede9666587b010247eca0024d68d051f4306cce841180cc3c9d65df3f756a8",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "af8f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 127,
+      "source_frame": 139,
+      "original_frame_sha256": "421630853dbbaab1d7f49cfe66e87fb5b976e930ce13e6bb09374704b8a3b766",
+      "output_frame_sha256": "a34cda1a179094828c16e3913edd09e5ec96e00d7f7e45535ef76a4048645205",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "af8f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 128,
+      "source_frame": 140,
+      "original_frame_sha256": "dfa0f46dc358ea1158277c239619cef3214ee25eb8c2529c134ebbf983fc5045",
+      "output_frame_sha256": "9f5c4c0dfabfded0a110d7a158d5398cee5c9ab879f81f71e6c7ffcf39db45bf",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "3fb3",
+          "new_hex": "af8e",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 129,
+      "source_frame": 141,
+      "original_frame_sha256": "b6ddae033a2b6c2ee82a886e51e5ae6576fa75ca322c38af098629d05a48567c",
+      "output_frame_sha256": "177dac361c0a0b1bc6cab0c2e7b9a62b58a3a68ba014ad78e3fbeda1e5ba1d0c",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "501e",
+          "new_hex": "47bf",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 130,
+      "source_frame": 142,
+      "original_frame_sha256": "57a647602ea51e975534f38463a6455b4f730ec9a9c70939d97fb612ba24b7f3",
+      "output_frame_sha256": "88be1e6d9e8038938e16e9741d98467520dffb3b932b9f713f1319098828cc0f",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "513d",
+          "new_hex": "2212",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 131,
+      "source_frame": 143,
+      "original_frame_sha256": "b2e4993f98c3fd11155acf101fc1df76b6583aec32ef7212942a92ebdd00a762",
+      "output_frame_sha256": "cb890725036fa98b28a144892626a72ba0b90d951811c731f7d93c3a2e3a4966",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "501e",
+          "new_hex": "466f",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 132,
+      "source_frame": 144,
+      "original_frame_sha256": "71af07e4a22fe2fd010fdd0096a1d62a30a1cedcf6efa097e8d923896e431e55",
+      "output_frame_sha256": "cc10b069529f4706e7ee09fdd756da5ef8a8db79ea25bd078b426c6804df118d",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "8b06",
+          "new_hex": "0bf9",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 133,
+      "source_frame": 145,
+      "original_frame_sha256": "16549a9eb1cdc602611740c349f003c3cd8d6a81326b4862b5479fe0669057b9",
+      "output_frame_sha256": "93a8888bc7e91faf04c407719018026fdbb05452d5865c2007c90eb78e4672ca",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "5036",
+          "new_hex": "571e",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 134,
+      "source_frame": 146,
+      "original_frame_sha256": "c4fb7b7dc461b962c5af0674c0d1adb41b3fdc01b1028215f028a92b2da476a6",
+      "output_frame_sha256": "478b060f620e9bdae58c0411a536aad4fc036771b7aee432c5bc178beeba75e1",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "501e",
+          "new_hex": "4655",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 135,
+      "source_frame": 147,
+      "original_frame_sha256": "bfd99ad38de59d46b9c79503f3e802ffb1e2a746b543c06b78250d9aa81d73ff",
+      "output_frame_sha256": "5d3b990f28eb17c3af5d809fdd8346d691d06fb5fa4d8ecfbfc5867ab48c7ad7",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "501e",
+          "new_hex": "465b",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    },
+    {
+      "output_frame": 136,
+      "source_frame": 148,
+      "original_frame_sha256": "a1200e9b47f0bfdf941ca2bc4d90dfcd183e5307792a4860cb77ab21da527212",
+      "output_frame_sha256": "359177a361e16b68faacb50e22b5c9a59dfedb0ef4a44f1497bbd6b70fbded57",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "501e",
+          "new_hex": "4653",
+          "reason": "Complete verified pseudoheader offload checksum seed"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,445 @@
+{
+  "verified_date": "2026-11-10",
+  "source": "PCAPs/LabsPython/S1067-FluBot/S1067-FluBot.pcap",
+  "source_sha256": "17167c7a3edf389b9ae817ecf3881f7563761b36fcf256ef3a78693d49803326",
+  "original_unchanged": true,
+  "source_packets": 132,
+  "source_max_frame_bytes": 488,
+  "source_flows_handshakes_sequence_and_ack_verified": true,
+  "shared_original_frames": [
+    70,
+    71,
+    72,
+    75,
+    76
+  ],
+  "shared_frames_reason": "FTP handshake, server banner and ACK are context in both views.",
+  "no_added_handshakes_closures_or_other_synthetic_packets": true,
+  "no_resegmentation": true,
+  "outputs": [
+    {
+      "file": "S1067-FluBot-T1604-proxy.pcap",
+      "sha256": "3453468166fad7444f67ad53bf0bf6cfe2e7e6c6d26a93078c3ad4e0c0659ce5",
+      "packet_count": 78,
+      "max_frame_bytes": 488,
+      "frames_over_4000": 0,
+      "exact_selection_and_manifest_reconstruction": true,
+      "inverse_edits_reconstruct_original_frames": true,
+      "only_expected_port_advertisement_and_checksum_changes": true,
+      "global_and_record_headers_timestamps_preserved": true,
+      "seq_ack_flags_options_preserved": true,
+      "ipv4_tcp_udp_checksums_mathematically_valid": true,
+      "source_checksum_status_counts": {
+        "partial_offload_seed": 78
+      },
+      "edits_by_reason": {
+        "Complete transport checksum, including any port/payload changes": 78,
+        "Announced SOCKS data port 4444 -> 1080 (u16 big-endian)": 1,
+        "SOCKS port 4444 -> 1080": 9
+      },
+      "flows": [
+        {
+          "stream": 0,
+          "client": [
+            "10.106.7.10",
+            39856
+          ],
+          "server": [
+            "189.165.94.67",
+            80
+          ],
+          "packets": 14,
+          "handshake_output_frames": [
+            3,
+            4,
+            5
+          ],
+          "handshake_original_frames": [
+            3,
+            4,
+            5
+          ],
+          "handshake_complete": true,
+          "sequence_gaps_or_overlaps": 0,
+          "acks_beyond_observed_data": 0,
+          "all_data_and_captured_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              15
+            ],
+            [
+              14
+            ]
+          ],
+          "state_at_end": "both_FIN_ACKed",
+          "directional_payload_bytes": [
+            459,
+            161
+          ],
+          "directional_payload_sha256": [
+            "d138fe55426008dc9d4f90cd247d19977eb3738c2a45a6e39d6211043b1004f1",
+            "c5975e3d7f38e2266c9f78ccc08a3c9be300a0d870dca9fb0d02e325c38955d2"
+          ],
+          "next_relative_seq_by_direction": [
+            461,
+            163
+          ],
+          "highest_relative_ack_by_direction": [
+            163,
+            461
+          ]
+        },
+        {
+          "stream": 1,
+          "client": [
+            "10.106.7.10",
+            39864
+          ],
+          "server": [
+            "189.165.94.67",
+            80
+          ],
+          "packets": 15,
+          "handshake_output_frames": [
+            19,
+            20,
+            21
+          ],
+          "handshake_original_frames": [
+            19,
+            20,
+            21
+          ],
+          "handshake_complete": true,
+          "sequence_gaps_or_overlaps": 0,
+          "acks_beyond_observed_data": 0,
+          "all_data_and_captured_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              30
+            ],
+            [
+              31
+            ]
+          ],
+          "state_at_end": "both_FIN_ACKed",
+          "directional_payload_bytes": [
+            523,
+            177
+          ],
+          "directional_payload_sha256": [
+            "17d701a89dc3be3a453f3bf1d138a2e71f0aaeeec204402129a933535259f1d0",
+            "d46a66bd61c510134087641e768c7f9aaa92e58409547d92e94db4fc27d19e78"
+          ],
+          "next_relative_seq_by_direction": [
+            525,
+            179
+          ],
+          "highest_relative_ack_by_direction": [
+            179,
+            525
+          ]
+        },
+        {
+          "stream": 2,
+          "client": [
+            "10.106.7.10",
+            39880
+          ],
+          "server": [
+            "189.165.94.67",
+            80
+          ],
+          "packets": 14,
+          "handshake_output_frames": [
+            36,
+            37,
+            38
+          ],
+          "handshake_original_frames": [
+            36,
+            37,
+            38
+          ],
+          "handshake_complete": true,
+          "sequence_gaps_or_overlaps": 0,
+          "acks_beyond_observed_data": 0,
+          "all_data_and_captured_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              48
+            ],
+            [
+              47
+            ]
+          ],
+          "state_at_end": "both_FIN_ACKed",
+          "directional_payload_bytes": [
+            491,
+            194
+          ],
+          "directional_payload_sha256": [
+            "45752666b909fd6f3977286e8694301951297f99299ee1a1ba788f53806d45fc",
+            "1150164aca747737a8d325fe50fec59e911cb256d30d004e31404e80e8d81f70"
+          ],
+          "next_relative_seq_by_direction": [
+            493,
+            196
+          ],
+          "highest_relative_ack_by_direction": [
+            196,
+            493
+          ]
+        },
+        {
+          "stream": 3,
+          "client": [
+            "10.106.7.10",
+            41184
+          ],
+          "server": [
+            "189.165.94.67",
+            9000
+          ],
+          "packets": 11,
+          "handshake_output_frames": [
+            52,
+            53,
+            54
+          ],
+          "handshake_original_frames": [
+            52,
+            53,
+            54
+          ],
+          "handshake_complete": true,
+          "sequence_gaps_or_overlaps": 0,
+          "acks_beyond_observed_data": 0,
+          "all_data_and_captured_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [],
+            []
+          ],
+          "state_at_end": "open",
+          "directional_payload_bytes": [
+            40,
+            2
+          ],
+          "directional_payload_sha256": [
+            "206aa8e4ff16cc4e36fc2c970906462edcb16c8e97218f461ccd98093aaf753f",
+            "811ae5ec47cc5d6e83ee6b8a8fbd3f7d4b1102e6e39713a43ad00ea7a4d52820"
+          ],
+          "next_relative_seq_by_direction": [
+            41,
+            3
+          ],
+          "highest_relative_ack_by_direction": [
+            3,
+            41
+          ]
+        },
+        {
+          "stream": 4,
+          "client": [
+            "10.106.7.10",
+            40170
+          ],
+          "server": [
+            "189.165.94.67",
+            1080
+          ],
+          "packets": 9,
+          "handshake_output_frames": [
+            65,
+            66,
+            67
+          ],
+          "handshake_original_frames": [
+            65,
+            66,
+            67
+          ],
+          "handshake_complete": true,
+          "sequence_gaps_or_overlaps": 0,
+          "acks_beyond_observed_data": 0,
+          "all_data_and_captured_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [],
+            []
+          ],
+          "state_at_end": "open",
+          "directional_payload_bytes": [
+            41,
+            9
+          ],
+          "directional_payload_sha256": [
+            "c53dee4486ac706ca76c61c9c01bc8df7ce62d95d90cf6fc4c944881c2178f63",
+            "3ea4d940148466fb97f6679a8c3ca2cb8622fa6e0042d913ab594c6a27d4a294"
+          ],
+          "next_relative_seq_by_direction": [
+            42,
+            10
+          ],
+          "highest_relative_ack_by_direction": [
+            10,
+            42
+          ]
+        },
+        {
+          "stream": 5,
+          "client": [
+            "10.106.7.10",
+            33762
+          ],
+          "server": [
+            "10.106.7.20",
+            21
+          ],
+          "packets": 5,
+          "handshake_output_frames": [
+            70,
+            71,
+            72
+          ],
+          "handshake_original_frames": [
+            70,
+            71,
+            72
+          ],
+          "handshake_complete": true,
+          "sequence_gaps_or_overlaps": 0,
+          "acks_beyond_observed_data": 0,
+          "all_data_and_captured_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [],
+            []
+          ],
+          "state_at_end": "open",
+          "directional_payload_bytes": [
+            0,
+            33
+          ],
+          "directional_payload_sha256": [
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "267186132172418d7c1119531f37bab99867371e0650a954c12697fa551b6674"
+          ],
+          "next_relative_seq_by_direction": [
+            1,
+            34
+          ],
+          "highest_relative_ack_by_direction": [
+            34,
+            1
+          ]
+        }
+      ],
+      "tshark_agrees_on_streams_seq_ack_ports_payload_lengths": true,
+      "tshark_sequence_malformed_or_bad_checksum_frames": []
+    },
+    {
+      "file": "S1067-FluBot-T1428-explotacion.pcap",
+      "sha256": "ac129844d8b53644c1f3313eefa4f6e3ad68a86a41db17ece71e6310088d86c3",
+      "packet_count": 31,
+      "max_frame_bytes": 127,
+      "frames_over_4000": 0,
+      "exact_selection_and_manifest_reconstruction": true,
+      "inverse_edits_reconstruct_original_frames": true,
+      "only_expected_port_advertisement_and_checksum_changes": true,
+      "global_and_record_headers_timestamps_preserved": true,
+      "seq_ack_flags_options_preserved": true,
+      "ipv4_tcp_udp_checksums_mathematically_valid": true,
+      "source_checksum_status_counts": {
+        "partial_offload_seed": 30,
+        "valid": 1
+      },
+      "edits_by_reason": {
+        "Complete transport checksum, including any port/payload changes": 30
+      },
+      "flows": [
+        {
+          "stream": 0,
+          "client": [
+            "10.106.7.10",
+            33762
+          ],
+          "server": [
+            "10.106.7.20",
+            21
+          ],
+          "packets": 31,
+          "handshake_output_frames": [
+            1,
+            2,
+            3
+          ],
+          "handshake_original_frames": [
+            70,
+            71,
+            72
+          ],
+          "handshake_complete": true,
+          "sequence_gaps_or_overlaps": 0,
+          "acks_beyond_observed_data": 0,
+          "all_data_and_captured_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              30
+            ],
+            [
+              28
+            ]
+          ],
+          "state_at_end": "both_FIN_ACKed",
+          "directional_payload_bytes": [
+            113,
+            279
+          ],
+          "directional_payload_sha256": [
+            "82e01800bf469de697794bd160d41b1ce99d99eab541359bfed5df562ccb1148",
+            "4d9e8b81502d1425bd48a90ad416e5fa040e33c08b9cf20cd78dc10504e6f505"
+          ],
+          "next_relative_seq_by_direction": [
+            115,
+            281
+          ],
+          "highest_relative_ack_by_direction": [
+            281,
+            115
+          ]
+        }
+      ],
+      "tshark_agrees_on_streams_seq_ack_ports_payload_lengths": true,
+      "tshark_sequence_malformed_or_bad_checksum_frames": []
+    }
+  ],
+  "decoded_panel_messages": [
+    {
+      "stream": 0,
+      "request": "PREPING,",
+      "response": "NONE,"
+    },
+    {
+      "stream": 1,
+      "request": "GET_INJECTS_LIST,com.android.chrome,com.google.android.gm",
+      "response": "com.android.chrome"
+    },
+    {
+      "stream": 2,
+      "request": "PING,3.1,11,Google,Pixel,en,1,lab",
+      "response": "SOCKS,gurbngbcxheshsj.ru:9000"
+    }
+  ],
+  "proxy_control_socks_and_ftp_open_with_all_bytes_ACKed": true,
+  "proxy_no_CPFR_CPTO": true,
+  "proxy_socks_port_1080_in_headers_and_control_advertisement": true,
+  "proxy_socks_success_and_relayed_ftp_banner_match_original": true,
+  "exploit_ftp_stream_payload_and_real_closure_preserved": true,
+  "mcp_wireshark_verification": {
+    "proxy_control_advertisement_and_handshakes": true,
+    "proxy_socks_follow": true,
+    "exploit_ftp_follow": true,
+    "expert_info_no_errors_or_warnings_in_both": true
+  },
+  "lab_scope": "Existing Python emulation; no APK execution or live exploitation performed.",
+  "live_replay_on_NGFW_or_Snort_performed": false
+}

@@ -1,0 +1,211 @@
+{
+  "verified_date": "2026-10-26",
+  "source": "PCAPs/LabsPython/S0655-BusyGasper/S0655-BusyGasper.pcap",
+  "source_sha256": "9d64d93ec36067e67846a7ee5c50b338643bee3898bd8bddffabffcbde108adf",
+  "original_unchanged": true,
+  "outputs_disjoint_and_partition_all_55_original_packets": true,
+  "no_synthetic_packets_or_resegmentation": true,
+  "outputs": [
+    {
+      "file": "S0655-BusyGasper-T1481.002-bidirectional.pcap",
+      "sha256": "1b966aa8360207da1f44f459c4d14c1ace1d98988fb17fe005568099afc8a030",
+      "target_technique": "T1481.002",
+      "collateral_techniques": [],
+      "packet_count": 23,
+      "max_frame_bytes": 133,
+      "frames_over_4000": 0,
+      "exact_source_selection_and_manifest_reconstruction": true,
+      "original_headers_timestamps_seq_ack_flags_payload_preserved_except_transport_checksum": true,
+      "original_transport_checksums_verified_as_offload_seeds": true,
+      "ipv4_tcp_udp_checksums_mathematically_valid": true,
+      "transport_checksum_completions": 23,
+      "application_streams_identical_to_original": true,
+      "tcp_flows": [
+        {
+          "output_stream_index": 0,
+          "client": [
+            "10.65.5.10",
+            52346
+          ],
+          "server": [
+            "149.28.246.185",
+            6667
+          ],
+          "packet_count": 21,
+          "handshake_output_frames": [
+            3,
+            4,
+            5
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "acks_beyond_observed_data": 0,
+          "both_FIN_and_all_payload_acknowledged": true,
+          "directions": [
+            {
+              "source": [
+                "10.65.5.10",
+                52346
+              ],
+              "payload_bytes": 102,
+              "payload_sha256": "4378bc72927b6ce04cd7c336ba6234dfcbc0db75c19a5b0696c7146afd9d9733"
+            },
+            {
+              "source": [
+                "149.28.246.185",
+                6667
+              ],
+              "payload_bytes": 289,
+              "payload_sha256": "b1b7f8a5e2ab2861aad2df2eb59ecf0e409e69b3a9c2ac95ef5e69b9b1834dac"
+            }
+          ]
+        }
+      ],
+      "tshark_analysis_or_malformed_frames": [],
+      "semantics": {
+        "only_tcp_server_port": 6667,
+        "dns_packets": 2,
+        "irc_order_and_functional_response_preserved": true,
+        "no_ftp_connections_or_downloaded_file_payload": true,
+        "scope": "IRC view of original update scenario; update instruction and result remain in the messages."
+      }
+    },
+    {
+      "file": "S0655-BusyGasper-T1407-download.pcap",
+      "sha256": "50b7eb0e1890e95f9ce1f7834883f35e6076fd3a4ff8a894c5a54bc228a0d86e",
+      "target_technique": "T1407",
+      "collateral_techniques": [],
+      "packet_count": 32,
+      "max_frame_bytes": 386,
+      "frames_over_4000": 0,
+      "exact_source_selection_and_manifest_reconstruction": true,
+      "original_headers_timestamps_seq_ack_flags_payload_preserved_except_transport_checksum": true,
+      "original_transport_checksums_verified_as_offload_seeds": true,
+      "ipv4_tcp_udp_checksums_mathematically_valid": true,
+      "transport_checksum_completions": 32,
+      "application_streams_identical_to_original": true,
+      "tcp_flows": [
+        {
+          "output_stream_index": 0,
+          "client": [
+            "10.65.5.10",
+            39614
+          ],
+          "server": [
+            "213.174.157.151",
+            21
+          ],
+          "packet_count": 24,
+          "handshake_output_frames": [
+            1,
+            2,
+            3
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "acks_beyond_observed_data": 0,
+          "both_FIN_and_all_payload_acknowledged": true,
+          "directions": [
+            {
+              "source": [
+                "10.65.5.10",
+                39614
+              ],
+              "payload_bytes": 69,
+              "payload_sha256": "16367e7d8db75307fb50b2b3be02aa38a1673d5f71a0668e944ac6006b63ae96"
+            },
+            {
+              "source": [
+                "213.174.157.151",
+                21
+              ],
+              "payload_bytes": 238,
+              "payload_sha256": "60c9913778ff5c9f1de665e90354e768acffaef119b3cd921d7e9ab7724a8b2c"
+            }
+          ]
+        },
+        {
+          "output_stream_index": 1,
+          "client": [
+            "10.65.5.10",
+            56832
+          ],
+          "server": [
+            "213.174.157.151",
+            20200
+          ],
+          "packet_count": 8,
+          "handshake_output_frames": [
+            13,
+            14,
+            15
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "acks_beyond_observed_data": 0,
+          "both_FIN_and_all_payload_acknowledged": true,
+          "directions": [
+            {
+              "source": [
+                "10.65.5.10",
+                56832
+              ],
+              "payload_bytes": 0,
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "source": [
+                "213.174.157.151",
+                20200
+              ],
+              "payload_bytes": 320,
+              "payload_sha256": "16b13fcd0d9817e781ee9f45011791671a4c7a3151bae63fe4a7b55e89c1aa63"
+            }
+          ]
+        }
+      ],
+      "tshark_analysis_or_malformed_frames": [],
+      "semantics": {
+        "tcp_server_ports": [
+          21,
+          20200
+        ],
+        "no_irc_or_dns": true,
+        "ftp_passive_negotiation_matches_data_endpoint": true,
+        "ftp_retr_and_transfer_completion_preserved": true,
+        "artifact": {
+          "name": "update.apk",
+          "bytes": 320,
+          "sha256": "16b13fcd0d9817e781ee9f45011791671a4c7a3151bae63fe4a7b55e89c1aa63",
+          "matches_original_and_lab_download": true,
+          "lab_download": "python-labnet/labs/busygasper/downloads/update.apk",
+          "zip_crc_valid": true,
+          "zip_members": [
+            "AndroidManifest.xml",
+            "classes.dex"
+          ],
+          "description": "Inert laboratory ZIP/APK surrogate; classes.dex contains a laboratory marker, not a verified executable DEX."
+        },
+        "no_T1509_for_negotiated_passive_data_port": true
+      }
+    }
+  ],
+  "wireshark_mcp": {
+    "tools": [
+      "wireshark_follow_stream",
+      "wireshark_extract_fields",
+      "wireshark_stats_expert_info"
+    ],
+    "checks": [
+      "Original FTP control conversation",
+      "Output IRC order and reply",
+      "Output FTP passive setup and 320-byte transfer",
+      "FTP output expert info without warnings or errors"
+    ]
+  },
+  "limitations": [
+    "IRC view still includes the update command and its result, but no file transfer.",
+    "Downloaded payload is the unchanged inert laboratory artifact, not evidence of successful installation.",
+    "No replay in NGFW or Snort has been performed."
+  ]
+}

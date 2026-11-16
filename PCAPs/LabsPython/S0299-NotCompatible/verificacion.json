@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-25",
+  "tshark_version": "TShark (Wireshark) 4.6.5 (v4.6.5-0-gb40c46f83867).",
+  "original_unchanged": true,
+  "original_sha256": "e2fcbc7b4c852f108589a7a7dac0d79523bef23c7d3ac48bc4e87002471fd5ee",
+  "independent_validation": [
+    {
+      "file": "S0299-NotCompatible-T1428-explotacion.pcap",
+      "sha256": "21d885c5bf58c2caff68cc8ac9d16d60dd3478e648c610e863fe225c60fa009f",
+      "packets": 25,
+      "max_frame_bytes": 105,
+      "streams": 2,
+      "all_checksums_good": true,
+      "tcp_analysis_warnings": 0,
+      "malformed": 0,
+      "all_opening_handshakes_present": true,
+      "exact_original_records_after_reversing_checksum_fix": true,
+      "timestamp_order_preserved": true,
+      "frames_over_4000": 0
+    },
+    {
+      "file": "S0299-NotCompatible-T1604-proxy.pcap",
+      "sha256": "16f5b2737d850fdbc124bb92173bfad850c0d2c9a4af2348ef3ad696a545de6c",
+      "packets": 38,
+      "max_frame_bytes": 336,
+      "streams": 3,
+      "all_checksums_good": true,
+      "tcp_analysis_warnings": 0,
+      "malformed": 0,
+      "all_opening_handshakes_present": true,
+      "exact_original_records_after_reversing_checksum_fix": true,
+      "timestamp_order_preserved": true,
+      "frames_over_4000": 0
+    }
+  ],
+  "mcp_checks": [
+    "Flags y final del proxy: C2/FTP abiertos, saludo FTP sin peticion de ataque",
+    "Follow stream del FTP extraido: saludo, USER, PASS y respuestas",
+    "Follow stream del 6200 extraido: id y respuesta emulada"
+  ],
+  "scope": "Validacion sobre archivos; no se han reproducido en un NGFW ni en Snort."
+}

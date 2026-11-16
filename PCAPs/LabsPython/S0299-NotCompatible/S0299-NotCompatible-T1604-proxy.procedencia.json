@@ -1,0 +1,613 @@
+{
+  "original": "PCAPs/LabsPython/S0299-NotCompatible/S0299-NotCompatible.pcap",
+  "original_sha256": "e2fcbc7b4c852f108589a7a7dac0d79523bef23c7d3ac48bc4e87002471fd5ee",
+  "output": "S0299-NotCompatible-T1604-proxy.pcap",
+  "output_sha256": "16f5b2737d850fdbc124bb92173bfad850c0d2c9a4af2348ef3ad696a545de6c",
+  "generated_date": "2026-10-25",
+  "packets": 38,
+  "max_frame_bytes": 336,
+  "target_technique": "T1604",
+  "selection": "frame.number <= 38",
+  "original_frame_mapping": [
+    {
+      "output_frame": 1,
+      "original_frame": 1,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 2,
+      "original_frame": 2,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 3,
+      "original_frame": 3,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 4,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 5,
+      "original_frame": 5,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 6,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 7,
+      "original_frame": 7,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 8,
+      "original_frame": 8,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 9,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 10,
+      "original_frame": 10,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 11,
+      "original_frame": 11,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 12,
+      "original_frame": 12,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 13,
+      "original_frame": 13,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 14,
+      "original_frame": 14,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 15,
+      "original_frame": 15,
+      "output_stream": 0,
+      "original_stream": 0
+    },
+    {
+      "output_frame": 16,
+      "original_frame": 16,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 17,
+      "original_frame": 17,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 18,
+      "original_frame": 18,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 19,
+      "original_frame": 19,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 20,
+      "original_frame": 20,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 21,
+      "original_frame": 21,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 22,
+      "original_frame": 22,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 23,
+      "original_frame": 23,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 24,
+      "original_frame": 24,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 25,
+      "original_frame": 25,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 26,
+      "original_frame": 26,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 27,
+      "original_frame": 27,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 28,
+      "original_frame": 28,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 29,
+      "original_frame": 29,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 30,
+      "original_frame": 30,
+      "output_stream": 2,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 31,
+      "original_frame": 31,
+      "output_stream": 2,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 32,
+      "original_frame": 32,
+      "output_stream": 2,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 33,
+      "original_frame": 33,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 34,
+      "original_frame": 34,
+      "output_stream": 2,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 35,
+      "original_frame": 35,
+      "output_stream": 2,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 36,
+      "original_frame": 36,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 37,
+      "original_frame": 37,
+      "output_stream": 1,
+      "original_stream": 1
+    },
+    {
+      "output_frame": 38,
+      "original_frame": 38,
+      "output_stream": 1,
+      "original_stream": 1
+    }
+  ],
+  "tcp_checksum_changes": [
+    {
+      "original_frame": 1,
+      "before": 15851,
+      "after": 21900
+    },
+    {
+      "original_frame": 2,
+      "before": 15851,
+      "after": 26284
+    },
+    {
+      "original_frame": 3,
+      "before": 15843,
+      "after": 37828
+    },
+    {
+      "original_frame": 4,
+      "before": 15975,
+      "after": 17501
+    },
+    {
+      "original_frame": 5,
+      "before": 15843,
+      "after": 37694
+    },
+    {
+      "original_frame": 6,
+      "before": 15975,
+      "after": 54315
+    },
+    {
+      "original_frame": 7,
+      "before": 15843,
+      "after": 37559
+    },
+    {
+      "original_frame": 8,
+      "before": 15960,
+      "after": 64895
+    },
+    {
+      "original_frame": 9,
+      "before": 16113,
+      "after": 40893
+    },
+    {
+      "original_frame": 10,
+      "before": 15843,
+      "after": 37103
+    },
+    {
+      "original_frame": 11,
+      "before": 15858,
+      "after": 419
+    },
+    {
+      "original_frame": 12,
+      "before": 15843,
+      "after": 36828
+    },
+    {
+      "original_frame": 13,
+      "before": 15843,
+      "after": 36826
+    },
+    {
+      "original_frame": 14,
+      "before": 15843,
+      "after": 36823
+    },
+    {
+      "original_frame": 15,
+      "before": 15843,
+      "after": 36824
+    },
+    {
+      "original_frame": 16,
+      "before": 23014,
+      "after": 47566
+    },
+    {
+      "original_frame": 17,
+      "before": 23014,
+      "after": 41410
+    },
+    {
+      "original_frame": 18,
+      "before": 23006,
+      "after": 52953
+    },
+    {
+      "original_frame": 19,
+      "before": 23138,
+      "after": 32626
+    },
+    {
+      "original_frame": 20,
+      "before": 23006,
+      "after": 52820
+    },
+    {
+      "original_frame": 21,
+      "before": 23138,
+      "after": 9402
+    },
+    {
+      "original_frame": 22,
+      "before": 23006,
+      "after": 52681
+    },
+    {
+      "original_frame": 23,
+      "before": 23116,
+      "after": 36370
+    },
+    {
+      "original_frame": 24,
+      "before": 23276,
+      "after": 33680
+    },
+    {
+      "original_frame": 25,
+      "before": 23006,
+      "after": 52218
+    },
+    {
+      "original_frame": 26,
+      "before": 23015,
+      "after": 41188
+    },
+    {
+      "original_frame": 27,
+      "before": 23006,
+      "after": 51949
+    },
+    {
+      "original_frame": 28,
+      "before": 23015,
+      "after": 49906
+    },
+    {
+      "original_frame": 29,
+      "before": 23048,
+      "after": 64709
+    },
+    {
+      "original_frame": 30,
+      "before": 9862,
+      "after": 39601
+    },
+    {
+      "original_frame": 31,
+      "before": 9862,
+      "after": 48644
+    },
+    {
+      "original_frame": 32,
+      "before": 9854,
+      "after": 60189
+    },
+    {
+      "original_frame": 33,
+      "before": 23037,
+      "after": 33026
+    },
+    {
+      "original_frame": 34,
+      "before": 9874,
+      "after": 36334
+    },
+    {
+      "original_frame": 35,
+      "before": 9854,
+      "after": 60163
+    },
+    {
+      "original_frame": 36,
+      "before": 23006,
+      "after": 51813
+    },
+    {
+      "original_frame": 37,
+      "before": 23053,
+      "after": 28898
+    },
+    {
+      "original_frame": 38,
+      "before": 23006,
+      "after": 51606
+    }
+  ],
+  "transformations": [
+    "Seleccion de registros originales",
+    "Completar checksums TCP parciales de offloading"
+  ],
+  "timestamps_preserved": true,
+  "application_payloads_byte_identical": true,
+  "tcp_sequences_ack_options_preserved": true,
+  "handshakes_synthesized": false,
+  "closures_synthesized": false,
+  "frames_resegmented": 0,
+  "tcp_states": {
+    "0": {
+      "initial": [
+        3218123020,
+        3680862302
+      ],
+      "next": [
+        251,
+        419
+      ],
+      "acked": [
+        251,
+        419
+      ],
+      "fin": [
+        true,
+        true
+      ],
+      "frames": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "original_stream": 0
+    },
+    "1": {
+      "initial": [
+        458077369,
+        18213182
+      ],
+      "next": [
+        330,
+        454
+      ],
+      "acked": [
+        330,
+        454
+      ],
+      "fin": [
+        false,
+        false
+      ],
+      "frames": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        33,
+        36,
+        37,
+        38
+      ],
+      "original_stream": 1
+    },
+    "2": {
+      "initial": [
+        332410115,
+        1426541807
+      ],
+      "next": [
+        1,
+        21
+      ],
+      "acked": [
+        1,
+        21
+      ],
+      "fin": [
+        false,
+        false
+      ],
+      "frames": [
+        30,
+        31,
+        32,
+        34,
+        35
+      ],
+      "original_stream": 2
+    }
+  },
+  "validation": {
+    "initial_tcp_handshakes_present_in_all_flows": true,
+    "tcp_sequence_gaps": 0,
+    "all_bytes_acknowledged_at_end": true,
+    "ipv4_tcp_checksums_valid": true,
+    "frames_over_4000": 0,
+    "rc4_messages_valid_when_c2_retained": true
+  },
+  "c2_decoded_tags": [
+    {
+      "original_frame": 8,
+      "original_stream": 0,
+      "tag": "HELO"
+    },
+    {
+      "original_frame": 9,
+      "original_stream": 0,
+      "tag": "SET"
+    },
+    {
+      "original_frame": 11,
+      "original_stream": 0,
+      "tag": "SETGROUP"
+    },
+    {
+      "original_frame": 23,
+      "original_stream": 1,
+      "tag": "HELO"
+    },
+    {
+      "original_frame": 24,
+      "original_stream": 1,
+      "tag": "SET"
+    },
+    {
+      "original_frame": 26,
+      "original_stream": 1,
+      "tag": "PING"
+    },
+    {
+      "original_frame": 28,
+      "original_stream": 1,
+      "tag": "PONG"
+    },
+    {
+      "original_frame": 29,
+      "original_stream": 1,
+      "tag": "CONN"
+    },
+    {
+      "original_frame": 33,
+      "original_stream": 1,
+      "tag": "CONN"
+    },
+    {
+      "original_frame": 37,
+      "original_stream": 1,
+      "tag": "RECV"
+    }
+  ],
+  "notes": [
+    "Solo cambian los dos bytes del checksum TCP. La carga, cabeceras restantes y tiempos conservan los bytes del original.",
+    "No se ejecutaron el malware, servidores ni explotaciones; trabajo sin trafico de red sobre la captura existente.",
+    "Corte tras la trama 38; el primer mensaje de explotacion ocupa la 39.",
+    "El gateway original stream 0 termina antes del C2 operativo. No es un canal activo del proxy al final.",
+    "C2 stream 1 y FTP stream 2 quedan abiertos; el saludo FTP se ha retransmitido y confirmado."
+  ]
+}

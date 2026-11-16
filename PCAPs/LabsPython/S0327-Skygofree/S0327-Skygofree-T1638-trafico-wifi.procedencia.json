@@ -1,0 +1,329 @@
+{
+  "prepared_date": "2026-10-25",
+  "source": "PCAPs/LabsPython/S0327-Skygofree/S0327-Skygofree.pcap",
+  "source_sha256": "2260793ad6a5fda170ba05e94ceafc047ebea5832a058d65c87f67fc47a1e2fe",
+  "output_file": "S0327-Skygofree-T1638-trafico-wifi.pcap",
+  "output_sha256": "b071be3e14069c07f02edff85f5ac9db6349526698524a49c47484f2f3151d6b",
+  "target_technique": "T1638",
+  "purpose": "DHCP, DNS y HTTP externo posterior a wifiYES; vista del trafico expuesto en la topologia emulada.",
+  "selection": {
+    "source_frames": [
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161
+    ],
+    "source_tcp_streams": [
+      9
+    ]
+  },
+  "packet_count": 18,
+  "max_frame_bytes": 389,
+  "frames_over_4000": 0,
+  "transforms": [
+    "whole_connection_extraction",
+    "complete_verified_offload_transport_checksums"
+  ],
+  "preserved": [
+    "pcap_global_header",
+    "capture_timestamps",
+    "frame_lengths",
+    "payload",
+    "tcp_initial_handshakes",
+    "tls_records_and_handshakes",
+    "seq_ack",
+    "addresses_ports",
+    "original_fin_rst_flags"
+  ],
+  "synthetic_packets": 0,
+  "resegmented_packets": 0,
+  "transport_checksum_completions": 18,
+  "closure_note": "Stream original 9: FIN de ambos extremos y ACK finales conservados.",
+  "scope_note": "Esta vista conserva trafico del escenario AiTM emulado; por si sola no acredita asociacion 802.11 ni control del punto de acceso.",
+  "frame_mapping": [
+    {
+      "output_frame": 1,
+      "source_frame": 144,
+      "original_frame_sha256": "1342d532c3c86e1d28a675565fcca35a3b8e6ded2d4ee47ebcabcc0f88cba2d3",
+      "output_frame_sha256": "673e8223c6a710f63a1dbc6344bd758f227f5048905b84acf4287414ea6c6a88",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "2360",
+          "new_hex": "ad43",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 2,
+      "source_frame": 145,
+      "original_frame_sha256": "093af4975c6d8ae5fc1466de5f9f263acf9e83b5ba5be2efab9c7901f616cfd5",
+      "output_frame_sha256": "e689e497d64357deec6fabe195a614781f626ecee1c1df45e054d027690d1be9",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "2381",
+          "new_hex": "e356",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 3,
+      "source_frame": 146,
+      "original_frame_sha256": "89048c06d2f606623b6106b20c7c860e4514cb867cec9b484be5488bfde37f34",
+      "output_frame_sha256": "ca37482a2e70c6613a6a3ff2b89c4932c9fb9363aaeefa0ee5ae07691e8c9809",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "236c",
+          "new_hex": "4680",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 4,
+      "source_frame": 147,
+      "original_frame_sha256": "e89669bf6fb89d4fa591648f65ed6c1d2f49fcfa97fcb939ecfd54feb5d10d27",
+      "output_frame_sha256": "18fbe7b18a2cc2c17b81813c7daa73285bdb14f91e631a1bb58c07388432a973",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "2381",
+          "new_hex": "e056",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 5,
+      "source_frame": 148,
+      "original_frame_sha256": "ae5f151345f56bf1aebaacb28cdaad2a3e8cb8185da05800d37f23536fb3e6ed",
+      "output_frame_sha256": "a4e02fce1c290352b624cf90096d5c6b3bb907c3b8bb77117d25abee00f1e77f",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "217a",
+          "new_hex": "c248",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 6,
+      "source_frame": 149,
+      "original_frame_sha256": "08876f72dcc515abec01ea462cbbc2d3dd8d3c38c02ffe9ffda2579a5758a487",
+      "output_frame_sha256": "8c4475b3db38bddd11a96f47efe7df1f36b01fd7dc97e29e621269719c03d62b",
+      "changes": [
+        {
+          "field": "udp.checksum",
+          "offset_zero_based": 40,
+          "old_hex": "218a",
+          "new_hex": "4224",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 7,
+      "source_frame": 150,
+      "original_frame_sha256": "d73769e0046e9b0238eb9ac12e4e0ab2de31991bcab4501a370ede337cf2d277",
+      "output_frame_sha256": "e72fa0b774b8149f45defa721b8b0b2a31003e9b955e396ce68dd71025db89bd",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "5405",
+          "new_hex": "df40",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 8,
+      "source_frame": 151,
+      "original_frame_sha256": "8a82bde95dc139815fb12acbda26dc3ba998f38ce7fd27244ddc660abd10e72c",
+      "output_frame_sha256": "27f3af5448fc421cebf4b0654f3981895372d7e6999b506f5820834be2a7b366",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "5405",
+          "new_hex": "e0ee",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 9,
+      "source_frame": 152,
+      "original_frame_sha256": "01792040290a7c1d84071f0c96ee57965b17591deeb9b854d38ce2b8ba4cc019",
+      "output_frame_sha256": "99239207569d2aa983344dcd4521e4914fe18a7143ffd66f6f3160d212e5fd93",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "53fd",
+          "new_hex": "0e08",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 10,
+      "source_frame": 153,
+      "original_frame_sha256": "ec9fa606d96baa670ef26f09708e16677171a6bbb3adc2effd210cb66fc74c01",
+      "output_frame_sha256": "91c0299ba5cd6cf4b1e76663f3457f51e4a29152217e0eb63daae0be1468a367",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "5540",
+          "new_hex": "f77b",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 11,
+      "source_frame": 154,
+      "original_frame_sha256": "cb0c06fdd85032d3495ab7bd4d2371ecbeb07951cf50e324e3b6da3bae66817b",
+      "output_frame_sha256": "58ccc16f0f8774e10c2a96a1f27a1848dcdc0971912170ccea795db09b4b1956",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "53fd",
+          "new_hex": "0cc2",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 12,
+      "source_frame": 155,
+      "original_frame_sha256": "54a988c9b5c5f78c4883e0b888837673bf9da6a4054a625d2959cfe5cb16adbf",
+      "output_frame_sha256": "b140888295dfd617dc8d3466444557b488d2f0ec01843ffc9b4bb947d9e848a5",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "53fd",
+          "new_hex": "0cc2",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 13,
+      "source_frame": 156,
+      "original_frame_sha256": "520c153dea067201bc8f693fdb538b5351c3d828e3c8fbafab9cff80f191da2d",
+      "output_frame_sha256": "702babadcbe4e599a0ff3e95861ae79de879461c171701b6e17a89c3b52ce972",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "550b",
+          "new_hex": "0a5b",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 14,
+      "source_frame": 157,
+      "original_frame_sha256": "42250888f6a63ea1422657602ee316a6aa9808d487cfd7d77e6ce5474dfe20de",
+      "output_frame_sha256": "a4687b5aad384372b8fbabc11bf2ed760ff86028f54a4f4c21c9eb77109683e5",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "53fd",
+          "new_hex": "0bb0",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 15,
+      "source_frame": 158,
+      "original_frame_sha256": "7509d63b2dae90598f2b11e370bf2b27919d556f9c31491f8fb7295ab056b16d",
+      "output_frame_sha256": "8c1e1d2ac246e794eb02f438e3babfdde44b5707cefe6c5da01ed0ad45bedeb9",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "544c",
+          "new_hex": "7e71",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 16,
+      "source_frame": 159,
+      "original_frame_sha256": "31fb04966275af484b242b3fc4dab010b88b5b6db39260f5031baae366e1b12e",
+      "output_frame_sha256": "73213064158857dffef6450f69539a4cfb477894ef653e0181a5cc8ceac2d8c0",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "53fd",
+          "new_hex": "0b61",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 17,
+      "source_frame": 160,
+      "original_frame_sha256": "9e0a5da472f4bce0bd21ba3a74416a8fd67f73ff9b97042d7f19ec268e62e54e",
+      "output_frame_sha256": "c6cdc61be1f65c79f0668e39e554475d9024f8a21794566657d9a09ff7f46523",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "53fd",
+          "new_hex": "0b5f",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    },
+    {
+      "output_frame": 18,
+      "source_frame": 161,
+      "original_frame_sha256": "4fd562f31ca0482fe39057c4d2931c9d235ad24518552f1e866ea3eaca2c48f7",
+      "output_frame_sha256": "1441f32a134c408b1544cf7724b6a844a40b43fc683b1283b3464771f2c23e48",
+      "changes": [
+        {
+          "field": "tcp.checksum",
+          "offset_zero_based": 50,
+          "old_hex": "53fd",
+          "new_hex": "0b60",
+          "reason": "Complete verified partial pseudoheader checksum from offloading"
+        }
+      ]
+    }
+  ]
+}

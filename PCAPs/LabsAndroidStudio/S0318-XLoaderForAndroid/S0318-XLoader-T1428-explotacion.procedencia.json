@@ -1,0 +1,289 @@
+{
+  "original": "PCAPs/LabsAndroidStudio/S0318-XLoaderForAndroid/S0318-XLoaderForAndroid.pcap",
+  "original_sha256": "3bf4c00db8b3eb0721f55f6b7b0a68ae741fee10482ba159d378307d562fac64",
+  "output": "S0318-XLoader-T1428-explotacion.pcap",
+  "output_sha256": "28f5c06203131c4abd8eeeecf175144ef5da11586856e6f3046c54193a458e54",
+  "generated_date": "2026-10-25",
+  "target_technique": "T1428",
+  "accompanying_techniques": [],
+  "packets": 10,
+  "max_frame_bytes": 224,
+  "original_frames_selected": [
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "original_to_output": [
+    {
+      "output_frame": 1,
+      "original_frame": 96,
+      "original_stream": 5,
+      "original_frame_bytes": 66,
+      "output_frame_bytes": 66,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 2,
+      "original_frame": 97,
+      "original_stream": 5,
+      "original_frame_bytes": 66,
+      "output_frame_bytes": 66,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d641",
+          "after_hex": "dfe2"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 3,
+      "original_frame": 98,
+      "original_stream": 5,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 99,
+      "original_stream": 5,
+      "original_frame_bytes": 190,
+      "output_frame_bytes": 190,
+      "payload_slice": [
+        0,
+        136
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 5,
+      "original_frame": 100,
+      "original_stream": 5,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d635",
+          "after_hex": "1ae2"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 101,
+      "original_stream": 5,
+      "original_frame_bytes": 224,
+      "output_frame_bytes": 224,
+      "payload_slice": [
+        0,
+        170
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d6df",
+          "after_hex": "cd12"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 7,
+      "original_frame": 102,
+      "original_stream": 5,
+      "original_frame_bytes": 98,
+      "output_frame_bytes": 98,
+      "payload_slice": [
+        0,
+        44
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d661",
+          "after_hex": "8ea5"
+        }
+      ],
+      "original_checksum_state": "offload_seed",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 8,
+      "original_frame": 103,
+      "original_stream": 5,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 104,
+      "original_stream": 5,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 10,
+      "original_frame": 105,
+      "original_stream": 5,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "payload_slice": [
+        0,
+        0
+      ],
+      "split_part": 1,
+      "split_parts": 1,
+      "header_edits": [],
+      "original_checksum_state": "good",
+      "output_stream": 0
+    }
+  ],
+  "tcp_sequence_rebased": false,
+  "original_isns_and_syn_options_preserved": true,
+  "sequence_mapping_retained_intervals": null,
+  "application_bytes_preserved": true,
+  "original_timestamps_preserved": true,
+  "handshakes_synthesized": false,
+  "closures_synthesized": false,
+  "closure_context_reused": false,
+  "closure_original_frames": [
+    102,
+    103,
+    104,
+    105
+  ],
+  "original_frames_resegmented": [],
+  "resegmentation_tcp_payload_limit": null,
+  "selected_original_checksum_states": {
+    "good": 6,
+    "offload_seed": 4
+  },
+  "tcp_state": {
+    "initial": [
+      2096112946,
+      1904657311
+    ],
+    "next": [
+      138,
+      216
+    ],
+    "acked": [
+      138,
+      216
+    ],
+    "fin": [
+      true,
+      true
+    ],
+    "reset": false,
+    "frames": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "payload_bytes_by_direction": [
+      136,
+      214
+    ],
+    "payload_sha256_by_direction": [
+      "53f48753be9ad57f8f8e3d6fe78fd3b1f3cf072da7b8aadfabdf25350705bb14",
+      "7c8fdd9f9d6d64f5c54e4c8dfe62893199617e33321c38c0cebc3829c7df1b48"
+    ]
+  },
+  "application_validation": {
+    "request_path": "/cgi-bin/status",
+    "body_bytes": 44,
+    "body_sha256": "c13976b17e68254dd68842679c80db0adacfa2497feee7244012adb3b3daa581",
+    "matches_c2_proxy_result": true,
+    "only_victim_target_http_connection": true
+  },
+  "validation": {
+    "all_initial_tcp_handshakes_present": true,
+    "tcp_sequence_gaps": 0,
+    "acknowledgments_coherent": true,
+    "ip_tcp_udp_checksums_valid": true,
+    "frames_over_4000": 0,
+    "original_unchanged": true
+  },
+  "notes": [
+    "Derivado del PCAP existente; no ejecucion nueva.",
+    "Los timestamps de partes resegmentadas coinciden con su trama de origen.",
+    "Cada salida se reproduce seleccionando las tramas indicadas, aplicando payload_slice y header_edits, y actualizando caplen/wirelen.",
+    "Los campos source/original son relativos a la raiz del repositorio; output es relativo a este informe."
+  ]
+}

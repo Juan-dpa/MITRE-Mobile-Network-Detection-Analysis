@@ -1,0 +1,1649 @@
+{
+  "verified_date": "2026-11-10",
+  "source": "PCAPs/LabsPython/S1185-LightSpy(iOS)/S1185-LightSpy(iOS).pcap",
+  "source_sha256": "bc0b1f6aaca8bff170d20e70d3a8aeda628bccf7220f930fccdda4c09879d724",
+  "original_unchanged": true,
+  "source_packets": 458,
+  "source_max_frame_bytes": 65226,
+  "outputs_cover_all_original_frames_without_overlap": true,
+  "source_frames_over_4000": 37,
+  "no_added_closures_or_handshakes": true,
+  "ports_and_endpoints_unchanged": true,
+  "outputs": [
+    {
+      "file": "S1185-LightSpy-T1407-descarga-T1509.pcap",
+      "sha256": "375e9443f07447a1671f6e43230b1834d87ecd49210dcdca0b79fac1476a3415",
+      "original_selected_packets": 203,
+      "output_packets": 267,
+      "resegmented_original_frames": [
+        6,
+        18,
+        30,
+        42,
+        54,
+        66,
+        78,
+        90,
+        102,
+        114,
+        126,
+        138,
+        150,
+        162,
+        175,
+        187
+      ],
+      "max_frame_bytes": 1514,
+      "frames_over_4000": 0,
+      "max_ipv4_packet_bytes": 1500,
+      "all_tcp_payloads_within_negotiated_MSS": true,
+      "ipv4_tcp_udp_checksums_mathematically_valid": true,
+      "exact_manifest_reconstruction_and_inverse_edits": true,
+      "no_unplanned_header_changes": true,
+      "all_original_packet_payloads_reassembled_exactly": true,
+      "all_bidirectional_stream_payloads_equal_original": true,
+      "handshakes_and_closures_preserved": true,
+      "tcp_flows": [
+        {
+          "output_stream": 0,
+          "original_stream": 0,
+          "client": [
+            "10.118.5.10",
+            58252
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            1,
+            2,
+            3
+          ],
+          "handshake_original_frames": [
+            1,
+            2,
+            3
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              15
+            ],
+            [
+              14
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            80,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "14934ce38fc62146727cdd32c2b55d9ea4a91fb755e4e8b7137425262bd2d7a2",
+            "3657547e3292a08ba5dd24bc0cf0c1a568f4df3eda14a6a34b6572da45c2eb91"
+          ]
+        },
+        {
+          "output_stream": 1,
+          "original_stream": 1,
+          "client": [
+            "10.118.5.10",
+            58268
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            17,
+            18,
+            19
+          ],
+          "handshake_original_frames": [
+            13,
+            14,
+            15
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              31
+            ],
+            [
+              30
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            95,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "f73253f35f3fcc094b1ddd39a74f0bff49cf81b927fc25fd85f4d7776ad2c8ba",
+            "285ec191753166104f8c9ee1b03c248e200a212b0ecee4f8d526db499aa59d32"
+          ]
+        },
+        {
+          "output_stream": 2,
+          "original_stream": 2,
+          "client": [
+            "10.118.5.10",
+            58270
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            33,
+            34,
+            35
+          ],
+          "handshake_original_frames": [
+            25,
+            26,
+            27
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              47
+            ],
+            [
+              46
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            83,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "08bdb65be7b3564cfc9aa86489a5fd291b6509fc555fe67fe7d7053c6f893ef1",
+            "6e60cd9c020d1c5f0dda12c10f7cd424bcfbc003d066a98c5e71a87b19bb024e"
+          ]
+        },
+        {
+          "output_stream": 3,
+          "original_stream": 3,
+          "client": [
+            "10.118.5.10",
+            58278
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            49,
+            50,
+            51
+          ],
+          "handshake_original_frames": [
+            37,
+            38,
+            39
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              63
+            ],
+            [
+              62
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            79,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "8e7e42f038d6a3841b3954257de01e3fd3614f017435f201e8c16bf088883361",
+            "f8142c603462392462ee599f83f44a040896e4176d99b7a10314a3b10643844a"
+          ]
+        },
+        {
+          "output_stream": 4,
+          "original_stream": 4,
+          "client": [
+            "10.118.5.10",
+            58284
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            65,
+            66,
+            67
+          ],
+          "handshake_original_frames": [
+            49,
+            50,
+            51
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              79
+            ],
+            [
+              78
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            85,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "b46ff1367af78308184d5a91d476e602575e79a13882c9f80a805466dc3a752c",
+            "4c62cf0a992f9a0a173605008a4f2e36c95cc732dd79426e720907b10c34231b"
+          ]
+        },
+        {
+          "output_stream": 5,
+          "original_stream": 5,
+          "client": [
+            "10.118.5.10",
+            58300
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            81,
+            82,
+            83
+          ],
+          "handshake_original_frames": [
+            61,
+            62,
+            63
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              95
+            ],
+            [
+              94
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            83,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "bae5700a0499a68515bd11411e36af36c75b2047e530c6e2236160fee52170d2",
+            "9eac93540f0d2ad215384c995e22735a4ef16c21daadcf212e449bc6a4da6f5b"
+          ]
+        },
+        {
+          "output_stream": 6,
+          "original_stream": 6,
+          "client": [
+            "10.118.5.10",
+            58308
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            97,
+            98,
+            99
+          ],
+          "handshake_original_frames": [
+            73,
+            74,
+            75
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              111
+            ],
+            [
+              110
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            81,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "a6c7c235d3c8fd8a44b8928c5a596978c9a1573d250c8340bf52057e8c51b403",
+            "0dfc0a697abba43a9614e767c07519769a9bf70cd9dd65eae871685175e83654"
+          ]
+        },
+        {
+          "output_stream": 7,
+          "original_stream": 7,
+          "client": [
+            "10.118.5.10",
+            58314
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            113,
+            114,
+            115
+          ],
+          "handshake_original_frames": [
+            85,
+            86,
+            87
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              127
+            ],
+            [
+              126
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            78,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "208587f8ff97b2139c22203f2d936e389069ceedc6b462be8807ef5fac576ef8",
+            "8d4501242958992b09d84544a9a629ef91114d9dd1a11b888b3036b8a8c85f0b"
+          ]
+        },
+        {
+          "output_stream": 8,
+          "original_stream": 8,
+          "client": [
+            "10.118.5.10",
+            58330
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            129,
+            130,
+            131
+          ],
+          "handshake_original_frames": [
+            97,
+            98,
+            99
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              143
+            ],
+            [
+              142
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            82,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "206d102f41f057d6650d969a35c580d63a75e7fa44da16c0de9b4cd1bb15aac1",
+            "3d00768f143028120d56d66a989a0b0e23cf516f91d6939b0084e2b8eb994d9e"
+          ]
+        },
+        {
+          "output_stream": 9,
+          "original_stream": 9,
+          "client": [
+            "10.118.5.10",
+            58334
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            145,
+            146,
+            147
+          ],
+          "handshake_original_frames": [
+            109,
+            110,
+            111
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              159
+            ],
+            [
+              158
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            88,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "7bb23399ddfc9e1933f3f5d56d368967cc4e06bb3dcb8a51aa7ca20752e7640b",
+            "c774bef1c257ed0d0f2112f9e7c0f84cffe309f8941799659d0e615b98986416"
+          ]
+        },
+        {
+          "output_stream": 10,
+          "original_stream": 10,
+          "client": [
+            "10.118.5.10",
+            58344
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            161,
+            162,
+            163
+          ],
+          "handshake_original_frames": [
+            121,
+            122,
+            123
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              175
+            ],
+            [
+              174
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            84,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "4c0ca2d281039f11a134445a4ae663fcf7c9f692aa25ced3ec27b6645a5d9957",
+            "26a4589055515c0e8961c9aa2d3daff3e8658c12dc32f3914ef0f89d27269e24"
+          ]
+        },
+        {
+          "output_stream": 11,
+          "original_stream": 11,
+          "client": [
+            "10.118.5.10",
+            58346
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            177,
+            178,
+            179
+          ],
+          "handshake_original_frames": [
+            133,
+            134,
+            135
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              191
+            ],
+            [
+              190
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            81,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "d90674fa3c95d2719c01a19612632a5645251e41ba3e8f8e0369e4a4ba60b3e4",
+            "281bdff317dcdad12f6d07bf253b9a2ecc98e18025ad37c75ea9485a8fb3cfd1"
+          ]
+        },
+        {
+          "output_stream": 12,
+          "original_stream": 12,
+          "client": [
+            "10.118.5.10",
+            58356
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            193,
+            194,
+            195
+          ],
+          "handshake_original_frames": [
+            145,
+            146,
+            147
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              207
+            ],
+            [
+              206
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            90,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "4a9aa5318b161eea8fd7cf1ed4c41c52bb36efb8dc4fb57ce4dbf0d0d89e849c",
+            "6ea2281efceee606206ae50f4b76a051454ba8775a19c7521c998e3fff175249"
+          ]
+        },
+        {
+          "output_stream": 13,
+          "original_stream": 13,
+          "client": [
+            "10.118.5.10",
+            58364
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 17,
+          "handshake_output_frames": [
+            209,
+            210,
+            211
+          ],
+          "handshake_original_frames": [
+            157,
+            158,
+            159
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              223
+            ],
+            [
+              222
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            90,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "03f05cf84c68060e5573f7e94045390d99a4bcf254ed4484d4e5b0b47b346206",
+            "866c87495ac4af6572ed55507abcf5ac9ae4685b369d505ba7906908e90c9b29"
+          ]
+        },
+        {
+          "output_stream": 14,
+          "original_stream": 14,
+          "client": [
+            "10.118.5.10",
+            58370
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            226,
+            227,
+            228
+          ],
+          "handshake_original_frames": [
+            170,
+            171,
+            172
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              240
+            ],
+            [
+              239
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            83,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "90212f4fc81e3c6ad4780e1a7432f35d80fa17ef0dd1deada8cb01727899e45b",
+            "d35af843ba254701bfba5f7eb19073b18f17727979ea8a62d51a2efa3541dbad"
+          ]
+        },
+        {
+          "output_stream": 15,
+          "original_stream": 15,
+          "client": [
+            "10.118.5.10",
+            58374
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            242,
+            243,
+            244
+          ],
+          "handshake_original_frames": [
+            182,
+            183,
+            184
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              256
+            ],
+            [
+              255
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            82,
+            8273
+          ],
+          "payload_sha256_by_direction": [
+            "cfbffbe04065837421cf40b9a7ce07d1daef8eb6b8d48afa0a6b275fa19ebcf7",
+            "f8d7b931a25d205d4f9406e459435ee77b0c1dd7d255ef11bcf87aa76e393954"
+          ]
+        },
+        {
+          "output_stream": 16,
+          "original_stream": 16,
+          "client": [
+            "10.118.5.10",
+            58390
+          ],
+          "server": [
+            "45.83.237.13",
+            8088
+          ],
+          "packet_count": 10,
+          "handshake_output_frames": [
+            258,
+            259,
+            260
+          ],
+          "handshake_original_frames": [
+            194,
+            195,
+            196
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              266
+            ],
+            [
+              265
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            85,
+            259
+          ],
+          "payload_sha256_by_direction": [
+            "74f36f0d2db28d946c3fa6ea1761a7ab2fa0e44e3eecc0337583ef8b2645ebde",
+            "fc2556f4b058600ec0be959e75d5d7add832b963b504a8915b4820a3dc763f45"
+          ]
+        }
+      ],
+      "tshark_confirms_streams_sequences_and_payload_lengths": true,
+      "tshark_malformed_bad_checksum_or_over_4000_frames": [],
+      "tshark_analysis_frames_output": [],
+      "tshark_analysis_frames_original": [],
+      "no_new_tcp_analysis_flags": true
+    },
+    {
+      "file": "S1185-LightSpy-T1509-c2.pcap",
+      "sha256": "22cbf8f8405ff7fa4751ce9ec57cc1b224bf72ba3946f08a48a621b3915b1d21",
+      "original_selected_packets": 255,
+      "output_packets": 652,
+      "resegmented_original_frames": [
+        392,
+        394,
+        396,
+        397,
+        399,
+        400,
+        402,
+        404,
+        406,
+        407,
+        408,
+        410,
+        411,
+        430,
+        432,
+        434,
+        435,
+        437,
+        438,
+        440,
+        441
+      ],
+      "max_frame_bytes": 1514,
+      "frames_over_4000": 0,
+      "max_ipv4_packet_bytes": 1500,
+      "all_tcp_payloads_within_negotiated_MSS": true,
+      "ipv4_tcp_udp_checksums_mathematically_valid": true,
+      "exact_manifest_reconstruction_and_inverse_edits": true,
+      "no_unplanned_header_changes": true,
+      "all_original_packet_payloads_reassembled_exactly": true,
+      "all_bidirectional_stream_payloads_equal_original": true,
+      "handshakes_and_closures_preserved": true,
+      "tcp_flows": [
+        {
+          "output_stream": 0,
+          "original_stream": 17,
+          "client": [
+            "10.118.5.10",
+            42766
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 17,
+          "handshake_output_frames": [
+            2,
+            3,
+            4
+          ],
+          "handshake_original_frames": [
+            205,
+            206,
+            207
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              55
+            ],
+            [
+              54
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            880,
+            1517
+          ],
+          "payload_sha256_by_direction": [
+            "815c3e27952efcdee01da186954e4a4d02268fd8a032519d292572d536e7e036",
+            "7023fa1988487bd25709d1d40268340d60fe6b73ee3ed68925ef2248572f85e0"
+          ]
+        },
+        {
+          "output_stream": 1,
+          "original_stream": 18,
+          "client": [
+            "10.118.5.10",
+            42782
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 17,
+          "handshake_output_frames": [
+            5,
+            6,
+            7
+          ],
+          "handshake_original_frames": [
+            208,
+            209,
+            210
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              45
+            ],
+            [
+              52
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            858,
+            1517
+          ],
+          "payload_sha256_by_direction": [
+            "68f698d659044174250787f4d44aef6ea89e8d23f0931525524434f4701938a3",
+            "e735b2405dc820171be6421abfb7b50f74efbc4f0e254cbd62e7b751bc3bfcbf"
+          ]
+        },
+        {
+          "output_stream": 2,
+          "original_stream": 19,
+          "client": [
+            "10.118.5.10",
+            42786
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 50,
+          "handshake_output_frames": [
+            9,
+            10,
+            11
+          ],
+          "handshake_original_frames": [
+            212,
+            213,
+            214
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              651
+            ],
+            [
+              650
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            2197,
+            2404
+          ],
+          "payload_sha256_by_direction": [
+            "e2121835d23f51658fbec6da00cb8738f8484a304abc156fedbb590ed9442521",
+            "4d504ca85ec702224ba2a0fba71b35244ff905b84cd386fbc35066e3849f2d52"
+          ]
+        },
+        {
+          "output_stream": 3,
+          "original_stream": 20,
+          "client": [
+            "10.118.5.10",
+            42788
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 17,
+          "handshake_output_frames": [
+            14,
+            15,
+            16
+          ],
+          "handshake_original_frames": [
+            217,
+            218,
+            219
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              62
+            ],
+            [
+              63
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            864,
+            1517
+          ],
+          "payload_sha256_by_direction": [
+            "b9aaea2ff8e589857ffd778a9105283ce1bf5304c56e0243c23a65fa3b48e98b",
+            "27896f4287ba10945b393e8b14978742ed94f94bebf0f0117d0ee68b55492009"
+          ]
+        },
+        {
+          "output_stream": 4,
+          "original_stream": 21,
+          "client": [
+            "10.118.5.10",
+            42804
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 17,
+          "handshake_output_frames": [
+            66,
+            67,
+            68
+          ],
+          "handshake_original_frames": [
+            269,
+            270,
+            271
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              92
+            ],
+            [
+              94
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            863,
+            1517
+          ],
+          "payload_sha256_by_direction": [
+            "2863312b03292aaf8871bab3bec0d9429abce651f44b38509d3e164f410837f1",
+            "13b8784b6a4d957bd5177add871faa714aa6d777b9efe8bfd257e45d907e925f"
+          ]
+        },
+        {
+          "output_stream": 5,
+          "original_stream": 22,
+          "client": [
+            "10.118.5.10",
+            42806
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 18,
+          "handshake_output_frames": [
+            75,
+            76,
+            77
+          ],
+          "handshake_original_frames": [
+            278,
+            279,
+            280
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              101
+            ],
+            [
+              102
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            863,
+            1517
+          ],
+          "payload_sha256_by_direction": [
+            "2a63699e7b586e96e5b3fcd8ff52ff5589d07e411ab8e03e9e290adbeaa7c592",
+            "5362a97ecfe5a3c7a3cdd5a481ba8ce05a9b887b5a6706a28dd60cd72df558a3"
+          ]
+        },
+        {
+          "output_stream": 6,
+          "original_stream": 23,
+          "client": [
+            "10.118.5.10",
+            42814
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 18,
+          "handshake_output_frames": [
+            108,
+            109,
+            110
+          ],
+          "handshake_original_frames": [
+            311,
+            312,
+            313
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              151,
+              156
+            ],
+            [
+              159
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [
+            156
+          ],
+          "payload_bytes_by_direction": [
+            1371,
+            1517
+          ],
+          "payload_sha256_by_direction": [
+            "753ee23cc810c35f97641426b5117ebed2411e0762d550f70cedca36d3351918",
+            "d2cc1e751e262a2247c097e42e73b3491a7f9efc162b75548a3faebe25019d01"
+          ]
+        },
+        {
+          "output_stream": 7,
+          "original_stream": 24,
+          "client": [
+            "10.118.5.10",
+            42824
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 17,
+          "handshake_output_frames": [
+            132,
+            134,
+            135
+          ],
+          "handshake_original_frames": [
+            335,
+            337,
+            338
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              176
+            ],
+            [
+              182
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            863,
+            1517
+          ],
+          "payload_sha256_by_direction": [
+            "7046adda6109a2454c5ca0a511653bcf5e8faaa77df02a9240d339890804c7e3",
+            "f26a2052ab8a04ba77743693206d493a1c1c34e03200fc5df6a948682c1b111d"
+          ]
+        },
+        {
+          "output_stream": 8,
+          "original_stream": 25,
+          "client": [
+            "10.118.5.10",
+            42832
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 16,
+          "handshake_output_frames": [
+            143,
+            144,
+            145
+          ],
+          "handshake_original_frames": [
+            346,
+            347,
+            348
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              185
+            ],
+            [
+              187
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            863,
+            1517
+          ],
+          "payload_sha256_by_direction": [
+            "9b750f31447aec8369245ad298aefe92ecd8948b5f6b145316ed7c8401dfde57",
+            "d628afe76b7a10bcb4ccb9477923b16adb02b46bad6191f07682cd0234e7da76"
+          ]
+        },
+        {
+          "output_stream": 9,
+          "original_stream": 26,
+          "client": [
+            "10.118.5.10",
+            42834
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 309,
+          "handshake_output_frames": [
+            163,
+            164,
+            165
+          ],
+          "handshake_original_frames": [
+            366,
+            367,
+            368
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              487
+            ],
+            [
+              488
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            412040,
+            1524
+          ],
+          "payload_sha256_by_direction": [
+            "ff45d9037fee57d99364e667dfa618a4c3f4136e7a85432132a78e76f4a4dac6",
+            "fa504170c2dbcf2a5748560a003c208a3bebac8f90e9113ec3d2344d062a27e1"
+          ]
+        },
+        {
+          "output_stream": 10,
+          "original_stream": 27,
+          "client": [
+            "10.118.5.10",
+            42840
+          ],
+          "server": [
+            "45.134.1.180",
+            50000
+          ],
+          "packet_count": 154,
+          "handshake_output_frames": [
+            490,
+            491,
+            492
+          ],
+          "handshake_original_frames": [
+            421,
+            422,
+            423
+          ],
+          "handshake_complete": true,
+          "sequence_gaps": 0,
+          "conflicting_overlaps": 0,
+          "ACKs_beyond_observed_data": 0,
+          "all_data_and_FIN_ACKed": true,
+          "FIN_output_frames": [
+            [
+              641
+            ],
+            [
+              642
+            ]
+          ],
+          "retransmitted_FIN_output_frames": [],
+          "payload_bytes_by_direction": [
+            192439,
+            1519
+          ],
+          "payload_sha256_by_direction": [
+            "f54e1c4b0a232303ece06284c0f687f6b180428a4c089368d938324733c0fb8a",
+            "5d4f344a65234b52e6a361d1871209efc9202c85e74e5e593f3db221f0fc297d"
+          ]
+        }
+      ],
+      "tshark_confirms_streams_sequences_and_payload_lengths": true,
+      "tshark_malformed_bad_checksum_or_over_4000_frames": [],
+      "tshark_analysis_frames_output": [
+        156
+      ],
+      "tshark_analysis_frames_original": [
+        359
+      ],
+      "no_new_tcp_analysis_flags": true
+    }
+  ],
+  "downloaded_artifacts": [
+    {
+      "name": "browser",
+      "bytes": 8192,
+      "sha256": "ed629252bf860286ba75dedf5190e3aeec09d61f7b1c634c69360b0b5b2e7f47",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "EnvironmentalRecording",
+      "bytes": 8192,
+      "sha256": "24aa173ffdf018dc6693d7192e4a0f1bed8eee8e3492d565310635fe142deea2",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "FileManage",
+      "bytes": 8192,
+      "sha256": "fd8a8a36ae14e12647e7bb7550fd9de793edc4f2d67f9f15de59c4449d9eb61b",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "ios_qq",
+      "bytes": 8192,
+      "sha256": "dc3170671b619d733cbe1510962a5acab6380fcf5566b833b91986ca3dd1e959",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "ios_telegram",
+      "bytes": 8192,
+      "sha256": "2a6a5da60513e74a56dd2e0d7d9cd03db45e9aeb7844fa72f699988a7749f000",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "ios_wechat",
+      "bytes": 8192,
+      "sha256": "b6df8b8f6764f047c1eb456abc77024f7fd1f1a3ca3c7387c25fa83be7211abb",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "KeyChain",
+      "bytes": 8192,
+      "sha256": "70ed3ff44b80f439f5f4dce45145440d79adf1a3497a6ea88eae4230981eb67b",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "light",
+      "bytes": 8192,
+      "sha256": "4b12da5d91362375cb07b3e27cb221386238639b0749dfa051235df973fe2d89",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "Screenaaa",
+      "bytes": 8192,
+      "sha256": "bd89a1e41b01855509b8b2fe10382c7b1eb11658b3641ba4e4fb73121200ee1b",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "ShellCommandaaa",
+      "bytes": 8192,
+      "sha256": "41cdc7f84d493cec49ebb3762874257040f18cf5c3ac538ec1f715f71e2b7258",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "SoftInfoaaa",
+      "bytes": 8192,
+      "sha256": "64a210924cec8349f33d367c8b31367557143b2732b2b152ae68d7564d1d174c",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "WifiList",
+      "bytes": 8192,
+      "sha256": "39bcb2b9b129a1696e4e6c8aa6b1d652d46d8e9f89fe9921a7fe64c999a4eb38",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "locationaaa.dylib",
+      "bytes": 8192,
+      "sha256": "62b6417cd88bf68a55f394ea2907d7df238c3d37aa4cce73fec366cbfce4772c",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "baseinfoaaa.dylib",
+      "bytes": 8192,
+      "sha256": "9250168456a7bc059b50d53b8f3e1b1b72950a6a074847b42453f89a1e8bb561",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "irc_loader",
+      "bytes": 8192,
+      "sha256": "d887a1533028a805b993de2fcd7340c63db02c7f4fc223d97a6728706b3ad06b",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "launchctl",
+      "bytes": 8192,
+      "sha256": "add41833db91d9b0b97e948c217fc0a1dcc84c60dfe8e0316ce46369ef29a344",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": true
+    },
+    {
+      "name": "ircbin.plist",
+      "bytes": 179,
+      "sha256": "55a9c3dbd2e3925788619684eace456de8fcbdd4e0afb681237cdcff36d6bda9",
+      "matches_original_and_capture_log": true,
+      "matches_current_payload_file_byte_for_byte": false
+    }
+  ],
+  "plist_note": "Original LF bytes retained. Current local payload has CRLF; normalizing its line endings matches the original. No payload bytes were changed in the capture.",
+  "tls_conversations": [
+    {
+      "tls_stream": 0,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        580,
+        93
+      ],
+      "plaintext_sha256_by_direction": [
+        "fc50255198746a9ebd6b00a1102defd99bec7529669001fb1ea1a019710b0ef4",
+        "383961f4305488f889efcf805f7099773e7876b21abb6c9bae2d505ac2e6de02"
+      ]
+    },
+    {
+      "tls_stream": 1,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        558,
+        93
+      ],
+      "plaintext_sha256_by_direction": [
+        "dcbc547d737c47e19edc109d51fbc7307449458c127ebbce33d66226d5b23309",
+        "383961f4305488f889efcf805f7099773e7876b21abb6c9bae2d505ac2e6de02"
+      ]
+    },
+    {
+      "tls_stream": 2,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        1491,
+        748
+      ],
+      "plaintext_sha256_by_direction": [
+        "5c43d5897f8740a97ea97c572a333aebaa44e3e4f0d5c1233ead4447afd4394a",
+        "11521afbbfb770128091e89a71dc2687c1b57a5a3e8028764d84df6d3e46cd2a"
+      ]
+    },
+    {
+      "tls_stream": 3,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        564,
+        93
+      ],
+      "plaintext_sha256_by_direction": [
+        "e5cca91b253b2de8bdca4bca750f2a7652c9e33e8a0f08371a1aa5cc5ca58cf6",
+        "383961f4305488f889efcf805f7099773e7876b21abb6c9bae2d505ac2e6de02"
+      ]
+    },
+    {
+      "tls_stream": 4,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        563,
+        93
+      ],
+      "plaintext_sha256_by_direction": [
+        "1eebd00bb66c2d2cf11ddb4ba5b9f5104cea513e74a08cacf285d3413c9c23bd",
+        "383961f4305488f889efcf805f7099773e7876b21abb6c9bae2d505ac2e6de02"
+      ]
+    },
+    {
+      "tls_stream": 5,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        563,
+        93
+      ],
+      "plaintext_sha256_by_direction": [
+        "62a1c7cdd02aaf8290618bd8992f7ea0da844e021aceaebb17bb0d35f08bd626",
+        "383961f4305488f889efcf805f7099773e7876b21abb6c9bae2d505ac2e6de02"
+      ]
+    },
+    {
+      "tls_stream": 6,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        1071,
+        93
+      ],
+      "plaintext_sha256_by_direction": [
+        "cee0273ce0a8233ce38ac40e6e989a07f6fd19d0c8890718e8308a1c8b13fca3",
+        "383961f4305488f889efcf805f7099773e7876b21abb6c9bae2d505ac2e6de02"
+      ]
+    },
+    {
+      "tls_stream": 7,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        563,
+        93
+      ],
+      "plaintext_sha256_by_direction": [
+        "175bddaaf760c2bf02930e2e68fef073e64c462bea59871c2a1e0f37d47ed920",
+        "383961f4305488f889efcf805f7099773e7876b21abb6c9bae2d505ac2e6de02"
+      ]
+    },
+    {
+      "tls_stream": 8,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        563,
+        93
+      ],
+      "plaintext_sha256_by_direction": [
+        "56e1336bec56189ee17a085ecd80a0c548ef91cda9410973dd793fbd1b56b963",
+        "383961f4305488f889efcf805f7099773e7876b21abb6c9bae2d505ac2e6de02"
+      ]
+    },
+    {
+      "tls_stream": 9,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        411015,
+        100
+      ],
+      "plaintext_sha256_by_direction": [
+        "3c218fb348f7aa5368c4b2f1f3445388242aeb3837340a6a8db0170d9378ada2",
+        "7979a1af34e0ac33e2aae236ffbd84c437c8b8927d2bcba322c98516765c5696"
+      ]
+    },
+    {
+      "tls_stream": 10,
+      "decrypted_bytes_identical_in_both_directions": true,
+      "plaintext_bytes_by_direction": [
+        191820,
+        95
+      ],
+      "plaintext_sha256_by_direction": [
+        "2e237ef71d9d6ccd5fae1bf26e556c662bd30ea2437108c5f708a6b3f61a2a84",
+        "c9456b50ed75ff4575c5c2f35518459c2ff57ce20eeac017b4bf27c4c6de9a58"
+      ]
+    }
+  ],
+  "c2_has_no_additional_download_transaction": true,
+  "upload_chunks": [
+    {
+      "tls_stream": 9,
+      "offset": 0,
+      "file_bytes": 409600,
+      "response_next_offset": 409600
+    },
+    {
+      "tls_stream": 10,
+      "offset": 409600,
+      "file_bytes": 190400,
+      "response_next_offset": 0
+    }
+  ],
+  "upload_total_bytes": 600000,
+  "upload_sha256": "23eef78b0e27ad4d2060207b9b1a269740ce3110eff51efadec672b8edd1ebee",
+  "upload_matches_original_and_lab_payload": true,
+  "inherited_tcp_anomaly": "Original frames 354/359 are the same client FIN; original frame 360 is its D-SACK/ambiguous ACK. Kept intact; no data loss or new anomaly.",
+  "mcp_verification": {
+    "download_requests_and_expert_info_confirmed": true,
+    "c2_handshakes_confirmed": true,
+    "c2_only_original_D_SACK_and_FIN_retransmission_notes": true
+  },
+  "no_live_replay_on_NGFW_or_Snort": true
+}

@@ -1,0 +1,386 @@
+{
+  "original": "PCAPs/LabsPython/S0299-NotCompatible/S0299-NotCompatible.pcap",
+  "original_sha256": "e2fcbc7b4c852f108589a7a7dac0d79523bef23c7d3ac48bc4e87002471fd5ee",
+  "output": "S0299-NotCompatible-T1428-explotacion.pcap",
+  "output_sha256": "21d885c5bf58c2caff68cc8ac9d16d60dd3478e648c610e863fe225c60fa009f",
+  "generated_date": "2026-10-25",
+  "packets": 25,
+  "max_frame_bytes": 105,
+  "target_technique": "T1428",
+  "selection": "tcp.stream == 2 || tcp.stream == 3",
+  "original_frame_mapping": [
+    {
+      "output_frame": 1,
+      "original_frame": 30,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 2,
+      "original_frame": 31,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 3,
+      "original_frame": 32,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 34,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 5,
+      "original_frame": 35,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 40,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 7,
+      "original_frame": 41,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 8,
+      "original_frame": 42,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 43,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 10,
+      "original_frame": 48,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 11,
+      "original_frame": 49,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 12,
+      "original_frame": 50,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 13,
+      "original_frame": 55,
+      "output_stream": 1,
+      "original_stream": 3
+    },
+    {
+      "output_frame": 14,
+      "original_frame": 56,
+      "output_stream": 1,
+      "original_stream": 3
+    },
+    {
+      "output_frame": 15,
+      "original_frame": 57,
+      "output_stream": 1,
+      "original_stream": 3
+    },
+    {
+      "output_frame": 16,
+      "original_frame": 61,
+      "output_stream": 1,
+      "original_stream": 3
+    },
+    {
+      "output_frame": 17,
+      "original_frame": 62,
+      "output_stream": 1,
+      "original_stream": 3
+    },
+    {
+      "output_frame": 18,
+      "original_frame": 63,
+      "output_stream": 1,
+      "original_stream": 3
+    },
+    {
+      "output_frame": 19,
+      "original_frame": 64,
+      "output_stream": 1,
+      "original_stream": 3
+    },
+    {
+      "output_frame": 20,
+      "original_frame": 69,
+      "output_stream": 1,
+      "original_stream": 3
+    },
+    {
+      "output_frame": 21,
+      "original_frame": 70,
+      "output_stream": 1,
+      "original_stream": 3
+    },
+    {
+      "output_frame": 22,
+      "original_frame": 73,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 23,
+      "original_frame": 76,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 24,
+      "original_frame": 78,
+      "output_stream": 0,
+      "original_stream": 2
+    },
+    {
+      "output_frame": 25,
+      "original_frame": 79,
+      "output_stream": 1,
+      "original_stream": 3
+    }
+  ],
+  "tcp_checksum_changes": [
+    {
+      "original_frame": 30,
+      "before": 9862,
+      "after": 39601
+    },
+    {
+      "original_frame": 31,
+      "before": 9862,
+      "after": 48644
+    },
+    {
+      "original_frame": 32,
+      "before": 9854,
+      "after": 60189
+    },
+    {
+      "original_frame": 34,
+      "before": 9874,
+      "after": 36334
+    },
+    {
+      "original_frame": 35,
+      "before": 9854,
+      "after": 60163
+    },
+    {
+      "original_frame": 40,
+      "before": 9866,
+      "after": 34532
+    },
+    {
+      "original_frame": 41,
+      "before": 9854,
+      "after": 59950
+    },
+    {
+      "original_frame": 42,
+      "before": 9888,
+      "after": 41697
+    },
+    {
+      "original_frame": 43,
+      "before": 9854,
+      "after": 59913
+    },
+    {
+      "original_frame": 48,
+      "before": 9864,
+      "after": 46886
+    },
+    {
+      "original_frame": 49,
+      "before": 9876,
+      "after": 15323
+    },
+    {
+      "original_frame": 50,
+      "before": 9854,
+      "after": 59671
+    },
+    {
+      "original_frame": 55,
+      "before": 9862,
+      "after": 54031
+    },
+    {
+      "original_frame": 56,
+      "before": 9862,
+      "after": 35140
+    },
+    {
+      "original_frame": 57,
+      "before": 9854,
+      "after": 46682
+    },
+    {
+      "original_frame": 61,
+      "before": 9857,
+      "after": 17129
+    },
+    {
+      "original_frame": 62,
+      "before": 9854,
+      "after": 46674
+    },
+    {
+      "original_frame": 63,
+      "before": 9893,
+      "after": 65508
+    },
+    {
+      "original_frame": 64,
+      "before": 9854,
+      "after": 46632
+    },
+    {
+      "original_frame": 69,
+      "before": 9854,
+      "after": 46530
+    },
+    {
+      "original_frame": 70,
+      "before": 9854,
+      "after": 46427
+    },
+    {
+      "original_frame": 73,
+      "before": 9854,
+      "after": 59312
+    },
+    {
+      "original_frame": 76,
+      "before": 9854,
+      "after": 58951
+    },
+    {
+      "original_frame": 78,
+      "before": 9854,
+      "after": 58951
+    },
+    {
+      "original_frame": 79,
+      "before": 9854,
+      "after": 46428
+    }
+  ],
+  "transformations": [
+    "Seleccion de registros originales",
+    "Completar checksums TCP parciales de offloading"
+  ],
+  "timestamps_preserved": true,
+  "application_payloads_byte_identical": true,
+  "tcp_sequences_ack_options_preserved": true,
+  "handshakes_synthesized": false,
+  "closures_synthesized": false,
+  "frames_resegmented": 0,
+  "tcp_states": {
+    "0": {
+      "initial": [
+        332410115,
+        1426541807
+      ],
+      "next": [
+        24,
+        78
+      ],
+      "acked": [
+        24,
+        78
+      ],
+      "fin": [
+        true,
+        true
+      ],
+      "frames": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        22,
+        23,
+        24
+      ],
+      "original_stream": 2
+    },
+    "1": {
+      "initial": [
+        2084055017,
+        2437222133
+      ],
+      "next": [
+        5,
+        41
+      ],
+      "acked": [
+        5,
+        41
+      ],
+      "fin": [
+        true,
+        true
+      ],
+      "frames": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        25
+      ],
+      "original_stream": 3
+    }
+  },
+  "validation": {
+    "initial_tcp_handshakes_present_in_all_flows": true,
+    "tcp_sequence_gaps": 0,
+    "all_bytes_acknowledged_at_end": true,
+    "ipv4_tcp_checksums_valid": true,
+    "frames_over_4000": 0,
+    "rc4_messages_valid_when_c2_retained": false
+  },
+  "c2_decoded_tags": [],
+  "notes": [
+    "Solo cambian los dos bytes del checksum TCP. La carga, cabeceras restantes y tiempos conservan los bytes del original.",
+    "No se ejecutaron el malware, servidores ni explotaciones; trabajo sin trafico de red sobre la captura existente.",
+    "Vista de las conexiones de salida de la victima al objetivo. No conserva la conexion C2 ni los comandos de apertura del proxy.",
+    "Se conservan todos los paquetes originales de FTP (stream 2) y 6200 (stream 3), incluidos sus handshakes, saludo FTP y cierres.",
+    "Los cinco paquetes FTP anteriores al corte (30,31,32,34,35) son el contexto repetido del primer PCAP.",
+    "La captura original representa una explotacion controlada de un servicio emulado; no prueba un compromiso real."
+  ]
+}

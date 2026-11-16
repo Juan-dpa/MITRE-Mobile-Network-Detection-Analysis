@@ -1,0 +1,490 @@
+{
+  "original": "PCAPs/LabsAndroidStudio/S0300-DressCode/S0300-DressCode.pcap",
+  "original_sha256": "960160ec184db42e9083ed5d9ae541f6820a8b8945a07cd1f071e8d4c2860d81",
+  "output": "S0300-DressCode-T1428-explotacion.pcap",
+  "output_sha256": "2c311bca5d0f47fe0183f658d3cb9cb7b976322cff75fe65d8505fcb34bdd220",
+  "generated_date": "2026-10-25",
+  "selection": "tcp.stream == 2 (complete original SMTP connection)",
+  "target_technique": "T1428",
+  "packets": 26,
+  "max_frame_bytes": 105,
+  "original_frame_mapping": [
+    {
+      "output_frame": 1,
+      "original_frame": 55,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 2,
+      "original_frame": 56,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 3,
+      "original_frame": 57,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 60,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 5,
+      "original_frame": 64,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 65,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 7,
+      "original_frame": 66,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 8,
+      "original_frame": 69,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 70,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 10,
+      "original_frame": 74,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 11,
+      "original_frame": 75,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 12,
+      "original_frame": 78,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 13,
+      "original_frame": 79,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 14,
+      "original_frame": 82,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 15,
+      "original_frame": 83,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 16,
+      "original_frame": 86,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 17,
+      "original_frame": 87,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 18,
+      "original_frame": 90,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 19,
+      "original_frame": 91,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 20,
+      "original_frame": 92,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 21,
+      "original_frame": 95,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 22,
+      "original_frame": 96,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 23,
+      "original_frame": 97,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 24,
+      "original_frame": 98,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 25,
+      "original_frame": 104,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    },
+    {
+      "output_frame": 26,
+      "original_frame": 105,
+      "original_stream": 2,
+      "derivation": "selected original",
+      "output_stream": 0
+    }
+  ],
+  "changes": [
+    {
+      "output_frame": 2,
+      "original_frame": 56,
+      "original_frame_bytes": 66,
+      "output_frame_bytes": 66,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d53c",
+          "after_hex": "eb75",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 4,
+      "original_frame": 60,
+      "original_frame_bytes": 97,
+      "output_frame_bytes": 97,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d55b",
+          "after_hex": "3a88",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 6,
+      "original_frame": 65,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d530",
+          "after_hex": "26bf",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 7,
+      "original_frame": 66,
+      "original_frame_bytes": 79,
+      "output_frame_bytes": 79,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d549",
+          "after_hex": "ca98",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 9,
+      "original_frame": 70,
+      "original_frame_bytes": 74,
+      "output_frame_bytes": 74,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d544",
+          "after_hex": "167d",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 11,
+      "original_frame": 75,
+      "original_frame_bytes": 93,
+      "output_frame_bytes": 93,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d557",
+          "after_hex": "611d",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 13,
+      "original_frame": 79,
+      "original_frame_bytes": 62,
+      "output_frame_bytes": 62,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d538",
+          "after_hex": "6774",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 15,
+      "original_frame": 83,
+      "original_frame_bytes": 91,
+      "output_frame_bytes": 91,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d555",
+          "after_hex": "f516",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 17,
+      "original_frame": 87,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d530",
+          "after_hex": "25e0",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 19,
+      "original_frame": 91,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d530",
+          "after_hex": "25c7",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 20,
+      "original_frame": 92,
+      "original_frame_bytes": 105,
+      "output_frame_bytes": 105,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d563",
+          "after_hex": "b4be",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 22,
+      "original_frame": 96,
+      "original_frame_bytes": 63,
+      "output_frame_bytes": 63,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d539",
+          "after_hex": "10a4",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    },
+    {
+      "output_frame": 23,
+      "original_frame": 97,
+      "original_frame_bytes": 54,
+      "output_frame_bytes": 54,
+      "original_checksum_state": "offload_seed",
+      "transformations": [],
+      "byte_edits": [
+        {
+          "packet_offset": 50,
+          "before_hex": "d530",
+          "after_hex": "2584",
+          "reason": "Complete offload checksum"
+        }
+      ]
+    }
+  ],
+  "selected_original_checksum_states": {
+    "good": 13,
+    "offload_seed": 13
+  },
+  "tcp_states": {
+    "0": {
+      "initial": [
+        3084442330,
+        1018692312
+      ],
+      "next": [
+        146,
+        234
+      ],
+      "acked": [
+        146,
+        234
+      ],
+      "fin": [
+        true,
+        true
+      ],
+      "frames": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "original_stream": 2,
+      "payload_sha256_by_direction": [
+        "402c7f0af04cc465ac5813a8f40425dab67c0ea09983af7d854c802eb4865084",
+        "9e213908b41ca8fa8f145b05faca60b8d5620431aa128cbf3a887ca63e2bd934"
+      ],
+      "payload_bytes_by_direction": [
+        144,
+        232
+      ]
+    }
+  },
+  "handshakes_synthesized": false,
+  "closures_synthesized": false,
+  "frames_resegmented": 0,
+  "synthetic_ack_count": 0,
+  "timestamps_preserved": true,
+  "application_changes": [],
+  "validation": {
+    "all_opening_handshakes_present": true,
+    "tcp_sequence_gaps": 0,
+    "all_bytes_acknowledged_at_end": true,
+    "checksums_ipv4_tcp_udp_good": true,
+    "frames_over_4000": 0,
+    "source_unchanged": true
+  },
+  "notes": [
+    "Tratamiento del PCAP existente; no es una nueva ejecucion del malware.",
+    "Origen observado 172.22.0.1: extremo del emulador visible tras su traduccion de red.",
+    "Los offsets de byte_edits se cuentan desde el inicio de la trama Ethernet; aplicarlos por orden para reproducir cada salida.",
+    "Los timestamps de todos los registros, incluido el ACK derivado, son los de sus tramas originales.",
+    "La extraccion completa del stream 2 conserva saludo, EHLO, ataque y cierre. No conserva el tunel SOCKS ni el C2.",
+    "Tramas 55,56,57,60,64,65,66,69,70 repetidas como contexto anterior al ataque; handshake en salida 1,2,3.",
+    "La primera orden maliciosa SMTP, original 74, aparece en salida 10 con su contenido intacto.",
+    "La explotacion fue emulada en el laboratorio; no se afirma un compromiso real."
+  ]
+}

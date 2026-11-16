@@ -1,0 +1,8 @@
+Laboratorio: telerat
+Directorio: /home/juadelavi/python-labnet/android-smoke/20260824-132816/telerat/keys
+Material:
+  - telerat-api-telegram.crt: Certificado RSA presentado por la API de Telegram emulada
+  - telerat-api-telegram.key: Clave privada RSA para descifrar las sesiones TLS 1.0
+  - telerat-lab-ca.pem: CA que firma el certificado instalado previamente en el AVD
+  - telerat-lab-ca.sha256.txt: Huella SHA-256 de la CA del laboratorio
+Nota: TeleRAT usa HTTP/80 y HTTPS/443 contra api.telegram.org. HTTPS negocia TLS 1.0 con RSA y AES128-SHA; la clave privada incluida permite descifrar sesiones cuya captura contenga el handshake completo.
